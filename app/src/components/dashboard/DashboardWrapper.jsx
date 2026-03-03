@@ -420,7 +420,7 @@ function DashboardWrapper() {
 
                 {/* Sub-stats */}
                 {card.subStats && (
-                  <div className="grid grid-cols-4 gap-y-1 gap-x-4">
+                  <div className="grid grid-cols-4 gap-y-1 gap-x-2">
                     {card.subStats.map((stat, idx) => (
                       <div key={idx} className="flex items-center gap-1.5 min-w-0">
                         <span className="text-white/80 shrink-0">{stat.icon}</span>

@@ -80,16 +80,53 @@ function createWindow() {
     },
     icon: path.join(__dirname, "app/public/assets", "icon.png"),
     autoHideMenuBar: false,
+    show: false, // Don't show until ready-to-show
   });
 
   Menu.setApplicationMenu(null);
 
-  if (isDev) {
-    mainWindow.loadURL("http://localhost:5173");
-    mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.loadFile(path.join(__dirname, "dist", "app", "index.html"));
-  }
+  // First, load the loading.html page
+  mainWindow.loadFile(path.join(__dirname, "loading.html")).then(() => {
+    mainWindow.show();
+
+    // Once loading screen is displayed, load the main application
+    if (isDev) {
+      mainWindow.loadURL("http://localhost:5173").catch(err => {
+        console.error("Failed to load dev server:", err);
+      });
+      // Optionally open devtools in dev mode:
+      // mainWindow.webContents.openDevTools();
+    } else {
+      mainWindow.loadFile(path.join(__dirname, "dist", "app", "index.html")).catch(err => {
+        console.error("Failed to load production index.html:", err);
+        dialog.showErrorBox("Failed to load application", err.message || JSON.stringify(err));
+        mainWindow.webContents.openDevTools();
+      });
+    }
+  }).catch(err => {
+    console.error("Failed to load loading.html:", err);
+  });
+
+  // Handle errors during page load
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+    console.error(`Failed to load: ${errorDescription} (${errorCode})`);
+
+    // Only show error dialog and devtools if not the loading page
+    if (!mainWindow.webContents.getURL().includes('loading.html')) {
+      // Only open devtools once to investigate
+      if (!mainWindow.webContents.isDevToolsOpened()) {
+        mainWindow.webContents.openDevTools();
+      }
+      console.log("App load failed. See DevTools for details.");
+    }
+  });
+
+  mainWindow.webContents.on('crashed', (event, killed) => {
+    console.error(`Renderer process crashed. Killed: ${killed}`);
+    if (!mainWindow.webContents.isDevToolsOpened()) {
+      mainWindow.webContents.openDevTools();
+    }
+  });
 }
 
 // -----------------------------

@@ -62,7 +62,7 @@ function Navbar() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <NavLink to="/dashboard">
-              <img crossOrigin="anonymous" src="/assets/dashboard/logo.png" alt="CRM Logo" className="h-12 w-auto object-contain" />
+              <img crossOrigin="anonymous" src="./assets/dashboard/logo.png" alt="CRM Logo" className="h-12 w-auto object-contain" />
             </NavLink>
           </div>
 
@@ -160,7 +160,7 @@ function Navbar() {
             {isLogged && (
               <div className="relative flex items-center gap-2">
                 <Link to={`/single-employee-view/${employeeInfo.id}`} className="flex items-center gap-2 rounded-full focus:outline-none">
-                  <img src={employeeInfo?.profile_pic_url || '/assets/dashboard/user.png'} crossOrigin="anonymous" alt="User" className="w-10 h-10 rounded-full object-cover" />
+                  <img src={employeeInfo?.profile_pic_url || './assets/dashboard/user.png'} crossOrigin="anonymous" alt="User" className="w-10 h-10 rounded-full object-cover" />
                   <span className="text-[12px] font-medium italic text-[#2b2b2b]">{employeeInfo.name}</span>
                 </Link>
                 <button onClick={handleLogout} className="p-2 text-red-600 hover:bg-red-50 rounded-full flex items-center justify-center cursor-pointer">

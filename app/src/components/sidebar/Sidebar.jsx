@@ -68,7 +68,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                         <Link to="/dashboard" className="flex items-center gap-2">
                             <img
                                 crossOrigin="anonymous"
-                                src="/assets/dashboard/logo.png"
+                                src="./assets/dashboard/logo.png"
                                 alt="Logo"
                                 className="h-12 w-auto object-contain"
                             />
@@ -229,7 +229,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                             }
                         >
                             <img
-                                src={employeeInfo?.profile_pic_url || '/assets/dashboard/user.png'}
+                                src={employeeInfo?.profile_pic_url || './assets/dashboard/user.png'}
                                 crossOrigin="anonymous"
                                 alt="User"
                                 className="w-9 h-9 rounded-full object-cover border border-neutral-200"

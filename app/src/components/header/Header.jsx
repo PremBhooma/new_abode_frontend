@@ -37,7 +37,7 @@ const Header = ({ toggleSidebar }) => {
             <div className="flex items-center gap-2 md:gap-4 ml-auto">
 
                 {/* Search Icon */}
-                {!isSearchPage && (
+                {/* {!isSearchPage && (
                     <Link
                         to="/search"
                         className="p-2 text-neutral-500 hover:text-green-600 hover:bg-green-50 rounded-full transition-colors duration-200"
@@ -45,7 +45,7 @@ const Header = ({ toggleSidebar }) => {
                     >
                         <IconSearch size={22} stroke={1.5} />
                     </Link>
-                )}
+                )} */}
 
                 {/* Global Logout */}
                 <button

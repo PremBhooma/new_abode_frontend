@@ -93,7 +93,7 @@ function Loginwrapprer() {
               crossOrigin="anonymous"
               src="./assets/logo.png"
               alt="Econest Logo"
-              className="h-12 w-auto mb-4"
+              className="h-16 w-auto mb-2"
             />
 
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
@@ -189,7 +189,7 @@ function Loginwrapprer() {
       <div className="hidden lg:block lg:w-1/2 relative bg-gray-900">
         <div className="absolute inset-0 bg-blue-900/40 mix-blend-multiply z-10" />
         <img
-          src="/assets/auth_build.jpg"
+          src="./assets/auth_build.jpg"
           alt="Modern Architecture"
           className="absolute inset-0 w-full h-full object-cover"
         />

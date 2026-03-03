@@ -67,7 +67,7 @@ function Settingswrapper() {
                         // { id: 'bulk_uploads_tab', label: 'Global Upload', icon: IconDatabase, permission: 'global_tab' },
                         // { id: 'backup', label: 'Backup', icon: IconRestore, permission: 'backup_tab' },
                         { id: 'lead_stages', label: 'Lead Stages', icon: Funnel, permission: 'lead_stage_tab' }, // Assuming no specific permission or always visible
-                        { id: 'templates', label: 'Templates', icon: LayoutTemplate, permission: 'templates_tab' },
+                        // { id: 'templates', label: 'Templates', icon: LayoutTemplate, permission: 'templates_tab' },
                         { id: 'rewards', label: 'Rewards', icon: Gift, permission: 'reward_records_tab' }
                     ].map((tab) => {
                         // Check permission if it exists

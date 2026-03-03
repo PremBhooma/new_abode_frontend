@@ -531,7 +531,7 @@ function Sharedpermissionlist({
             <hr className="my-4 border-gray-200" />
 
             {/* Group Owner Default Page Section */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
                 <p className='font-bold text-sm mb-2'>Group/Owner Assiging Page</p>
                 <hr className="my-2 border-gray-200" />
                 <div className="flex flex-wrap gap-4 mt-3">
@@ -551,7 +551,7 @@ function Sharedpermissionlist({
                         </label>
                     ))}
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }

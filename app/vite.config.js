@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react-swc'
 
 export default defineConfig({
   plugins: [tailwindcss(), react()],
-  base: '/',
+  base: './',
   build: {
     outDir: '../dist/app',
     emptyOutDir: true,
