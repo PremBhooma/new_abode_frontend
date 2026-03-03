@@ -92,7 +92,7 @@ function Loginwrapprer() {
             <img
               crossOrigin="anonymous"
               src="./assets/logo.png"
-              alt="Econest Logo"
+              alt="Abode Logo"
               className="h-16 w-auto mb-2"
             />
 
@@ -166,7 +166,7 @@ function Loginwrapprer() {
 
             {/* Footer Links */}
             {/* <div className="mt-8 pt-6 flex items-center justify-center space-x-6 text-xs text-gray-400">
-              <span>Econest 2024</span>
+              <span>Abode Developers 2024</span>
               <span>•</span>
               <a href="#" className="hover:text-gray-600">Privacy</a>
               <span>•</span>

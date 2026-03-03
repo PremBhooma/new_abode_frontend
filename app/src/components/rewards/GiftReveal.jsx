@@ -138,7 +138,7 @@ const GiftReveal = ({ redemptionData, onReset, rewardId, customerData, selectedF
                             </div>
 
                             <div className="w-full h-px bg-gray-100 my-8 flex items-center justify-center">
-                                <div className="bg-white px-4 text-[10px] font-bold text-gray-300 tracking-[4px] uppercase">Econest Rewards</div>
+                                <div className="bg-white px-4 text-[10px] font-bold text-gray-300 tracking-[4px] uppercase">Abode Developers Rewards</div>
                             </div>
 
                             {/* <Button

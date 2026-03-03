@@ -29,7 +29,7 @@ const Header = ({ toggleSidebar }) => {
 
                 {/* On mobile, we might want to show title if sidebar logo is hidden */}
                 <div className="lg:hidden font-semibold text-lg text-neutral-900">
-                    Econest
+                    Abode Developers
                 </div>
             </div>
 

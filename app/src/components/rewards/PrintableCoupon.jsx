@@ -18,7 +18,7 @@ const PrintableCoupon = React.forwardRef(({ redemptionData, customerData, select
                 <div className="flex justify-between items-start mb-8 relative z-10">
                     <div>
                         <h1 className="text-4xl font-black text-[#0083bf] leading-tight mb-2">CONGRATULATIONS!</h1>
-                        <p className="text-lg font-bold text-gray-400">ECONEST REWARDS GIFT COUPON</p>
+                        <p className="text-lg font-bold text-gray-400">ABODE DEVELOPERS REWARDS GIFT COUPON</p>
                     </div>
                     <div className="text-right">
                         <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Date Issued</p>
