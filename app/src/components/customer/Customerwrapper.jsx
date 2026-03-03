@@ -883,7 +883,7 @@ function Customerwrapper() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={10} className="text-center py-8">
+                      <td colSpan={10} className="text-center py-3">
                         <p className="text-neutral-500 text-sm">
                           No customers found
                         </p>

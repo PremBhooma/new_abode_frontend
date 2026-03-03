@@ -924,7 +924,7 @@ function Leadwrapper() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={9} className="text-center py-6 text-gray-400 text-[15px] font-medium"  >
+                      <td colSpan={9} className="text-center py-3 text-neutral-500 text-sm"  >
                         No data found
                       </td>
                     </tr>

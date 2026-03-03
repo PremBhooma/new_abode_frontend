@@ -346,7 +346,7 @@ function Ageing() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" className="text-center py-10 text-gray-500 sticky left-0 right-0 border-b border-neutral-200">No records found</td>
+                  <td colSpan="8" className="text-center py-3 text-neutral-500 sticky left-0 right-0 border-b border-neutral-200">No sales reports found</td>
                 </tr>
               )}
             </tbody>

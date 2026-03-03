@@ -780,7 +780,7 @@ function Flatswrapper() {
                   <tr>
                     <td
                       colSpan={10}
-                      className="text-center py-3 text-[11px]"
+                      className="text-center py-3 text-neutral-500 text-sm"
                     >
                       No flats found.
                     </td>

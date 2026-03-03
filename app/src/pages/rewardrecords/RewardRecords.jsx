@@ -305,7 +305,7 @@ function RewardRecords() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="text-center py-10 text-gray-500 border-b border-neutral-200">No reward records found</td>
+                  <td colSpan="7" className="text-center py-3 text-neutral-500 border-b border-neutral-200">No reward reports found</td>
                 </tr>
               )}
             </tbody>

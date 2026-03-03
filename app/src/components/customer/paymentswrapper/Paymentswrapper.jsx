@@ -884,7 +884,7 @@ function Paymentswrapper({ customerUuid }) {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={13} className="text-center py-8">
+                                        <td colSpan={13} className="text-center py-3">
                                             <p className="text-neutral-500 text-sm">
                                                 No payments found
                                             </p>

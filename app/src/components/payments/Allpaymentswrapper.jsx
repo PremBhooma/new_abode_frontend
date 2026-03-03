@@ -562,7 +562,7 @@ function Allpaymentswrapper() {
                                         ) : (
                                             <tr>
                                                 <td colSpan={5} className="text-center py-3">
-                                                    <p className="text-neutral-500 text-[12px]">
+                                                    <p className="text-neutral-500 text-sm">
                                                         No payments found
                                                     </p>
                                                 </td>
