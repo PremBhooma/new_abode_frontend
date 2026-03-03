@@ -1,6 +1,6 @@
 {
   "name": "abodegroupcrm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Abode Group CRM",
   "main": "index.js",
   "scripts": {
@@ -14,14 +14,16 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/PremBhooma/electronicjs",
-  "publish": {
-    "provider": "github",
-    "owner": "PremBhooma",
-    "repo": "electronicjs",
-    "releaseType": "release"
-  },
   "build": {
     "appId": "com.abodegroups.crm",
+    "productName": "abodegroupcrm",
+    "artifactName": "${productName}-Setup-${version}.${ext}",
+    "publish": {
+      "provider": "github",
+      "owner": "PremBhooma",
+      "repo": "electronicjs",
+      "releaseType": "release"
+    },
     "mac": {
       "target": "dmg"
     },
