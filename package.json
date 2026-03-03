@@ -1,7 +1,7 @@
 {
-  "name": "econestcrm",
-  "version": "1.0.4",
-  "description": "Econest CRM",
+  "name": "abodegroupcrm",
+  "version": "1.0.1",
+  "description": "Abode Group CRM",
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently \"npm run dev:vite\" \"npm run dev:electron\"",
@@ -13,11 +13,11 @@
     "dist": "npm run build:vite && npm run build:electron",
     "postinstall": "electron-builder install-app-deps"
   },
-  "repository": "https://github.com/nayeshdaggula/abodegroupcromapp",
+  "repository": "https://github.com/PremBhooma/electronicjs",
   "publish": {
     "provider": "github",
-    "owner": "nayeshdaggula",
-    "repo": "abodegroupcromapp",
+    "owner": "PremBhooma",
+    "repo": "electronicjs",
     "releaseType": "release"
   },
   "build": {
