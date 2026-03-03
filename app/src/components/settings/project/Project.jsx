@@ -1,0 +1,206 @@
+import React, { useEffect, useState } from "react";
+import Projectapi from "../../api/Projectapi.jsx";
+import Errorpanel from "../../shared/Errorpanel.jsx";
+import Updateprojectmodal from "./Updateprojectmodal";
+import Addproject from "./Addproject";
+import { useEmployeeDetails } from "../../zustand/useEmployeeDetails.jsx";
+import { toast } from "react-toastify";
+import TableLoadingEffect from "../../shared/Tableloadingeffect.jsx";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "../../ui/table";
+import { Dialog, DialogContent } from "../../ui/dialog";
+import { Badge } from "../../ui/badge";
+
+const Project = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [projectList, setProjectList] = useState([]);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [updateProjectModal, setUpdateProjectModal] = useState(false);
+
+    const openUpdateProjectModal = (project) => {
+        setSelectedProject(project);
+        setUpdateProjectModal(true);
+    };
+
+    const closeUpdateProjectModal = () => setUpdateProjectModal(false);
+
+    const permissions = useEmployeeDetails((state) => state.permissions);
+
+    async function getProjectData() {
+        setIsLoading(true);
+
+        Projectapi.get("get-all-projects", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                const data = response.data;
+                if (data.status === "error") {
+                    setErrorMessage({
+                        message: data.message,
+                        server_res: data,
+                    });
+                    setProjectList([]);
+                } else {
+                    setProjectList(data?.data || []);
+                    setErrorMessage("");
+                }
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error fetching project info:", error);
+                const finalResponse = {
+                    message: error?.message || "Unknown error",
+                    server_res: error?.response?.data || null,
+                };
+                setErrorMessage(finalResponse);
+                setProjectList([]);
+                setIsLoading(false);
+            });
+    }
+
+    const handleDeleteProject = async (uuid) => {
+        if (!window.confirm("Are you sure you want to delete this project?")) return;
+
+        setIsLoading(true);
+        Projectapi.post("delete-project", { uuid })
+            .then((response) => {
+                const data = response.data;
+                if (data.status === "success") {
+                    toast.success("Project deleted successfully");
+                    getProjectData();
+                } else {
+                    toast.error(data.message);
+                }
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error deleting project:", error);
+                toast.error("Failed to delete project");
+                setIsLoading(false);
+            });
+    };
+
+    useEffect(() => {
+        getProjectData();
+    }, []);
+
+    const refreshProject = () => {
+        getProjectData();
+    };
+
+    return (
+        <>
+            <div className="flex flex-col gap-4 border border-[#ebecef] rounded-xl bg-white p-8 min-h-[65vh]">
+                <div className="flex justify-between items-center">
+                    <p className="text-[18px] font-semibold">Projects</p>
+                </div>
+                <hr className="text-[#ebecef]" />
+
+                <div className="grid grid-cols-4 gap-4">
+                    {/* Add Project Form - Left Column */}
+                    {permissions?.settings_page?.includes("create_project") && (
+                        <div className="col-span-1 w-full">
+                            <Addproject refreshProject={refreshProject} />
+                        </div>
+                    )}
+
+                    {/* Project List - Right Column */}
+                    <div className="col-span-3 bg-white p-4 flex flex-col gap-4 w-full border border-[#ebecef] rounded-md">
+                        <div className="w-full relative overflow-x-auto border border-neutral-200 rounded-lg">
+                            <Table>
+                                <TableHeader className="bg-gray-50">
+                                    <TableRow>
+                                        <TableHead className="w-[80px]">S.No</TableHead>
+                                        <TableHead>Project Name</TableHead>
+                                        {/* <TableHead>Address</TableHead> */}
+                                        <TableHead>Corner Price</TableHead>
+                                        <TableHead>East Price</TableHead>
+                                        <TableHead>6th Floor+ Price</TableHead>
+                                        <TableHead>Rewards</TableHead>
+                                        <TableHead className="w-[120px] text-center">Actions</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {isLoading ? (
+                                        <TableLoadingEffect colspan={8} tr={4} />
+                                    ) : (
+                                        projectList.length > 0 ? (
+                                            projectList.map((project, index) => (
+                                                <TableRow key={project.uuid} className="hover:bg-neutral-50">
+                                                    <TableCell className="font-medium">{index + 1}</TableCell>
+                                                    <TableCell>{project.project_name}</TableCell>
+                                                    {/* <TableCell>{project.project_address || "-"}</TableCell> */}
+                                                    <TableCell>{project.project_corner_price || "-"}</TableCell>
+                                                    <TableCell>{project.project_east_price || "-"}</TableCell>
+                                                    <TableCell>{project.project_six_floor_onwards_price || "-"}</TableCell>
+                                                    <TableCell>
+                                                        {project.project_rewards ? (
+                                                            <Badge variant="success">Yes</Badge>
+                                                        ) : (
+                                                            <Badge variant="secondary">No</Badge>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <div className="flex items-center justify-center gap-2">
+                                                            {permissions?.settings_page?.includes("update_project_info") && (
+                                                                <div
+                                                                    onClick={() => openUpdateProjectModal(project)}
+                                                                    className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600 cursor-pointer"
+                                                                >
+                                                                    <IconEdit size={18} />
+                                                                </div>
+                                                            )}
+                                                            {permissions?.settings_page?.includes("delete_project") && (
+                                                                <div
+                                                                    onClick={() => handleDeleteProject(project.uuid)}
+                                                                    className="p-1 hover:bg-red-50 rounded-md transition-colors text-neutral-500 hover:text-red-600 cursor-pointer"
+                                                                >
+                                                                    <IconTrash size={18} />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        ) : (
+                                            <TableRow>
+                                                <TableCell colSpan={8} className="text-center py-8 text-neutral-500">No projects found</TableCell>
+                                            </TableRow>
+                                        )
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {errorMessage && <Errorpanel errorMessages={errorMessage} setErrorMessages={setErrorMessage} />}
+
+            <Dialog open={updateProjectModal} onOpenChange={setUpdateProjectModal}>
+                <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0">
+                    {
+                        updateProjectModal &&
+                        <Updateprojectmodal
+                            closeUpdateProjectModal={closeUpdateProjectModal}
+                            projectData={selectedProject}
+                            refreshProject={refreshProject}
+                            isEdit={true}
+                        />
+                    }
+                </DialogContent>
+            </Dialog>
+        </>
+    );
+};
+
+export default Project;
