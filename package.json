@@ -1,6 +1,6 @@
 {
   "name": "abodegroupcrm",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Abode Group CRM",
   "main": "index.js",
   "scripts": {
