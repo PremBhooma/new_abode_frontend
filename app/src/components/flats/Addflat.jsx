@@ -552,7 +552,7 @@ function Addflat() {
               {blockError && <p className="text-xs text-red-500">{blockError}</p>}
             </div>
 
-            <div className="flex flex-col gap-1">
+            {/* <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-600 mb-1">Mortgage <span className="text-red-500">*</span></label>
               <Select value={mortgage !== undefined ? String(mortgage) : undefined} onValueChange={(val) => updateMortgage(val === "true")}>
                 <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${mortgageError ? 'border-red-500' : 'border-gray-300'}`}>
@@ -564,7 +564,7 @@ function Addflat() {
                 </SelectContent>
               </Select>
               {mortgageError && <p className="text-xs text-red-500">{mortgageError}</p>}
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-600 mb-1">Area (Sq.ft.) <span className="text-red-500">*</span></label>

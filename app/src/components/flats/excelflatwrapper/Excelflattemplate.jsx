@@ -120,7 +120,6 @@ function Excelflattemplate({ closeDownloadTemplate }) {
             "Floor No",
             "Block",
             // "Group/Owner",
-            "Mortgage",
             "Area(Sq.ft.)",
             // "UDL",
             // "Deed No",
@@ -135,6 +134,7 @@ function Excelflattemplate({ closeDownloadTemplate }) {
             "North Facing View",
             "South Facing View",
             "Corner",
+            "Flat Reward",
             // "Floor Rise",
             // "Furnishing Status",
             // "Google Map Link",
@@ -149,12 +149,6 @@ function Excelflattemplate({ closeDownloadTemplate }) {
         const flatTypes = [
             { value: "2 BHK", label: "2 BHK" },
             { value: "3 BHK", label: "3 BHK" },
-        ];
-
-
-        const mortgageOptions = [
-            { value: "true", label: "Yes" },
-            { value: "false", label: "No" },
         ];
 
         const facingOptions = [
@@ -214,7 +208,6 @@ function Excelflattemplate({ closeDownloadTemplate }) {
             { formula: "FloorNoList!A1" },                          // Floor No (dummy)
             blocksData[0]?.name || "",    // Block
             // groupOwnerData[0]?.name || "",// Group/Owner
-            mortgageOptions[0].label,     // Mortgage (Yes)
             "1200",                       // Area
             // "UDL001",                     // UDL
             // "Deed001",                    // Deed No
@@ -229,6 +222,7 @@ function Excelflattemplate({ closeDownloadTemplate }) {
             "Garden View",                // North Facing View
             "Road View",                  // South Facing View
             yesNoOptions[0].label,        // Corner
+            yesNoOptions[0].label,        // Flat Reward
             // yesNoOptions[0].label,        // Floor Rise
             // furnishingOptions[0].label,   // Furnishing
             // "Map Link",
@@ -272,19 +266,8 @@ function Excelflattemplate({ closeDownloadTemplate }) {
                 error: 'Please select a valid Block from the dropdown list.',
             };
 
-            // ✅ Mortgage (Column E)
-            worksheet.getCell(`E${i}`).dataValidation = {
-                type: "list",
-                allowBlank: true,
-                formulae: [`"${mortgageOptions.map((o) => o.label).join(",")}"`],
-                showErrorMessage: true,
-                errorStyle: "error",
-                errorTitle: "Invalid Mortgage Option",
-                error: "Please select Yes or No.",
-            };
-
-            // ✅ Flat Type (Column G)
-            worksheet.getCell(`G${i}`).dataValidation = {
+            // ✅ Flat Type (Column F)
+            worksheet.getCell(`F${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${flatTypes.map((o) => o.label).join(",")}"`],
@@ -294,8 +277,8 @@ function Excelflattemplate({ closeDownloadTemplate }) {
                 error: "Please select a valid flat type.",
             };
 
-            // ✅ Facing (Column H)
-            worksheet.getCell(`H${i}`).dataValidation = {
+            // ✅ Facing (Column G)
+            worksheet.getCell(`G${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${facingOptions.map((o) => o.label).join(",")}"`],
@@ -305,14 +288,25 @@ function Excelflattemplate({ closeDownloadTemplate }) {
                 error: "Please select a valid facing option.",
             };
 
-            // ✅ Corner (Column M)
-            worksheet.getCell(`M${i}`).dataValidation = {
+            // ✅ Corner (Column L)
+            worksheet.getCell(`L${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${yesNoOptions.map((o) => o.label).join(",")}"`],
                 showErrorMessage: true,
                 errorStyle: "error",
                 errorTitle: "Invalid Corner Option",
+                error: "Please select Yes or No.",
+            };
+
+            // ✅ Flat Reward (Column M)
+            worksheet.getCell(`M${i}`).dataValidation = {
+                type: "list",
+                allowBlank: true,
+                formulae: [`"${yesNoOptions.map((o) => o.label).join(",")}"`],
+                showErrorMessage: true,
+                errorStyle: "error",
+                errorTitle: "Invalid Flat Reward Option",
                 error: "Please select Yes or No.",
             };
         }
@@ -345,8 +339,8 @@ function Excelflattemplate({ closeDownloadTemplate }) {
                     <li><span className="font-semibold text-gray-700">Floor No:</span> Select a value between <strong>1–100</strong>.</li>
                     <li><span className="font-semibold text-gray-700">Flat Type:</span> e.g., Studio, 1 BHK, 2 BHK.</li>
                     <li><span className="font-semibold text-gray-700">Facing:</span> e.g., East, West, North, South.</li>
-                    <li><span className="font-semibold text-gray-700">Mortgage:</span> Select Yes or No.</li>
                     <li><span className="font-semibold text-gray-700">Corner:</span> Select Yes or No.</li>
+                    <li><span className="font-semibold text-gray-700">Flat Reward:</span> Select Yes or No.</li>
                 </ul>
             </div>
 

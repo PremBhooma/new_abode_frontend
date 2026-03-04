@@ -4,6 +4,7 @@ import Flatapi from '../../api/Flatapi';
 import { useNavigate } from 'react-router-dom';
 import { Button, Fileinput, Loadingoverlay } from '@nayeshdaggula/tailify';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
+import Skippedrecords from './Skippedrecords';
 
 const Uploadflatexcel = ({ closeUploadFlatExcel, refreshGetAllFlats, setErrorMessage }) => {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
@@ -12,6 +13,12 @@ const Uploadflatexcel = ({ closeUploadFlatExcel, refreshGetAllFlats, setErrorMes
     const [flatExcelFileError, setFlatExcelFileError] = useState(null);
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
     const navigate = useNavigate();
+
+    // States for Skipped Records Modal
+    const [showSkippedModal, setShowSkippedModal] = useState(false);
+    const [skippedData, setSkippedData] = useState([]);
+    const [skippedCount, setSkippedCount] = useState(0);
+    const [insertedCount, setInsertedCount] = useState(0);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -54,9 +61,20 @@ const Uploadflatexcel = ({ closeUploadFlatExcel, refreshGetAllFlats, setErrorMes
                     return false;
                 }
                 setIsLoadingEffect(false);
-                closeUploadFlatExcel();
-                refreshGetAllFlats();
-                setFlatExcelFile(null);
+
+                // Check for skipped records
+                if (data.skippedCount > 0) {
+                    setSkippedData(data.skipped || []);
+                    setSkippedCount(data.skippedCount);
+                    setInsertedCount(data.insertedCount || 0);
+                    setShowSkippedModal(true);
+                } else {
+                    // No skipped records, close immediately
+                    closeUploadFlatExcel();
+                    refreshGetAllFlats();
+                    setFlatExcelFile(null);
+                }
+
                 return false;
             }).catch((error) => {
                 let finalresponse;
@@ -110,6 +128,22 @@ const Uploadflatexcel = ({ closeUploadFlatExcel, refreshGetAllFlats, setErrorMes
                         Submit
                     </button>
                 </div>
+            )}
+
+            {/* Skipped Records Modal */}
+            {showSkippedModal && (
+                <Skippedrecords
+                    isOpen={showSkippedModal}
+                    onClose={() => {
+                        setShowSkippedModal(false);
+                        closeUploadFlatExcel();
+                        refreshGetAllFlats();
+                        setFlatExcelFile(null);
+                    }}
+                    skippedData={skippedData}
+                    skippedCount={skippedCount}
+                    insertedCount={insertedCount}
+                />
             )}
 
         </div>

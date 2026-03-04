@@ -594,7 +594,7 @@ function Flatswrapper() {
                 dropDownClass=" overflow-y-hidden"
                 clearable
               /> */}
-              <Select
+              {/* <Select
                 data={[
                   { value: "true", label: "Yes" },
                   { value: "false", label: "No" },
@@ -608,7 +608,7 @@ function Flatswrapper() {
                 selectWrapperClass="!bg-white !rounded-sm !shadow-none !border !border-[#ebecef] !py-1.5"
                 dropDownClass=" overflow-y-hidden"
                 clearable
-              />
+              /> */}
               {!selectedCustomer && (
                 <>
                   {/* <Datefilter
