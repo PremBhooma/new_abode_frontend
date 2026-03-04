@@ -3,6 +3,7 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { Button } from '@nayeshdaggula/tailify';
 import Employeeapi from '../../api/Employeeapi';
+import Leadapi from '../../api/Leadapi';
 import { useState, useEffect } from 'react';
 
 function Excelleadstemplate({ closeDownloadTemplate }) {
@@ -10,6 +11,7 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [employeeData, setEmployeeData] = useState([]);
+    const [leadStages, setLeadStages] = useState([]);
 
     async function getEmployees() {
         setIsLoading(true);
@@ -38,8 +40,26 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
             });
     }
 
+    async function getLeadStages() {
+        Leadapi.get("/get-lead-stages-order-wise", {
+            headers: { "Content-Type": "application/json" },
+        })
+            .then((response) => {
+                const data = response?.data;
+                if (data?.status === "success") {
+                    setLeadStages(data.data || []);
+                } else {
+                    setLeadStages([]);
+                }
+            })
+            .catch((error) => {
+                setLeadStages([]);
+            });
+    }
+
     useEffect(() => {
         getEmployees();
+        getLeadStages();
     }, []);
 
     console.log("Employees Data", employeeData);
@@ -62,6 +82,7 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
             "Email Address",
             "Phone Number",
             "Assign to Employee",
+            "Lead Stage",
             "Source of lead",
             "Lead Status",
             "Min Budget",
@@ -98,6 +119,13 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
         });
         employeeSheet.state = 'veryHidden';
 
+        // Hidden Lead Stage sheet
+        const leadStageSheet = workbook.addWorksheet('LeadStageList');
+        leadStages.forEach((ele, index) => {
+            leadStageSheet.getCell(`A${index + 1}`).value = ele.label;
+        });
+        leadStageSheet.state = 'veryHidden';
+
         // Sample row
         worksheet.addRow([
             prefixes[0],                    // Prefixes
@@ -105,6 +133,7 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
             "john.doe@example.com",         // Email Address
             "9876543210",                   // Phone Number
             employeeData[0]?.label || "",   // Employee
+            leadStages[0]?.label || "",     // Lead Stage
             sourceOfLead[0],                // Source of lead
             leadStatusOptions[0],           // Lead Status
             5000000,                        // Min Budget
@@ -145,8 +174,19 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
                 error: "Please select a valid employee from the dropdown list.",
             };
 
-            // ✅ Source of lead (Column F)
+            // ✅ Lead Stage (Column F)
             worksheet.getCell(`F${i}`).dataValidation = {
+                type: "list",
+                allowBlank: true,
+                formulae: [`LeadStageList!$A$1:$A$${leadStages.length || 1}`],
+                showErrorMessage: true,
+                errorStyle: "error",
+                errorTitle: "Invalid Lead Stage",
+                error: "Please select a valid lead stage from the dropdown list.",
+            };
+
+            // ✅ Source of lead (Column G)
+            worksheet.getCell(`G${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${sourceOfLead.join(",")}"`],
@@ -156,8 +196,8 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
                 error: "Please select a valid source of lead.",
             };
 
-            // ✅ Lead Status (Column G)
-            worksheet.getCell(`G${i}`).dataValidation = {
+            // ✅ Lead Status (Column H)
+            worksheet.getCell(`H${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${leadStatusOptions.join(",")}"`],
@@ -167,8 +207,8 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
                 error: "Please select Hot or Cold.",
             };
 
-            // ✅ Bedroom (Column J)
-            worksheet.getCell(`J${i}`).dataValidation = {
+            // ✅ Bedroom (Column K)
+            worksheet.getCell(`K${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${bedroomOptions.join(",")}"`],
@@ -178,8 +218,8 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
                 error: "Please select 2 BHK or 3 BHK.",
             };
 
-            // ✅ Purpose (Column K)
-            worksheet.getCell(`K${i}`).dataValidation = {
+            // ✅ Purpose (Column L)
+            worksheet.getCell(`L${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${purposeOptions.join(",")}"`],
@@ -189,8 +229,8 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
                 error: "Please select Enduse or Investment.",
             };
 
-            // ✅ Funding (Column L)
-            worksheet.getCell(`L${i}`).dataValidation = {
+            // ✅ Funding (Column M)
+            worksheet.getCell(`M${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${fundingOptions.join(",")}"`],
@@ -221,6 +261,7 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
                 <li><strong>Email Address:</strong> Required field - Must be valid email format.</li>
                 <li><strong>Phone Number:</strong> Required field - Must be exactly 10 digits.</li>
                 <li><strong>Assign to Employee:</strong> Select from dropdown - Required field.</li>
+                <li><strong>Lead Stage:</strong> Select from dropdown.</li>
                 <li><strong>Source of lead:</strong> Select from dropdown (Instagram, Facebook, etc.).</li>
                 <li><strong>Lead Status:</strong> Select from dropdown (Hot, Cold).</li>
                 <li><strong>Budget Range:</strong> Enter numeric values for Min and Max Budget.</li>

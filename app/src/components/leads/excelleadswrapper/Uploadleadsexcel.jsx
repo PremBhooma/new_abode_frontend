@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Leadapi from '../../api/Leadapi';
 import { Button, Fileinput, Loadingoverlay } from '@nayeshdaggula/tailify';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
+import Skippedrecords from './Skippedrecords';
 
 const Uploadleadsexcel = ({ closeUploadLeadExcel, refreshLeadsData, setErrorMessage }) => {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
@@ -9,6 +10,12 @@ const Uploadleadsexcel = ({ closeUploadLeadExcel, refreshLeadsData, setErrorMess
     const [leadExcelFile, setLeadExcelFile] = useState(null);
     const [leadExcelFileError, setLeadExcelFileError] = useState(null);
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
+
+    // States for Skipped Records Modal
+    const [showSkippedModal, setShowSkippedModal] = useState(false);
+    const [skippedData, setSkippedData] = useState([]);
+    const [skippedCount, setSkippedCount] = useState(0);
+    const [insertedCount, setInsertedCount] = useState(0);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -51,9 +58,20 @@ const Uploadleadsexcel = ({ closeUploadLeadExcel, refreshLeadsData, setErrorMess
                     return false;
                 }
                 setIsLoadingEffect(false);
-                closeUploadLeadExcel();
-                refreshLeadsData();
-                setLeadExcelFile(null);
+
+                // Check for skipped records
+                if (data.skippedCount > 0) {
+                    setSkippedData(data.skipped || []);
+                    setSkippedCount(data.skippedCount);
+                    setInsertedCount(data.insertedCount || 0);
+                    setShowSkippedModal(true);
+                } else {
+                    // No skipped records, close immediately
+                    closeUploadLeadExcel();
+                    refreshLeadsData();
+                    setLeadExcelFile(null);
+                }
+
                 return false;
             }).catch((error) => {
                 let finalresponse;
@@ -109,6 +127,20 @@ const Uploadleadsexcel = ({ closeUploadLeadExcel, refreshLeadsData, setErrorMess
                 </div>
             )}
 
+            {showSkippedModal && (
+                <Skippedrecords
+                    isOpen={showSkippedModal}
+                    onClose={() => {
+                        setShowSkippedModal(false);
+                        closeUploadLeadExcel();
+                        refreshLeadsData();
+                        setLeadExcelFile(null);
+                    }}
+                    skippedData={skippedData}
+                    skippedCount={skippedCount}
+                    insertedCount={insertedCount}
+                />
+            )}
         </div>
     );
 };
