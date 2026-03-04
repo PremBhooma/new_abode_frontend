@@ -1,15 +1,58 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { Button } from '@nayeshdaggula/tailify';
+import Projectapi from '../../api/Projectapi';
 
 function Excelcustomertemplate({ closeDownloadTemplate }) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [projectsData, setProjectsData] = useState([]);
+
+    async function getProjects() {
+        setIsLoading(true);
+
+        Projectapi.get("/get-all-projects", {
+            headers: { "Content-Type": "application/json" },
+        })
+            .then((response) => {
+                const data = response?.data;
+                if (data?.status === "error") {
+                    setErrorMessage({ message: data.message, server_res: data });
+                    setProjectsData([]);
+                } else {
+                    setProjectsData(data?.data || []);
+                    setErrorMessage("");
+                }
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                setErrorMessage({
+                    message: error?.message || "Unknown error",
+                    server_res: error?.response?.data || null,
+                });
+                setProjectsData([]);
+                setIsLoading(false);
+            });
+    }
+
+    useEffect(() => {
+        getProjects();
+    }, []);
 
     const downloadCustomerTemplate = async () => {
+
+        if (!projectsData || projectsData.length === 0) {
+            setErrorMessage("No projects available. Please add projects before downloading.");
+            return;
+        }
+
+        setErrorMessage("");
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet("Customer Upload Template");
 
         const headers = [
+            "Project", // NEW REQUIRED FIELD
             "Prefixes", // NEW
             "First Name",
             "Last Name",
@@ -66,8 +109,16 @@ function Excelcustomertemplate({ closeDownloadTemplate }) {
         const ifPOAHolderIsIndian = ["Resident", "NRI"];
         const haveYouEverOwnedAbode = ["Yes", "No"];
 
+        // Hidden Project sheet
+        const projectSheet = workbook.addWorksheet('ProjectList');
+        projectsData.forEach((ele, index) => {
+            projectSheet.getCell(`A${index + 1}`).value = ele.project_name;
+        });
+        projectSheet.state = 'veryHidden';
+
         // Example row
         worksheet.addRow([
+            projectsData[0]?.project_name || "",
             "Mr",
             "ABC",
             "XYZ",
@@ -114,8 +165,19 @@ function Excelcustomertemplate({ closeDownloadTemplate }) {
         const rowCount = 5000;
 
         for (let i = 2; i <= rowCount; i++) {
-            // Prefixes → column A
+            // Project (Column A)
             worksheet.getCell(`A${i}`).dataValidation = {
+                type: "list",
+                allowBlank: false,
+                formulae: [`ProjectList!$A$1:$A$${projectsData.length}`],
+                showErrorMessage: true,
+                errorStyle: "error",
+                errorTitle: "Invalid Project",
+                error: "Please select a valid Project from the dropdown list.",
+            };
+
+            // Prefixes → column B
+            worksheet.getCell(`B${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${prefixes.join(",")}"`],
@@ -125,8 +187,8 @@ function Excelcustomertemplate({ closeDownloadTemplate }) {
                 error: "Please select Mr, Mrs, Miss, or Mx",
             };
 
-            // Gender → column G
-            worksheet.getCell(`G${i}`).dataValidation = {
+            // Gender → column H
+            worksheet.getCell(`H${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${gender.join(",")}"`],
@@ -136,8 +198,8 @@ function Excelcustomertemplate({ closeDownloadTemplate }) {
                 error: "Please select Male or Female",
             };
 
-            // Spouse Prefixes → column J
-            worksheet.getCell(`J${i}`).dataValidation = {
+            // Spouse Prefixes → column K
+            worksheet.getCell(`K${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${prefixes.join(",")}"`],
@@ -147,8 +209,8 @@ function Excelcustomertemplate({ closeDownloadTemplate }) {
                 error: "Please select Mr, Mrs, Miss, or Mx",
             };
 
-            // Marital Status → column L
-            worksheet.getCell(`L${i}`).dataValidation = {
+            // Marital Status → column M
+            worksheet.getCell(`M${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${maritalStatus.join(",")}"`],
@@ -205,6 +267,8 @@ function Excelcustomertemplate({ closeDownloadTemplate }) {
             <div className="bg-blue-50/50 rounded-lg p-4 border border-blue-100">
                 <p className="text-sm text-gray-600 mb-3 font-medium">Please follow these rules to ensure successful upload:</p>
                 <ul className="list-disc ml-4 space-y-2 text-sm text-gray-600">
+                    <li><span className="font-semibold text-gray-700">Project:</span> Required field. Select from dropdown.</li>
+                    <li><span className="font-semibold text-gray-700">Required Fields:</span> Project, Prefixes, First Name, Last Name, Phone Number, Gender.</li>
                     <li><span className="font-semibold text-gray-700">Prefixes:</span> Select from dropdown → Mr, Mrs, Miss, Mx.</li>
                     <li><span className="font-semibold text-gray-700">Gender:</span> Select from dropdown → Male, Female.</li>
                     <li><span className="font-semibold text-gray-700">Spouse Prefixes:</span> Select from dropdown → Mr, Mrs, Miss, Mx.</li>
@@ -217,12 +281,14 @@ function Excelcustomertemplate({ closeDownloadTemplate }) {
 
             <div className="flex flex-col gap-3 pt-2">
                 <button
-                    className="w-full flex justify-center items-center gap-2 px-5 py-2.5 text-white text-sm font-medium bg-[#0083bf] hover:bg-[#006e9e] rounded-md shadow-sm transition-all duration-200 cursor-pointer"
+                    className="w-full flex justify-center items-center gap-2 px-5 py-2.5 text-white text-sm font-medium bg-[#0083bf] hover:bg-[#006e9e] rounded-md shadow-sm transition-all duration-200 cursor-pointer disabled:opacity-50"
                     onClick={downloadCustomerTemplate}
+                    disabled={isLoading}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Download Customer Template
+                    {isLoading ? "Loading..." : "Download Customer Template"}
                 </button>
+                {errorMessage && <p className="text-red-500 text-sm mt-2 text-center">{errorMessage.message || errorMessage}</p>}
             </div>
         </div>
     );

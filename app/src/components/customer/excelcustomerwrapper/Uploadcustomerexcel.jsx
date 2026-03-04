@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Customerapi from '../../api/Customerapi';
 import { Button, Fileinput, Loadingoverlay } from '@nayeshdaggula/tailify';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
+import Skippedrecords from './Skippedrecords';
 
 const Uploadcustomerexcel = ({ closeUploadCustomerExcel, refreshCustomerData, setErrorMessage }) => {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
@@ -9,6 +10,12 @@ const Uploadcustomerexcel = ({ closeUploadCustomerExcel, refreshCustomerData, se
     const [customerExcelFile, setCustomerExcelFile] = useState(null);
     const [customerExcelFileError, setCustomerExcelFileError] = useState(null);
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
+
+    // States for Skipped Records Modal
+    const [showSkippedModal, setShowSkippedModal] = useState(false);
+    const [skippedData, setSkippedData] = useState([]);
+    const [skippedCount, setSkippedCount] = useState(0);
+    const [insertedCount, setInsertedCount] = useState(0);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -51,9 +58,20 @@ const Uploadcustomerexcel = ({ closeUploadCustomerExcel, refreshCustomerData, se
                     return false;
                 }
                 setIsLoadingEffect(false);
-                closeUploadCustomerExcel();
-                refreshCustomerData();
-                setCustomerExcelFile(null);
+
+                // Check for skipped records
+                if (data.skippedCount > 0) {
+                    setSkippedData(data.skipped || []);
+                    setSkippedCount(data.skippedCount);
+                    setInsertedCount(data.insertedCount || 0);
+                    setShowSkippedModal(true);
+                } else {
+                    // No skipped records, close immediately
+                    closeUploadCustomerExcel();
+                    refreshCustomerData();
+                    setCustomerExcelFile(null);
+                }
+
                 return false;
             }).catch((error) => {
                 let finalresponse;
@@ -107,6 +125,22 @@ const Uploadcustomerexcel = ({ closeUploadCustomerExcel, refreshCustomerData, se
                         Submit
                     </button>
                 </div>
+            )}
+
+            {/* Skipped Records Modal */}
+            {showSkippedModal && (
+                <Skippedrecords
+                    isOpen={showSkippedModal}
+                    onClose={() => {
+                        setShowSkippedModal(false);
+                        closeUploadCustomerExcel();
+                        refreshCustomerData();
+                        setCustomerExcelFile(null);
+                    }}
+                    skippedData={skippedData}
+                    skippedCount={skippedCount}
+                    insertedCount={insertedCount}
+                />
             )}
 
         </div>
