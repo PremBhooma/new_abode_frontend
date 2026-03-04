@@ -403,7 +403,7 @@ function Employeewrapper() {
                       usersdata.map((user, index) => (
                         <tr
                           key={index}
-                          className="hover:bg-neutral-50 transition-colors duration-150 align-top group border-b border-neutral-200"
+                          className="hover:bg-neutral-50 transition-colors duration-150 align-center group border-b border-neutral-200"
                         >
                           {visibleColumns.reference && (
                             <td className="px-3 py-2 whitespace-normal break-words w-[150px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border border-neutral-200">

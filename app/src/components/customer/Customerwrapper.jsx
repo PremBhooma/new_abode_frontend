@@ -600,7 +600,7 @@ function Customerwrapper() {
                     customersData?.map((customer, index) => (
                       <tr
                         key={index}
-                        className="hover:bg-neutral-50 transition-colors duration-150 align-top group"
+                        className="hover:bg-neutral-50 transition-colors duration-150 align-center group"
                       >
                         {visibleColumns.reference && (
                           <td className="px-3 py-2 whitespace-normal break-words w-[140px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border-r border-neutral-200">
