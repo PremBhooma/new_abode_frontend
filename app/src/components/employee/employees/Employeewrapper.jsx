@@ -333,7 +333,7 @@ function Employeewrapper() {
                     {visibleColumns.reference && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[150px] sticky left-0 z-20 bg-gray-50 border-r border-neutral-200"
+                        className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[150px] sticky left-0 z-20 bg-gray-50 border border-neutral-200"
                       >
                         Ref ID
                       </th>
@@ -341,7 +341,7 @@ function Employeewrapper() {
                     {visibleColumns.name && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[160px]"
+                        className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[160px] border border-neutral-200"
                       >
                         Name
                       </th>
@@ -349,7 +349,7 @@ function Employeewrapper() {
                     {visibleColumns.email && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[180px]"
+                        className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[180px] border border-neutral-200"
                       >
                         Email Address
                       </th>
@@ -357,7 +357,7 @@ function Employeewrapper() {
                     {visibleColumns.phone && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[160px]"
+                        className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[160px] border border-neutral-200"
                       >
                         Phone Number
                       </th>
@@ -365,7 +365,7 @@ function Employeewrapper() {
                     {visibleColumns.role && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[140px]"
+                        className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[140px] border border-neutral-200"
                       >
                         Role
                       </th>
@@ -373,7 +373,7 @@ function Employeewrapper() {
                     {visibleColumns.reportingHead && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[160px]"
+                        className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[160px] border border-neutral-200"
                       >
                         Reporting Head
                       </th>
@@ -381,17 +381,17 @@ function Employeewrapper() {
                     {visibleColumns.date && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[140px]"
+                        className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[140px] border border-neutral-200"
                       >
                         Date Joined
                       </th>
                     )}
-                    <th className="sticky right-[120px] z-10 w-[120px] bg-gray-50 border-l border-neutral-200 px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px]">
+                    <th className="sticky right-[120px] z-10 w-[120px] bg-gray-50 border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px]">
                       Status
                     </th>
                     <th
                       scope="col"
-                      className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[120px] sticky right-0 z-20 bg-gray-50 border-l border-neutral-200"
+                      className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[120px] sticky right-0 z-20 bg-gray-50 border border-neutral-200"
                     >
                       Actions
                     </th>
@@ -403,10 +403,10 @@ function Employeewrapper() {
                       usersdata.map((user, index) => (
                         <tr
                           key={index}
-                          className="hover:bg-neutral-50 transition-colors duration-150 align-top group"
+                          className="hover:bg-neutral-50 transition-colors duration-150 align-top group border-b border-neutral-200"
                         >
                           {visibleColumns.reference && (
-                            <td className="px-4 py-3 whitespace-normal break-words w-[150px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border-r border-neutral-200">
+                            <td className="px-3 py-2 whitespace-normal break-words w-[150px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border border-neutral-200">
                               <NavLink to={`/single-employee-view/${user.id}`}>
                                 <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
                                   {user?.uuid}
@@ -415,14 +415,14 @@ function Employeewrapper() {
                             </td>
                           )}
                           {visibleColumns.name && (
-                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
+                            <td className="px-3 py-2 whitespace-normal break-words w-[160px] border border-neutral-200">
                               <p className="text-neutral-900 text-xs font-semibold leading-[18px]">
                                 {user.name}
                               </p>
                             </td>
                           )}
                           {visibleColumns.email && (
-                            <td className="px-4 py-3 whitespace-normal break-words w-[180px]">
+                            <td className="px-3 py-2 whitespace-normal break-words w-[180px] border border-neutral-200">
                               <NavLink to={`mailto:${user.email}`}>
                                 <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
                                   {user.email}
@@ -431,7 +431,7 @@ function Employeewrapper() {
                             </td>
                           )}
                           {visibleColumns.phone && (
-                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
+                            <td className="px-3 py-2 whitespace-normal break-words w-[160px] border border-neutral-200">
                               <NavLink
                                 to={`https://wa.me/${user.phone_code}${user.phone_number}?text=Hello!%20I%27m%20interested%20in%20your%20service`}
                                 target="_blank"
@@ -446,14 +446,14 @@ function Employeewrapper() {
                             </td>
                           )}
                           {visibleColumns.role && (
-                            <td className="px-4 py-3 whitespace-normal break-words w-[140px]">
+                            <td className="px-3 py-2 whitespace-normal break-words w-[140px] border border-neutral-200">
                               <p className="text-neutral-600 text-xs font-medium leading-[18px]">
                                 {user.role_name}
                               </p>
                             </td>
                           )}
                           {visibleColumns.reportingHead && (
-                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
+                            <td className="px-3 py-2 whitespace-normal break-words w-[160px] border border-neutral-200">
                               <p className="text-neutral-600 text-xs font-medium leading-[18px]">
                                 {user.reporting_head_name
                                   ? user.reporting_head_name
@@ -462,13 +462,13 @@ function Employeewrapper() {
                             </td>
                           )}
                           {visibleColumns.date && (
-                            <td className="px-4 py-3 whitespace-normal break-words w-[140px]">
+                            <td className="px-3 py-2 whitespace-normal break-words w-[140px] border border-neutral-200">
                               <p className="text-neutral-600 text-xs font-medium leading-[18px]">
                                 {dayjs(user?.joinedAt).format("DD MMM YYYY")}
                               </p>
                             </td>
                           )}
-                          <td className="px-4 py-3 whitespace-normal break-words w-[160px] sticky right-[120px] z-10 bg-white group-hover:bg-neutral-50 border-l border-neutral-200">
+                          <td className="px-3 py-2 whitespace-normal break-words w-[160px] sticky right-[120px] z-10 bg-white group-hover:bg-neutral-50 border border-neutral-200">
                             {user?.employee_status === "Inactive" ? (
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                 Inactive
@@ -485,7 +485,7 @@ function Employeewrapper() {
                               )
                             )}
                           </td>
-                          <td className="px-4 py-3 text-center whitespace-normal break-words w-[120px] sticky right-0 z-10 bg-white group-hover:bg-neutral-50 border-l border-neutral-200">
+                          <td className="px-3 py-2 text-center whitespace-normal break-words w-[120px] sticky right-0 z-10 bg-white group-hover:bg-neutral-50 border border-neutral-200">
                             <div className="flex flex-row items-center justify-center gap-2">
                               {permissions?.employee_page?.includes(
                                 "view_employee"
