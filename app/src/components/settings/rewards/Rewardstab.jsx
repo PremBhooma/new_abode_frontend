@@ -135,13 +135,13 @@ const Rewardstab = () => {
                             <Table>
                                 <TableHeader className="bg-gray-50">
                                     <TableRow>
-                                        <TableHead className="w-[80px]">S.No</TableHead>
-                                        <TableHead>Image</TableHead>
-                                        <TableHead>Coupon ID</TableHead>
-                                        <TableHead>Reward Name</TableHead>
-                                        <TableHead>Project</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead className="w-[120px] text-center">Actions</TableHead>
+                                        <TableHead className="w-[80px] border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">S.No</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Image</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Coupon ID</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Reward Name</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Project</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Status</TableHead>
+                                        <TableHead className="w-[120px] text-center border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -151,8 +151,8 @@ const Rewardstab = () => {
                                         rewardList.length > 0 ? (
                                             rewardList.map((reward, index) => (
                                                 <TableRow key={reward.id} className="hover:bg-neutral-50">
-                                                    <TableCell className="font-medium">{(page - 1) * limit + index + 1}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell className="font-medium border border-neutral-200 px-3 py-2">{(page - 1) * limit + index + 1}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">
                                                         <div className="w-12 h-12 rounded-lg overflow-hidden border border-gray-100 shadow-sm bg-gray-50 flex items-center justify-center p-0.5">
                                                             <img
                                                                 src={`${reward.coupon_gift_pic_url}`}
@@ -165,18 +165,18 @@ const Rewardstab = () => {
                                                             />
                                                         </div>
                                                     </TableCell>
-                                                    <TableCell>{reward.coupon_gift_id || 'N/A'}</TableCell>
-                                                    <TableCell>{reward.name}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">{reward.coupon_gift_id || 'N/A'}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">{reward.name}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">
                                                         {projects.find(p => String(p.id) === String(reward.project_id))?.project_name || 'Loading...'}
                                                     </TableCell>
-                                                    <TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">
                                                         <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${reward.coupon_gift_status === 'Active' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-red-100 text-red-700 border border-red-200'
                                                             }`}>
                                                             {reward.coupon_gift_status || 'Active'}
                                                         </span>
                                                     </TableCell>
-                                                    <TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">
                                                         <div className="flex items-center justify-center gap-2">
                                                             <div
                                                                 onClick={() => openUpdateRewardModal(reward)}

@@ -120,14 +120,14 @@ const Project = () => {
                             <Table>
                                 <TableHeader className="bg-gray-50">
                                     <TableRow>
-                                        <TableHead className="w-[80px]">S.No</TableHead>
-                                        <TableHead>Project Name</TableHead>
+                                        <TableHead className="w-[80px] border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">S.No</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Project Name</TableHead>
                                         {/* <TableHead>Address</TableHead> */}
-                                        <TableHead>Corner Price</TableHead>
-                                        <TableHead>East Price</TableHead>
-                                        <TableHead>6th Floor+ Price</TableHead>
-                                        <TableHead>Rewards</TableHead>
-                                        <TableHead className="w-[120px] text-center">Actions</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Corner Price</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">East Price</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">6th Floor+ Price</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Rewards</TableHead>
+                                        <TableHead className="w-[120px] text-center border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -137,20 +137,20 @@ const Project = () => {
                                         projectList.length > 0 ? (
                                             projectList.map((project, index) => (
                                                 <TableRow key={project.uuid} className="hover:bg-neutral-50">
-                                                    <TableCell className="font-medium">{index + 1}</TableCell>
-                                                    <TableCell>{project.project_name}</TableCell>
+                                                    <TableCell className="font-medium border border-neutral-200 px-3 py-2">{index + 1}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">{project.project_name}</TableCell>
                                                     {/* <TableCell>{project.project_address || "-"}</TableCell> */}
-                                                    <TableCell>{project.project_corner_price || "-"}</TableCell>
-                                                    <TableCell>{project.project_east_price || "-"}</TableCell>
-                                                    <TableCell>{project.project_six_floor_onwards_price || "-"}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">{project.project_corner_price || "-"}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">{project.project_east_price || "-"}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">{project.project_six_floor_onwards_price || "-"}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">
                                                         {project.project_rewards ? (
                                                             <Badge variant="success">Yes</Badge>
                                                         ) : (
                                                             <Badge variant="secondary">No</Badge>
                                                         )}
                                                     </TableCell>
-                                                    <TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">
                                                         <div className="flex items-center justify-center gap-2">
                                                             {permissions?.settings_page?.includes("update_project_info") && (
                                                                 <div

@@ -174,13 +174,13 @@ const Blocks = () => {
                             <table className="w-full table-fixed text-left border-collapse">
                                 <thead className="bg-gray-50 border-b border-neutral-200">
                                     <tr className="w-full">
-                                        <th scope="col" className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[120px] sticky left-0 z-20 bg-gray-50 border-r border-neutral-200">
+                                        <th scope="col" className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[120px] sticky left-0 z-20 bg-gray-50 border border-neutral-200">
                                             S.No
                                         </th>
-                                        <th scope="col" className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[180px]">
+                                        <th scope="col" className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[180px] border border-neutral-200">
                                             Block Name
                                         </th>
-                                        <th scope="col" className="px-4 py-3 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[120px] sticky right-0 z-20 bg-gray-50 border-l border-neutral-200">
+                                        <th scope="col" className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[120px] sticky right-0 z-20 bg-gray-50 border border-neutral-200">
                                             Actions
                                         </th>
                                     </tr>
@@ -190,17 +190,17 @@ const Blocks = () => {
                                         blocksData?.length > 0 ? (
                                             blocksData?.map((ele, index) => (
                                                 <tr key={index} className="hover:bg-neutral-50 transition-colors duration-150 align-top group">
-                                                    <td className="px-4 py-4 whitespace-normal break-words w-[120px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border-r border-neutral-200">
+                                                    <td className="px-3 py-2 whitespace-normal break-words w-[120px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border border-neutral-200">
                                                         <p className="text-neutral-600 text-xs font-medium leading-[18px]">
                                                             {index + 1}
                                                         </p>
                                                     </td>
-                                                    <td className="px-4 py-4 whitespace-normal break-words w-[180px]">
+                                                    <td className="px-3 py-2 whitespace-normal break-words w-[180px] border border-neutral-200">
                                                         <p className=" text-neutral-600 text-xs font-medium leading-[18px]">
                                                             {ele.block_name}
                                                         </p>
                                                     </td>
-                                                    <td className="px-4 py-4 text-center whitespace-normal break-words w-[120px] sticky right-0 z-20 bg-white group-hover:bg-neutral-50 border-l border-neutral-200">
+                                                    <td className="px-3 py-2 text-center whitespace-normal break-words w-[120px] sticky right-0 z-20 bg-white group-hover:bg-neutral-50 border border-neutral-200">
                                                         <div className="flex items-center justify-center gap-3">
                                                             {permissions?.settings_page?.includes("edit_block") && (
                                                                 <div

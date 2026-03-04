@@ -154,9 +154,9 @@ const Bankstab = () => {
                             <Table>
                                 <TableHeader className="bg-gray-50">
                                     <TableRow>
-                                        <TableHead className="w-[80px]">S.No</TableHead>
-                                        <TableHead>Bank Name</TableHead>
-                                        <TableHead className="w-[120px] text-center">Actions</TableHead>
+                                        <TableHead className="w-[80px] border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">S.No</TableHead>
+                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Bank Name</TableHead>
+                                        <TableHead className="w-[120px] text-center border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -166,9 +166,9 @@ const Bankstab = () => {
                                         bankList.length > 0 ? (
                                             bankList.map((bank, index) => (
                                                 <TableRow key={bank.id} className="hover:bg-neutral-50">
-                                                    <TableCell className="font-medium">{(page - 1) * limit + index + 1}</TableCell>
-                                                    <TableCell>{bank.name}</TableCell>
-                                                    <TableCell>
+                                                    <TableCell className="font-medium border border-neutral-200 px-3 py-2">{(page - 1) * limit + index + 1}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">{bank.name}</TableCell>
+                                                    <TableCell className="border border-neutral-200 px-3 py-2">
                                                         <div className="flex items-center justify-center gap-2">
                                                             <div
                                                                 onClick={() => openUpdateBankModal(bank)}
