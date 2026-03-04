@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@nayeshdaggula/tailify';
 import { useEmployeeDetails } from '../zustand/useEmployeeDetails';
 import { IconUpload, IconFile, IconX, IconFileSpreadsheet } from '@tabler/icons-react';
+import Skippedrecords from "./Skippedrecords";
 
-const Uploadpaymentsexcel = ({ closeUploadPaymentExcel, setErrorMessage, refreshPaymentsData }) => {
+const Uploadpaymentsexcel = ({ closeUploadPaymentExcel, setErrorMessage, refreshPaymentsData, onUploadResults }) => {
 
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const employeeId = employeeInfo?.id || null;
@@ -88,11 +89,19 @@ const Uploadpaymentsexcel = ({ closeUploadPaymentExcel, setErrorMessage, refresh
                     return false;
                 }
                 setIsLoadingEffect(false);
-                closeUploadPaymentExcel();
-                setPaymentExcelFile(null);
-                if (refreshPaymentsData) refreshPaymentsData();
-                if (data?.status === 'success') {
-                    navigate('/payments/view-bulk-payments')
+
+                // Handle Results (Success or Skipped)
+                if (data.skippedCount > 0) {
+                    if (onUploadResults) {
+                        onUploadResults(data);
+                    }
+                } else {
+                    closeUploadPaymentExcel();
+                    setPaymentExcelFile(null);
+                    if (refreshPaymentsData) refreshPaymentsData();
+                    if (data?.status === 'success') {
+                        navigate('/payments/view-bulk-payments')
+                    }
                 }
                 return false;
             }).catch((error) => {

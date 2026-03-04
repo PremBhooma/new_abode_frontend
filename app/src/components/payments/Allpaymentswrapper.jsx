@@ -15,6 +15,7 @@ import { Funnel } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import Downloadtemplate from "./Downloadtemplate";
 import Uploadpaymentexcel from "./Uploadpaymentexcel";
+import Skippedrecords from "./Skippedrecords";
 import dayjs from "dayjs";
 
 function Allpaymentswrapper() {
@@ -80,6 +81,26 @@ function Allpaymentswrapper() {
     const closeUploadPaymentExcel = () => {
         setUploadPaymentExcel(false)
     }
+
+    // Skipped Records Modal (Bulk Upload Results)
+    const [showSkippedModal, setShowSkippedModal] = useState(false);
+    const [skippedData, setSkippedData] = useState([]);
+    const [skippedCount, setSkippedCount] = useState(0);
+    const [insertedCount, setInsertedCount] = useState(0);
+
+    const handleUploadResults = (data) => {
+        setSkippedData(data.skipped || []);
+        setSkippedCount(data.skippedCount);
+        setInsertedCount(data.insertedCount || 0);
+        setShowSkippedModal(true);
+        // Close the upload modal when results are ready to show
+        closeUploadPaymentExcel();
+    };
+
+    const handleCloseSkippedModal = () => {
+        setShowSkippedModal(false);
+        refreshPaymentsData();
+    };
 
     // Fetch flats summary data
     async function GetPaymentsSummaryByFlat(newPage, newLimit, newSearchQuery, flatid, selectedblock) {
@@ -658,9 +679,19 @@ function Allpaymentswrapper() {
                     <Uploadpaymentexcel
                         closeUploadPaymentExcel={closeUploadPaymentExcel}
                         refreshPaymentsData={refreshPaymentsData}
+                        onUploadResults={handleUploadResults}
                     />
                 )}
             </Modal>
+
+            {showSkippedModal && (
+                <Skippedrecords
+                    insertedCount={insertedCount}
+                    skippedCount={skippedCount}
+                    skippedData={skippedData}
+                    closeModal={handleCloseSkippedModal}
+                />
+            )}
         </>
     );
 }

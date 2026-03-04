@@ -125,6 +125,10 @@ function ExcelPaymentTemplate({ closeDownloadTemplate }) {
             col.width = 25;
         });
 
+        // Format the "Date of Payment" column (F) as Text to prevent Excel
+        // from auto-converting dates to serial numbers (which causes locale issues)
+        worksheet.getColumn(6).numFmt = '@';
+
         const paymentTypes = ['Customer Pay', 'Loan Pay'];
         const paymentTowards = ['Flat', 'GST', 'Corpus fund', 'Registration', 'TDS', 'Maintenance'];
         const paymentMethods = ['DD', 'UPI', 'Bank Deposit', 'Cheque', 'Online Transfer (IMPS, NFT)'];
@@ -163,6 +167,9 @@ function ExcelPaymentTemplate({ closeDownloadTemplate }) {
         const rowCount = 5000;
 
         for (let i = 2; i <= rowCount; i++) {
+            // Ensure Date column cells are Text format
+            worksheet.getCell(`F${i}`).numFmt = '@';
+
             worksheet.getCell(`B${i}`).dataValidation = {
                 type: 'list',
                 allowBlank: false,
@@ -257,14 +264,11 @@ function ExcelPaymentTemplate({ closeDownloadTemplate }) {
             <div className="bg-blue-50/50 rounded-lg p-4 border border-blue-100">
                 <p className="text-sm text-gray-600 mb-3 font-medium">Please follow these rules to ensure successful upload:</p>
                 <ul className="list-disc ml-4 space-y-2 text-sm text-gray-600">
-                    <li><span className="font-semibold text-gray-700">Date of Payment:</span> Enter in <code>DD-MM-YYYY</code> format (e.g., <code>27-07-2025</code>).</li>
-                    <li><span className="font-semibold text-gray-700">Payment Type:</span> Select from dropdown → Customer Pay, Loan Pay.</li>
-                    <li><span className="font-semibold text-gray-700">Payment Towards:</span> Select from dropdown → Flat, GST, Corpus fund, Registration, TDS, Maintenance.</li>
-                    <li><span className="font-semibold text-gray-700">Payment Method:</span> Select from dropdown → DD, UPI, Bank Deposit, Cheque, Online Transfer (IMPS, NFT).</li>
-
-                    <li><span className="font-semibold text-gray-700">Bank:</span> Select a valid Bank from the dropdown list.</li>
-                    <li><span className="font-semibold text-gray-700">Block:</span> Select a valid block from the dropdown list.</li>
-                    <li><span className="font-semibold text-gray-700">Project:</span> Select a valid Project from the dropdown list.</li>
+                    <li><span className="font-semibold text-gray-700">Required Fields:</span> Amount, Type, Towards, Method, Date, Txn Id, Flat, Project are mandatory.</li>
+                    <li><span className="font-semibold text-gray-700">Customer Check:</span> The specified <span className="font-medium">Flat</span> must have an <span className="font-medium">Active Customer</span> assigned to it.</li>
+                    <li><span className="font-semibold text-gray-700">Date of Payment:</span> Must be between the <span className="font-medium">Booking Date</span> and <span className="font-medium">Today</span>. Use <code>DD-MM-YYYY</code> format (e.g., <code>01-03-2026</code>). <span className="text-red-500 font-medium">Do not use slashes (/).</span></li>
+                    <li><span className="font-semibold text-gray-700">Bank Requirement:</span> Required ONLY for <code>DD</code>, <code>Bank Deposit</code>, or <code>Cheque</code>.</li>
+                    <li><span className="font-semibold text-gray-700">Dropdowns:</span> Use provided lists for Type, Towards, Method, Bank, Block, and Project.</li>
                 </ul>
             </div>
 
