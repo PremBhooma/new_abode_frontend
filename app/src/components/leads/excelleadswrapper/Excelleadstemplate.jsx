@@ -4,6 +4,7 @@ import { saveAs } from 'file-saver';
 import { Button } from '@nayeshdaggula/tailify';
 import Employeeapi from '../../api/Employeeapi';
 import Leadapi from '../../api/Leadapi';
+import Projectapi from '../../api/Projectapi';
 import { useState, useEffect } from 'react';
 
 function Excelleadstemplate({ closeDownloadTemplate }) {
@@ -12,6 +13,7 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
     const [errorMessage, setErrorMessage] = useState("");
     const [employeeData, setEmployeeData] = useState([]);
     const [leadStages, setLeadStages] = useState([]);
+    const [projectsData, setProjectsData] = useState([]);
 
     async function getEmployees() {
         setIsLoading(true);
@@ -57,9 +59,29 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
             });
     }
 
+    async function getProjects() {
+        Projectapi.get("/get-all-projects", {
+            headers: { "Content-Type": "application/json" },
+        })
+            .then((response) => {
+                const data = response?.data;
+                if (data?.status === "error") {
+                    setErrorMessage({ message: data.message, server_res: data });
+                    setProjectsData([]);
+                } else {
+                    setProjectsData(data?.data || []);
+                    setErrorMessage("");
+                }
+            })
+            .catch((error) => {
+                setProjectsData([]);
+            });
+    }
+
     useEffect(() => {
         getEmployees();
         getLeadStages();
+        getProjects();
     }, []);
 
     console.log("Employees Data", employeeData);
@@ -77,6 +99,7 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
         const worksheet = workbook.addWorksheet("Lead Upload Template");
 
         const headers = [
+            "Project",
             "Prefixes",
             "Full Name",
             "Email Address",
@@ -126,8 +149,16 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
         });
         leadStageSheet.state = 'veryHidden';
 
+        // Hidden Project sheet
+        const projectSheet = workbook.addWorksheet('ProjectList');
+        projectsData.forEach((ele, index) => {
+            projectSheet.getCell(`A${index + 1}`).value = ele.project_name;
+        });
+        projectSheet.state = 'veryHidden';
+
         // Sample row
         worksheet.addRow([
+            projectsData[0]?.project_name || "", // Project
             prefixes[0],                    // Prefixes
             "John Doe",                     // Full Name
             "john.doe@example.com",         // Email Address
@@ -152,92 +183,148 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
         const rowCount = 5000;
 
         for (let i = 2; i <= rowCount; i++) {
-            // ✅ Prefixes (Column A)
+            // Project
             worksheet.getCell(`A${i}`).dataValidation = {
+                type: "list",
+                allowBlank: false,
+                formulae: [`ProjectList!$A$1:$A$${projectsData.length}`],
+                showErrorMessage: true,
+                errorStyle: "error",
+                errorTitle: "Invalid Project",
+                error: "Please select a valid Project from the list",
+            };
+
+            // Prefixes
+            worksheet.getCell(`B${i}`).dataValidation = {
                 type: "list",
                 allowBlank: true,
                 formulae: [`"${prefixes.join(",")}"`],
                 showErrorMessage: true,
                 errorStyle: "error",
                 errorTitle: "Invalid Prefix",
-                error: "Please select Mr, Mrs, Miss, or Mx.",
+                error: "Please select Mr, Mrs, Miss, or Mx",
             };
 
-            // ✅ Assign to Employee (Column E)
-            worksheet.getCell(`E${i}`).dataValidation = {
-                type: "list",
-                allowBlank: false,
+            // email validation -> index D
+            worksheet.getCell(`D${i}`).dataValidation = {
+                type: 'custom',
+                allowBlank: true,
+                formulae: ['ISNUMBER(SEARCH("@", D' + i + '))'],
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Invalid Email',
+                error: 'Please enter a valid email address containing "@"',
+            };
+
+            // Employee -> F
+            worksheet.getCell(`F${i}`).dataValidation = {
+                type: 'list',
+                allowBlank: true,
                 formulae: [`EmployeeList!$A$1:$A$${employeeData.length}`],
                 showErrorMessage: true,
-                errorStyle: "error",
-                errorTitle: "Invalid Employee",
-                error: "Please select a valid employee from the dropdown list.",
+                errorStyle: 'error',
+                errorTitle: 'Invalid Employee',
+                error: 'Please select an employee from the list',
             };
 
-            // ✅ Lead Stage (Column F)
-            worksheet.getCell(`F${i}`).dataValidation = {
-                type: "list",
-                allowBlank: true,
-                formulae: [`LeadStageList!$A$1:$A$${leadStages.length || 1}`],
-                showErrorMessage: true,
-                errorStyle: "error",
-                errorTitle: "Invalid Lead Stage",
-                error: "Please select a valid lead stage from the dropdown list.",
-            };
-
-            // ✅ Source of lead (Column G)
+            // Lead Stage -> G
             worksheet.getCell(`G${i}`).dataValidation = {
-                type: "list",
+                type: 'list',
+                allowBlank: true,
+                formulae: [`LeadStageList!$A$1:$A$${leadStages.length}`],
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Invalid Lead Stage',
+                error: 'Please select a lead stage from the list',
+            };
+
+            // Source of Lead -> H
+            worksheet.getCell(`H${i}`).dataValidation = {
+                type: 'list',
                 allowBlank: true,
                 formulae: [`"${sourceOfLead.join(",")}"`],
                 showErrorMessage: true,
-                errorStyle: "error",
-                errorTitle: "Invalid Source of lead",
-                error: "Please select a valid source of lead.",
+                errorStyle: 'error',
+                errorTitle: 'Invalid Source of Lead',
+                error: 'Please select from: Instagram, Facebook, Referral, Friend, Walk-In, Others',
             };
 
-            // ✅ Lead Status (Column H)
-            worksheet.getCell(`H${i}`).dataValidation = {
-                type: "list",
+            // Lead Status -> I
+            worksheet.getCell(`I${i}`).dataValidation = {
+                type: 'list',
                 allowBlank: true,
                 formulae: [`"${leadStatusOptions.join(",")}"`],
                 showErrorMessage: true,
-                errorStyle: "error",
-                errorTitle: "Invalid Lead Status",
-                error: "Please select Hot or Cold.",
+                errorStyle: 'error',
+                errorTitle: 'Invalid Lead Status',
+                error: 'Please select Hot or Cold',
             };
 
-            // ✅ Bedroom (Column K)
-            worksheet.getCell(`K${i}`).dataValidation = {
-                type: "list",
+            // Bedroom -> L
+            worksheet.getCell(`L${i}`).dataValidation = {
+                type: 'list',
                 allowBlank: true,
                 formulae: [`"${bedroomOptions.join(",")}"`],
                 showErrorMessage: true,
-                errorStyle: "error",
-                errorTitle: "Invalid Bedroom Option",
-                error: "Please select 2 BHK or 3 BHK.",
+                errorStyle: 'error',
+                errorTitle: 'Invalid Bedroom Option',
+                error: 'Please select 2 BHK or 3 BHK',
             };
 
-            // ✅ Purpose (Column L)
-            worksheet.getCell(`L${i}`).dataValidation = {
-                type: "list",
+            // Purpose -> M
+            worksheet.getCell(`M${i}`).dataValidation = {
+                type: 'list',
                 allowBlank: true,
                 formulae: [`"${purposeOptions.join(",")}"`],
                 showErrorMessage: true,
-                errorStyle: "error",
-                errorTitle: "Invalid Purpose",
-                error: "Please select Enduse or Investment.",
+                errorStyle: 'error',
+                errorTitle: 'Invalid Purpose',
+                error: 'Please select Enduse or Investment',
             };
 
-            // ✅ Funding (Column M)
-            worksheet.getCell(`M${i}`).dataValidation = {
-                type: "list",
+            // Funding -> N
+            worksheet.getCell(`N${i}`).dataValidation = {
+                type: 'list',
                 allowBlank: true,
                 formulae: [`"${fundingOptions.join(",")}"`],
                 showErrorMessage: true,
-                errorStyle: "error",
-                errorTitle: "Invalid Funding",
-                error: "Please select Selfloan or Bankloan.",
+                errorStyle: 'error',
+                errorTitle: 'Invalid Funding Option',
+                error: 'Please select Selfloan or Bankloan',
+            };
+
+            // Number validations
+            // Min budget -> J
+            worksheet.getCell(`J${i}`).dataValidation = {
+                type: 'whole',
+                operator: 'greaterThanOrEqual',
+                formulae: [0],
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Invalid Budget',
+                error: 'Min budget must be a positive number',
+            };
+
+            // Max budget -> K
+            worksheet.getCell(`K${i}`).dataValidation = {
+                type: 'whole',
+                operator: 'greaterThanOrEqual',
+                formulae: [0],
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Invalid Budget',
+                error: 'Max budget must be a positive number',
+            };
+
+            // Lead age -> O
+            worksheet.getCell(`O${i}`).dataValidation = {
+                type: 'whole',
+                operator: 'greaterThanOrEqual',
+                formulae: [0],
+                showErrorMessage: true,
+                errorStyle: 'error',
+                errorTitle: 'Invalid Age',
+                error: 'Lead age must be a positive number',
             };
         }
 
@@ -256,6 +343,7 @@ function Excelleadstemplate({ closeDownloadTemplate }) {
                 <Button onClick={closeDownloadTemplate} size="sm" variant="default">Close</Button>
             </div>
             <ul className="list-decimal ml-5 space-y-1">
+                <li><strong>Project:</strong> Select from dropdown - Required field.</li>
                 <li><strong>Prefixes:</strong> Select from dropdown (Mr, Mrs, Miss, Mx).</li>
                 <li><strong>Full Name:</strong> Required field - Enter complete name.</li>
                 <li><strong>Email Address:</strong> Required field - Must be valid email format.</li>
