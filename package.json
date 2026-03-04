@@ -1,6 +1,6 @@
 {
   "name": "abodegroupcrm",
-  "version": "1.0.4",
+  "version": "1.0.1",
   "description": "Abode Group CRM",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "dist": "npm run build:vite && npm run build:electron",
     "postinstall": "electron-builder install-app-deps"
   },
-  "repository": "https://github.com/PremBhooma/electronicjs",
+  "repository": "https://github.com/tribhadevops/abodegroupsfinancecrmversions",
   "build": {
     "appId": "com.abodegroups.crm",
     "productName": "abodegroupcrm",
@@ -21,8 +21,8 @@
     "icon": "app/public/assets/icon.png",
     "publish": {
       "provider": "github",
-      "owner": "PremBhooma",
-      "repo": "electronicjs",
+      "owner": "tribhadevops",
+      "repo": "abodegroupsfinancecrmversions",
       "releaseType": "release"
     },
     "mac": {

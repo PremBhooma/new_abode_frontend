@@ -291,6 +291,7 @@ function Customerwrapper() {
         params,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
         },
         responseType: "blob",
       });

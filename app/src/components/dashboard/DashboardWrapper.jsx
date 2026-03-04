@@ -312,7 +312,7 @@ function DashboardWrapper() {
         // { label: 'Active', value: dashboardData.activeCustomers, color: 'text-white/90', icon: <UserCheck size={14} /> },
         // { label: 'Inactive', value: dashboardData.inactiveCustomers, color: 'text-white/90', icon: <UserMinus size={14} /> },
         // { label: 'Suspended', value: dashboardData.suspendedCustomers, color: 'text-white/90', icon: <UserX size={14} /> }
-        { label: `Loan Delay${dashboardData.loanDelayCount > 1 ? 's' : ''}`, value: dashboardData.loanDelayCount, color: 'text-red-100', icon: <IconClock size={14} /> }
+        { label: `Loan${dashboardData.loanDelayCount > 1 ? 's' : ''} Delay`, value: dashboardData.loanDelayCount, color: 'text-red-100', icon: <IconClock size={14} /> }
       ]
     },
     // {
