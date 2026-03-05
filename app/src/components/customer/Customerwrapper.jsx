@@ -529,11 +529,6 @@ function Customerwrapper() {
                       Ref ID
                     </th>
                   )}
-                  {visibleColumns.flatNo && (
-                    <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[180px] border-r border-neutral-200">
-                      Flats
-                    </th>
-                  )}
                   {visibleColumns.name && (
                     <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[180px] border-r border-neutral-200">
                       Name
@@ -547,6 +542,11 @@ function Customerwrapper() {
                   {visibleColumns.phone && (
                     <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[140px] border-r border-neutral-200">
                       Phone
+                    </th>
+                  )}
+                  {visibleColumns.flatNo && (
+                    <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[180px] border-r border-neutral-200">
+                      Flats
                     </th>
                   )}
                   {visibleColumns.fatherName && (
@@ -610,6 +610,37 @@ function Customerwrapper() {
                             >
                               <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
                                 {customer?.customer_uid}
+                              </p>
+                            </NavLink>
+                          </td>
+                        )}
+                        {visibleColumns.name && (
+                          <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
+                            <p className="text-neutral-900 text-xs font-semibold leading-[18px]">
+                              {customer?.prefixes || ""} {customer?.first_name} {customer?.last_name}
+                            </p>
+                          </td>
+                        )}
+                        {visibleColumns.email && (
+                          <td className="px-3 py-2 whitespace-normal break-words w-[200px] border-r border-neutral-200">
+                            <NavLink to={`mailto:${customer.email}`}>
+                              <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
+                                {customer?.email || "----"}
+                              </p>
+                            </NavLink>
+                          </td>
+                        )}
+                        {visibleColumns.phone && (
+                          <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
+                            <NavLink
+                              to={`https://wa.me/${customer.phone_code}${customer.phone_number}?text=Hello!%20I%27m%20interested%20in%20your%20service`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
+                                {customer?.phone_code && customer?.phone_number
+                                  ? `+${customer?.phone_code} ${customer?.phone_number}`
+                                  : "----"}
                               </p>
                             </NavLink>
                           </td>
@@ -740,39 +771,6 @@ function Customerwrapper() {
 
 
                             </div>
-                          </td>
-                        )
-                        }
-
-                        {visibleColumns.name && (
-                          <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
-                            <p className="text-neutral-900 text-xs font-semibold leading-[18px]">
-                              {customer?.prefixes || ""} {customer?.first_name} {customer?.last_name}
-                            </p>
-                          </td>
-                        )}
-                        {visibleColumns.email && (
-                          <td className="px-3 py-2 whitespace-normal break-words w-[200px] border-r border-neutral-200">
-                            <NavLink to={`mailto:${customer.email}`}>
-                              <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
-                                {customer?.email || "----"}
-                              </p>
-                            </NavLink>
-                          </td>
-                        )}
-                        {visibleColumns.phone && (
-                          <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
-                            <NavLink
-                              to={`https://wa.me/${customer.phone_code}${customer.phone_number}?text=Hello!%20I%27m%20interested%20in%20your%20service`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
-                                {customer?.phone_code && customer?.phone_number
-                                  ? `+${customer?.phone_code} ${customer?.phone_number}`
-                                  : "----"}
-                              </p>
-                            </NavLink>
                           </td>
                         )}
                         {visibleColumns.fatherName && (
