@@ -339,14 +339,14 @@ function Leadwrapper() {
   };
 
   const [visibleColumns, setVisibleColumns] = useState({
-    reference: true,
+    // reference: true,
     name: true, // Name
     email: true, // Email
     phone: true, // Phone
     project: true, // Project
     leadStage: true,
     assignedto: true,
-    status: true, // Status
+    // status: true, // Status
   });
   const [showColumnToggle, setShowColumnToggle] = useState(false);
   const containerRef = useRef(null);
@@ -686,9 +686,14 @@ function Leadwrapper() {
                       disabled={unassignedLeads.length === 0}
                     />
                   </th>
-                  {visibleColumns.reference && (
+                  {/* {visibleColumns.reference && (
                     <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[140px] sticky left-[50px] z-20 bg-gray-50 border-r border-neutral-200">
                       Ref ID
+                    </th>
+                  )} */}
+                  {visibleColumns.project && (
+                    <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[140px] border-r border-neutral-200">
+                      Project
                     </th>
                   )}
                   {visibleColumns.name && (
@@ -697,7 +702,7 @@ function Leadwrapper() {
                     </th>
                   )}
                   {visibleColumns.email && (
-                    <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[180px] border-r border-neutral-200">
+                    <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[160px] border-r border-neutral-200">
                       Email
                     </th>
                   )}
@@ -706,26 +711,21 @@ function Leadwrapper() {
                       Phone
                     </th>
                   )}
-                  {visibleColumns.project && (
-                    <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[140px] border-r border-neutral-200">
-                      Project
-                    </th>
-                  )}
                   {visibleColumns.leadStage && (
-                    <th className="sticky right-[360px] z-10 w-[110px] bg-gray-50 border-l border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px]">
+                    <th className="bg-gray-50 border-l border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px]">
                       Lead Stage
                     </th>
                   )}
                   {visibleColumns.assignedto && (
-                    <th className="sticky right-[240px] z-10 w-[110px] bg-gray-50 border-l border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px]">
+                    <th className="bg-gray-50 border-l border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px]">
                       Assigned To
                     </th>
                   )}
-                  {visibleColumns.status && (
+                  {/* {visibleColumns.status && (
                     <th className="sticky right-[120px] z-10 w-[120px] bg-gray-50 border-l border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px]">
                       Status
                     </th>
-                  )}
+                  )} */}
                   {/* LAST (STICKY RIGHT) */}
                   <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[120px] sticky right-0 z-20 bg-gray-50 border-l border-neutral-200">
                     Actions
@@ -738,7 +738,7 @@ function Leadwrapper() {
                     leadsData?.map((ele, index) => (
                       <tr
                         key={index}
-                        className="hover:bg-neutral-50 transition-colors duration-150 align-top group"
+                        className="hover:bg-neutral-50 transition-colors duration-150 align-center group"
                       >
                         <th className="px-3 py-2 text-neutral-700 text-xs font-bold leading-[18px] w-[50px] sticky left-0 z-20 bg-white group-hover:bg-neutral-50 border-r border-neutral-200">
                           {
@@ -757,7 +757,7 @@ function Leadwrapper() {
                               />
                           }
                         </th>
-                        {visibleColumns.reference && (
+                        {/* {visibleColumns.reference && (
                           <td className="px-3 py-2 whitespace-normal break-words w-[140px] sticky left-[50px] z-10 bg-white group-hover:bg-neutral-50 border-r border-neutral-200 text-xs font-medium leading-[18px]">
                             {permissions?.leads_page?.includes("view_lead") ? (
                               <NavLink to={`/lead/${ele?.lead_uid}`}>
@@ -771,10 +771,17 @@ function Leadwrapper() {
                               </p>
                             )}
                           </td>
+                        )} */}
+                        {visibleColumns.project && (
+                          <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
+                            <p className="text-neutral-600 text-xs font-medium leading-[18px]">
+                              {ele?.project_name || "----"}
+                            </p>
+                          </td>
                         )}
                         {visibleColumns.name && (
                           <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
-                            <p className="text-neutral-900 text-xs font-semibold leading-[18px]">
+                            <p className="text-neutral-600 text-xs font-semibold leading-[18px] break-all">
                               {ele?.full_name}
                             </p>
                           </td>
@@ -782,7 +789,7 @@ function Leadwrapper() {
                         {visibleColumns.email && (
                           <td className="px-3 py-2 whitespace-normal break-words w-[200px] border-r border-neutral-200">
                             <NavLink to={`mailto:${ele.email}`}>
-                              <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
+                              <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf] break-all">
                                 {ele?.email || "----"}
                               </p>
                             </NavLink>
@@ -801,13 +808,6 @@ function Leadwrapper() {
                                   : "----"}
                               </p>
                             </NavLink>
-                          </td>
-                        )}
-                        {visibleColumns.project && (
-                          <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
-                            <p className="text-neutral-600 text-xs font-medium leading-[18px]">
-                              {ele?.project_name || "----"}
-                            </p>
                           </td>
                         )}
                         {/* {visibleColumns.fatherName && (
@@ -860,20 +860,20 @@ function Leadwrapper() {
                           </td>
                         )} */}
                         {visibleColumns.leadStage && (
-                          <td className="px-3 py-2 whitespace-normal break-words w-[120px] sticky right-[360px] z-10 bg-white group-hover:bg-neutral-50 border-l border-neutral-200">
+                          <td className="px-3 py-2 whitespace-normal break-words w-[120px] bg-white group-hover:bg-neutral-50 border-l border-neutral-200">
                             <p className="text-neutral-600 text-xs font-medium leading-[18px]">
                               {ele?.lead_stage_name || "----"}
                             </p>
                           </td>
                         )}
                         {visibleColumns.assignedto && (
-                          <td className="px-3 py-2 whitespace-normal break-words w-[120px] sticky right-[240px] z-10 bg-white group-hover:bg-neutral-50 border-l border-neutral-200">
+                          <td className="px-3 py-2 whitespace-normal break-words w-[120px] bg-white group-hover:bg-neutral-50 border-l border-neutral-200">
                             <p className="text-neutral-600 text-xs font-medium leading-[18px]">
                               {ele?.lead_assigned_employee || "----"}
                             </p>
                           </td>
                         )}
-                        {visibleColumns.status && (
+                        {/* {visibleColumns.status && (
                           <td className="px-3 py-2 whitespace-normal break-words w-[120px] sticky right-[120px] z-10 bg-white group-hover:bg-neutral-50 border-l border-neutral-200 text-xs font-medium leading-[18px]">
                             {ele?.status === "Inactive" ? (
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium bg-red-100 text-red-800">
@@ -891,7 +891,7 @@ function Leadwrapper() {
                               )
                             )}
                           </td>
-                        )}
+                        )} */}
                         <td className="px-3 py-2 text-center whitespace-normal break-words w-[120px] sticky right-0 z-10 bg-white group-hover:bg-neutral-50 border-l border-neutral-200">
                           <div className="flex flex-row items-center justify-center gap-2">
                             {permissions?.leads_page?.includes("view_lead") && (
@@ -925,7 +925,7 @@ function Leadwrapper() {
                   ) : (
                     <tr>
                       <td colSpan={9} className="text-center py-3 text-neutral-500 text-sm"  >
-                        No data found
+                        No leads found
                       </td>
                     </tr>
                   )
