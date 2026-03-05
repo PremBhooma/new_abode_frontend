@@ -262,6 +262,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                 params: {
                     flat_no: flat,
                     employeeId: employeeId,
+                    project_id: selectedCustomer?.project_id || undefined,
                 },
                 headers: {
                     "Content-Type": "application/json",
@@ -299,6 +300,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
             const response = await Customerapi.get(`search-customers-for-flat`, {
                 params: {
                     searchQuery: customerValue,
+                    project_id: selectedFlat?.project_id || undefined,
                 },
                 headers: {
                     "Content-Type": "application/json",

@@ -22,6 +22,7 @@ const Customersteptwo = forwardRef((props, ref) => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const customerUuid = searchParams.get("uuid")
+    const projectIdParam = searchParams.get("project_id")
 
     const [selectedFlat, setSelectedFlat] = useState(null);
     const [selectedFlatError, setSelectedFlatError] = useState('');
@@ -134,6 +135,7 @@ const Customersteptwo = forwardRef((props, ref) => {
                 params: {
                     flat_no: flat,
                     employeeId: employeeId,
+                    project_id: projectIdParam || undefined,
                 },
                 headers: {
                     "Content-Type": "application/json",

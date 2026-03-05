@@ -906,7 +906,7 @@ const Customerstepone = forwardRef((props, ref) => {
       }
 
       setIsLoadingEffect(false);
-      return { success: true, uuid: data?.uuid };
+      return { success: true, uuid: data?.uuid, project_id: selectedProjectId };
     } catch (error) {
       console.error("Add customer error:", error);
       let finalresponse;

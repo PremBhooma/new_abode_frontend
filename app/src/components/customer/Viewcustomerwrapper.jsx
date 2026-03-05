@@ -388,6 +388,7 @@ function Viewcustomerwrapper() {
           <Assignflattocustomer
             closeAssignFlatToCustomer={closeAssignFlatToCustomer}
             customerUuid={customerUuid}
+            projectId={customerData?.project_id}
             refreshFlats={refreshFlats}
           />
         )}

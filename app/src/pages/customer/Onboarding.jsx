@@ -15,6 +15,7 @@ function Onboarding() {
 
   const customerStepOneRef = useRef();
   const [customerUuid, setCustomerUuid] = useState(null);
+  const [projectId, setProjectId] = useState(null);
 
   const totalSteps = 2;
 
@@ -31,6 +32,10 @@ function Onboarding() {
     if (uuidParam) {
       setCustomerUuid(uuidParam);
     }
+    const projectIdParam = searchParams.get("project_id");
+    if (projectIdParam) {
+      setProjectId(projectIdParam);
+    }
   }, [searchParams]);
 
   const handleNext = async () => {
@@ -40,12 +45,13 @@ function Onboarding() {
       if (!result?.success) return;
 
       setCustomerUuid(result.uuid);
+      if (result.project_id) setProjectId(result.project_id);
 
       setCurrentStep(currentStep + 1);
-      navigate(`/customers/onboarding?step=2&uuid=${result.uuid}`, { replace: true });
+      navigate(`/customers/onboarding?step=2&uuid=${result.uuid}&project_id=${result.project_id || ''}`, { replace: true });
     } else if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
-      navigate(`/customers/onboarding?step=${currentStep + 1}&uuid=${customerUuid}`, { replace: true });
+      navigate(`/customers/onboarding?step=${currentStep + 1}&uuid=${customerUuid}&project_id=${projectId || ''}`, { replace: true });
     }
   };
 
@@ -61,7 +67,7 @@ function Onboarding() {
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      navigate(`/customers/onboarding?step=${currentStep - 1}&uuid=${customerUuid}`, {
+      navigate(`/customers/onboarding?step=${currentStep - 1}&uuid=${customerUuid}&project_id=${projectId || ''}`, {
         replace: true,
       });
     }

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IconX } from "@tabler/icons-react";
 
-function Assignflattocustomer({ closeAssignFlatToCustomer, customerUuid, refreshFlats }) {
+function Assignflattocustomer({ closeAssignFlatToCustomer, customerUuid, refreshFlats, projectId }) {
 
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const permissions = useEmployeeDetails((state) => state.permissions);
@@ -130,6 +130,7 @@ function Assignflattocustomer({ closeAssignFlatToCustomer, customerUuid, refresh
                 params: {
                     flat_no: flat,
                     employeeId: employeeId,
+                    project_id: projectId || undefined,
                 },
                 headers: {
                     "Content-Type": "application/json",

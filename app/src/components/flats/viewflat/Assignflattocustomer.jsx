@@ -187,6 +187,7 @@ function Assignflattocustomer({ closeFlatToCustomer, flatNo, block_id, refreshUs
                     flat_no: flat,
                     block_id: block_id,
                     employeeId: employeeId,
+                    project_id: selectedCustomer?.project_id || undefined,
                 },
                 headers: {
                     "Content-Type": "application/json",
@@ -242,6 +243,7 @@ function Assignflattocustomer({ closeFlatToCustomer, flatNo, block_id, refreshUs
             const response = await Customerapi.get(`search-customers-for-flat`, {
                 params: {
                     searchQuery: customerValue,
+                    project_id: selectedFlat?.project_id || undefined,
                 },
                 headers: {
                     "Content-Type": "application/json",
