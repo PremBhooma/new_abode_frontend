@@ -168,7 +168,7 @@ function Leadview() {
                     <span className="font-bold text-black text-[12px]">{leadData?.lead_assignee?.name}</span>
                   </div>
                   {permissions?.leads_page?.includes("transfer_lead") && (
-                    <Button onClick={openTransferLead} size="sm" className="px-4 py-2 border border-[#000] !rounded-sm !bg-[#000] hover:!bg-[#0083bf]/90 hover:border-[#0083bf]">
+                    <Button onClick={openTransferLead} size="sm" className="px-3 py-2 border border-[#000] !rounded-sm !bg-[#000] hover:!bg-[#0083bf]/90 hover:border-[#0083bf]">
                       Transfer Lead
                     </Button>
                   )}
@@ -176,24 +176,24 @@ function Leadview() {
                 :
                 <>
                   {permissions?.leads_page?.includes("assign_lead") && (
-                    <Button onClick={openAsignLead} size="sm" className="px-4 py-2 border border-[#000] !rounded-sm !bg-[#000] hover:!bg-[#0083bf]/90 hover:border-[#0083bf]">
+                    <Button onClick={openAsignLead} size="sm" className="px-3 py-2 border border-[#000] !rounded-sm !bg-[#000] hover:!bg-[#0083bf]/90 hover:border-[#0083bf]">
                       Assign to employee
                     </Button>
                   )}
                 </>
             }
             {permissions?.leads_page?.includes("update_lead_stage") && (
-              <div onClick={() => openUpdateLeadStageModal(leadData?.lead_stage_id, leadData?.id)} className="text-sm text-white px-4 py-2 border border-[#931f42] !rounded-sm !bg-[#931f42] hover:!bg-[#931f42]/90 cursor-pointer">
+              <div onClick={() => openUpdateLeadStageModal(leadData?.lead_stage_id, leadData?.id)} className="text-sm text-white px-3 py-2 border border-[#931f42] !rounded-sm !bg-[#931f42] hover:!bg-[#931f42]/90 cursor-pointer">
                 Update Lead Stage
               </div>
             )}
             {permissions?.leads_page?.includes("convert_lead_to_customer") && (
-              <Link to={`/lead/convert-lead-to-customer/${leadUuid}`} className="text-sm text-white px-4 py-2 border border-emerald-500 !rounded-sm !bg-emerald-500 hover:!bg-emerald-500/90 cursor-pointer">
+              <Link to={`/lead/convert-lead-to-customer/${leadUuid}`} className="text-sm text-white px-3 py-2 border border-emerald-500 !rounded-sm !bg-emerald-500 hover:!bg-emerald-500/90 cursor-pointer">
                 Convert Lead to Customer
               </Link>
             )}
             {permissions?.leads_page?.includes("edit_lead") && (
-              <Link to={`/lead/edit-lead/${leadUuid}`} className="text-sm text-white px-4 py-2 border border-[#0083bf] !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">
+              <Link to={`/lead/edit-lead/${leadUuid}`} className="text-sm text-white px-3 py-2 border border-[#0083bf] !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">
                 Edit
               </Link>
             )}
@@ -201,19 +201,26 @@ function Leadview() {
         </div> */}
 
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
             <h1 className="text-xl font-bold">View Lead</h1>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-1 bg-pink-50 text-pink-700 rounded-full border border-pink-100 text-xs font-medium">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-2 px-3 py-1 bg-pink-50 text-pink-700 rounded-full border border-pink-100 text-xs font-medium max-w-[120px]">
                 <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
-                <span>{leadData?.lead_stage_name || "Unknown Stage"}</span>
+                <span className="truncate min-w-0 max-w-[80px]">{leadData?.lead_stage_name || "Unknown Stage"}</span>
               </div>
 
               {leadData?.lead_assignee ? (
-                <div className="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-100 text-xs font-medium">
+                // <div className="truncate max-w-[100px] sm:max-w-[150px] flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-100 text-xs font-medium">
+                //   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                //   <span>Assigned: {leadData.lead_assignee.name}</span>
+                // </div>
+                <div className="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-100 text-xs font-medium max-w-[200px]">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                  <span>Assigned: {leadData.lead_assignee.name}</span>
+
+                  <span className="truncate min-w-0 max-w-[140px]">
+                    Assigned: {leadData.lead_assignee.name}
+                  </span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 px-3 py-1 bg-gray-100 text-gray-600 rounded-full border border-gray-200 text-xs font-medium">
@@ -224,42 +231,42 @@ function Leadview() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             {leadData?.lead_assignee ? (
               permissions?.leads_page?.includes("transfer_lead") && (
-                <button onClick={openTransferLead} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm cursor-pointer">
+                <button onClick={openTransferLead} className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm cursor-pointer">
                   Transfer
                 </button>
               )
             ) : (
               permissions?.leads_page?.includes("assign_lead") && (
-                <button onClick={openAsignLead} className="px-4 py-2 text-sm font-medium text-white bg-black border border-black rounded-lg hover:bg-gray-800 transition-colors shadow-sm cursor-pointer">
+                <button onClick={openAsignLead} className="px-3 py-2 text-sm font-medium text-white bg-black border border-black rounded-lg hover:bg-gray-800 transition-colors shadow-sm cursor-pointer">
                   Assign Lead
                 </button>
               )
             )}
 
             {permissions?.leads_page?.includes("update_lead_stage") && (
-              <button onClick={() => openUpdateLeadStageModal(leadData?.lead_stage_id, leadData?.id)} className="px-4 py-2 text-sm font-medium text-white bg-[#931f42] border border-[#931f42] rounded-lg hover:bg-[#a6234b] transition-colors shadow-sm cursor-pointer">
+              <button onClick={() => openUpdateLeadStageModal(leadData?.lead_stage_id, leadData?.id)} className="px-3 py-2 text-sm font-medium text-white bg-[#931f42] border border-[#931f42] rounded-lg hover:bg-[#a6234b] transition-colors shadow-sm cursor-pointer">
                 Update Stage
               </button>
             )}
 
 
             {permissions?.leads_page?.includes("generate_cost_sheet") && (
-              <button onClick={() => setCostSheetDrawer(true)} className="px-4 py-2 text-sm font-medium text-white bg-cyan-400 border border-cyan-500 rounded-lg hover:bg-cyan-600 transition-colors shadow-sm cursor-pointer">
+              <button onClick={() => setCostSheetDrawer(true)} className="px-3 py-2 text-sm font-medium text-white bg-cyan-400 border border-cyan-500 rounded-lg hover:bg-cyan-600 transition-colors shadow-sm cursor-pointer">
                 Cost Sheet
               </button>
             )}
 
             {permissions?.leads_page?.includes("convert_lead_to_customer") && (
-              <Link to={`/lead/convert-lead-to-customer/${leadUuid}`} className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm cursor-pointer">
+              <Link to={`/lead/convert-lead-to-customer/${leadUuid}`} className="px-3 py-2 text-sm font-medium text-white bg-emerald-600 border border-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm cursor-pointer">
                 Convert to Customer
               </Link>
             )}
 
             {permissions?.leads_page?.includes("edit_lead") && (
-              <Link to={`/lead/edit-lead/${leadUuid}`} className="px-4 py-2 text-sm font-medium text-white bg-[#0083bf] border border-[#0083bf] rounded-lg hover:bg-[#0072a6] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
+              <Link to={`/lead/edit-lead/${leadUuid}`} className="px-3 py-2 text-sm font-medium text-white bg-[#0083bf] border border-[#0083bf] rounded-lg hover:bg-[#0072a6] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
                 <IconEdit size={16} />
                 Edit
               </Link>
