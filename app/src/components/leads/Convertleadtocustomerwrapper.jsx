@@ -583,6 +583,10 @@ function Convertleadtocustomerwrapper() {
             .then((response) => {
                 const data = response.data;
                 if (data.status === "error") {
+                    if (data.message === "Lead not found") {
+                        navigate("/customers", { replace: true });
+                        return false;
+                    }
                     const finalresponse = {
                         message: data.message,
                         server_res: data,
@@ -825,7 +829,7 @@ function Convertleadtocustomerwrapper() {
                     return false;
                 }
                 toast.success("Convert lead to customer successfully");
-                navigate("/customers");
+                navigate("/assign-flat/" + data.customerUuid);
 
                 setIsLoadingEffect(false);
                 return false;

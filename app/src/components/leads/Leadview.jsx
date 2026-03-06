@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "../ui/dialog.jsx";
-import { Link, useParams, NavLink } from "react-router-dom";
+import { Link, useParams, NavLink, useNavigate } from "react-router-dom";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails.jsx";
 import { IconArrowLeft, IconEdit, IconPointFilled } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -20,6 +20,7 @@ import "react-modern-drawer/dist/index.css";
 
 function Leadview() {
   const params = useParams();
+  const navigate = useNavigate();
   const leadUuid = params?.lead_uuid;
 
   const permissions = useEmployeeDetails((state) => state.permissions);
@@ -69,6 +70,10 @@ function Leadview() {
       .then((response) => {
         const data = response.data;
         if (data.status === "error") {
+          if (data.message === "Lead not found") {
+            navigate("/customers", { replace: true });
+            return false;
+          }
           const finalresponse = {
             message: data.message,
             server_res: data,

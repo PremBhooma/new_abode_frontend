@@ -33,6 +33,7 @@ import RefundRecords from './pages/refundrecords/RefundRecords'
 import { useEmployeeDetails } from './components/zustand/useEmployeeDetails'
 import Convertleadtocustomer from './pages/leads/Convertleadtocustomer'
 import Flattocustomer from './components/customer/Flattocustomer';
+import Assignflattolead from './components/leads/Assignflattolead';
 
 import MainLayout from './components/layout/MainLayout'
 import Rewards from './pages/rewards/Rewards'
@@ -87,6 +88,7 @@ function Approuter() {
       <Route path="/customers/onboarding" element={<ProtectedRoute element={<Onboarding />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
       <Route path="/customers/editcustomer/:single_customer_id" element={<ProtectedRoute element={<Editcustomer />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
       <Route path="/assign-flat" element={<ProtectedRoute element={<Flattocustomer />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
+      <Route path="/assign-flat/:customer_uuid" element={<ProtectedRoute element={<Assignflattolead />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
 
       {/* Flats Module */}
       <Route path="/flats" element={<ProtectedRoute element={<Flats />} requiredPermission={(p) => p?.main_page?.includes("flats_page")} />} />
