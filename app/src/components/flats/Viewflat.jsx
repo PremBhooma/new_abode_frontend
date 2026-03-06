@@ -752,20 +752,21 @@ function Viewflat() {
         </div>
         {activeTab === "flat-info" && (
           permissions?.flats_page?.includes("flat_info_single_flat") && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold">Flat Cost Details :</p>
-                <button onClick={openFlatCostUpdate} className="text-[14px] text-white px-5 py-1.5 cursor-pointer !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">Update</button>
-              </div>
-              <Overviewtab customerFlatDetails={customerFlatDetails} paymentSummary={paymentSummary} />
-              {customerFlatDetails?.custom_note && (
-                <div className="w-full flex flex-col gap-2">
-                  <p className="text-sm font-bold text-gray-600">Custom Note:</p>
-                  <p className='text-sm font-semibold text-gray-900'>{customerFlatDetails?.custom_note}</p>
+            customerFlatDetails && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-lg font-semibold">Flat Cost Details :</p>
+                  <button onClick={openFlatCostUpdate} className="text-[14px] text-white px-5 py-1.5 cursor-pointer !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">Update</button>
                 </div>
-              )}
-            </div>
-          ))}
+                <Overviewtab customerFlatDetails={customerFlatDetails} paymentSummary={paymentSummary} />
+                {customerFlatDetails?.custom_note && (
+                  <div className="w-full flex flex-col gap-2">
+                    <p className="text-sm font-bold text-gray-600">Custom Note:</p>
+                    <p className='text-sm font-semibold text-gray-900'>{customerFlatDetails?.custom_note}</p>
+                  </div>
+                )}
+              </div>
+            )))}
       </div>
 
       {errorMessage && (
