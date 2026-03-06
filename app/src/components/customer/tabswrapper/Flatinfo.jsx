@@ -5,6 +5,7 @@ import Errorpanel from "../../shared/Errorpanel";
 import noImageStaticImage from "../../../../public/assets/imageplaceholder.png";
 import dayjs from "dayjs";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
+import Overviewtab from "./Overviewtab";
 
 function Flatinfo({ customerUuid, refreshTrigger }) {
     const [errorMessage, setErrorMessage] = useState("");
@@ -166,21 +167,10 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
                                     </div>
                                 </div>
 
-                                {/* Cost Details */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 border-t border-[#ebecef] pt-2">
-                                    <Info label="Saleable Area (sq.ft)" value={ele?.saleable_area_sq_ft} />
-                                    <Info label="Rate Per (sq.ft)" value={ele?.rate_per_sq_ft} />
-                                    <Info label="Base Cost Unit" value={ele?.base_cost_unit} />
-                                </div>
-
-                                {/* Financial Summary */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
-                                    <InfoBig label="Grand Total (₹)" value={formatPrice(ele?.grand_total)} />
-                                    <InfoBig label="Payments Made (₹)" value={formatPrice(ele?.flat_details?.totalPayment)} />
-                                    <InfoBig
-                                        label="Balance Amount (₹)"
-                                        value={formatPrice((ele?.grand_total || 0) - (ele?.flat_details?.totalPayment || 0))}
-                                    />
+                                {/* Cost Details & Financial Summary Table */}
+                                <div className="mt-4 border-t border-[#ebecef] pt-4">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Cost Details</h3>
+                                    <Overviewtab customerFlatDetails={ele} paymentsList={flats?.payment_history || []} />
                                 </div>
 
                                 {/* Payment History */}

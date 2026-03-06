@@ -24,6 +24,7 @@ import { set } from "date-fns";
 import { toast } from "react-toastify";
 import AgreementtemplateModal from "./templates/AgreementtemplateModal.jsx";
 import Downloadtemplate from "./templates/Downloadtemplate.jsx";
+import Overviewtab from "./viewflat/Overviewtab";
 
 function Viewflat() {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ function Viewflat() {
   const [flatDetails, setFlatDetails] = useState({});
   const [canAssignFlat, setCanAssignFlat] = useState(false);
   const [customerFlatDetails, setCustomerFlatDetails] = useState({});
+  const [paymentSummary, setPaymentSummary] = useState({});
   const [activeTab, setActiveTab] = useState("flat-info");
 
   const [uploadFileModal, setUploadFileModal] = useState(false);
@@ -142,6 +144,7 @@ function Viewflat() {
         setFlatDetails(flat);
         setCanAssignFlat(data?.canAssignFlat)
         setCustomerFlatDetails(data?.getCustomerFlat)
+        setPaymentSummary(data?.paymentSummary)
         setIsLoadingEffect(false);
         return false;
       }).catch((error) => {
@@ -170,7 +173,7 @@ function Viewflat() {
 
   const allTabs = [
     "flat-info",
-    ...(customerFlatDetails ? ["customer-info-tab"] : []),
+    // ...(customerFlatDetails ? ["customer-info-tab"] : []),
     "documents-tab",
     "payments-tab",
     "notes-tab",
@@ -483,10 +486,12 @@ function Viewflat() {
     setType('');
   }
 
+  console.log("paymentSummary__nmew:", paymentSummary)
+
   return (
     <>
-      <div className="w-full">
-        <div className="flex justify-between mb-4">
+      <div className="w-full flex flex-col gap-4">
+        <div className="flex justify-between">
           <div className="flex flex-row items-center gap-4">
             <h1 className="text-[20px] font-semibold">Flat No: {flatDetails?.flat_no} / {flatDetails?.block?.block_name} / Floor No: {flatDetails?.floor_no}</h1>
             <div className={`flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${flatDetails?.status === 'Sold' ? 'bg-green-100 text-green-600 border-green-200' : 'bg-red-100 text-red-600 border-red-200'}`}>
@@ -574,9 +579,8 @@ function Viewflat() {
           </div>
         </div>
 
-        <div className="flex gap-2 w-full">
-          <div className="h-fit pb-10 bg-white w-[25%] rounded-lg overflow-hidden shadow-md">
-            {/* <div className="h-screen bg-white w-92 rounded-2xl overflow-hidden shadow-xl"> */}
+        <div className="flex gap-4 w-full">
+          <div className="h-fit bg-white w-[25%] rounded-lg overflow-hidden shadow-md">
             <div className="flex flex-col gap-2">
               <div className="w-full overflow-hidden bg-white rounded-lg ">
                 <div className="relative p-3">
@@ -590,7 +594,7 @@ function Viewflat() {
                   )}
                 </div>
               </div>
-              <div className="flex flex-col gap-2 px-3">
+              <div className="flex flex-col gap-2 px-3 pb-3">
                 <div className="space-y-3 text-sm">
                   {customerFlatDetails && (
                     <div className="space-y-2">
@@ -600,12 +604,24 @@ function Viewflat() {
                       <div className="flex flex-row items-center w-full">
                         <div className="text-gray-600 shrink-0 w-[55%]">Name</div>
                         <div className="text-gray-900 font-semibold break-all capitalize w-[45%]">
-                          <NavLink to={`/customers/${customerFlatDetails?.customer?.uuid}`}>
-                            {`${customerFlatDetails?.customer?.prefixes || ''} ${customerFlatDetails?.customer?.first_name}` || '---'}
-                          </NavLink>
+                          {`${customerFlatDetails?.customer?.prefixes || ''} ${customerFlatDetails?.customer?.first_name}` || '---'}
                         </div>
                       </div>
-                      <div className="flex flex-row w-full">
+                      <div className="flex flex-row items-center w-full">
+                        <div className="text-gray-600 shrink-0 w-[55%]">Phone Number</div>
+                        <div className="text-gray-900 font-semibold break-all capitalize w-[45%]">
+                          {customerFlatDetails?.customer?.phone_number || '---'}
+                        </div>
+                      </div>
+                      {customerFlatDetails?.customer?.email && (
+                        <div className="flex flex-row items-center w-full">
+                          <div className="text-gray-600 shrink-0 w-[55%]">Email</div>
+                          <div className="text-gray-900 font-semibold break-all capitalize w-[45%]">
+                            {customerFlatDetails?.customer?.email || '---'}
+                          </div>
+                        </div>
+                      )}
+                      {/* <div className="flex flex-row w-full">
                         <div className="text-gray-600 shrink-0 w-[55%]">Saleable Area</div>
                         <div className="text-gray-900 font-semibold break-all w-[45%]">
                           {customerFlatDetails?.saleable_area_sq_ft || '---'} sq.ft.
@@ -642,10 +658,7 @@ function Viewflat() {
                         <div className="text-gray-900 font-semibold break-all w-[45%]">
                           {formatPrice(customerFlatDetails?.grand_total)}
                         </div>
-                      </div>
-                      <div className="flex flex-col">
-
-                      </div>
+                      </div> */}
                     </div>
                   )}
                 </div>
@@ -665,7 +678,6 @@ function Viewflat() {
                     </div>
                   )
                 } */}
-
                 <div className={`mb-3 grid ${customerFlatDetails ? 'grid-cols-6' : 'grid-cols-5'} relative border border-[#ebecef] rounded-md bg-[#f1f1f1] p-2`}>
                   {allTabs.map((tab) => (
                     <button
@@ -686,7 +698,6 @@ function Viewflat() {
                 </div>
 
                 <div className="flex-1 p-6 bg-white rounded-md shadow-md">
-
                   {activeTab === "flat-info" && (
                     <div className="space-y-6">
                       {permissions?.flats_page?.includes("flat_info_single_flat") && (
@@ -739,6 +750,22 @@ function Viewflat() {
             }
           </div>
         </div>
+        {activeTab === "flat-info" && (
+          permissions?.flats_page?.includes("flat_info_single_flat") && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-lg font-semibold">Flat Cost Details :</p>
+                <button onClick={openFlatCostUpdate} className="text-[14px] text-white px-5 py-1.5 cursor-pointer !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">Update</button>
+              </div>
+              <Overviewtab customerFlatDetails={customerFlatDetails} paymentSummary={paymentSummary} />
+              {customerFlatDetails?.custom_note && (
+                <div className="w-full flex flex-col gap-2">
+                  <p className="text-sm font-bold text-gray-600">Custom Note:</p>
+                  <p className='text-sm font-semibold text-gray-900'>{customerFlatDetails?.custom_note}</p>
+                </div>
+              )}
+            </div>
+          ))}
       </div>
 
       {errorMessage && (
@@ -796,6 +823,7 @@ function Viewflat() {
           </div>
         )}
       </Modal>
+
       <Modal
         open={isSaleDeedTemplateModalOpen}
         close={closeSaleDeedTemplateModal}

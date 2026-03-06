@@ -1,21 +1,14 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Flatcostupdate from "./Flatcostupdate";
-import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
-
 import Drawer from 'react-modern-drawer'
+import Flatcostupdate from "./Flatcostupdate";
+import { Link } from "react-router-dom";
+import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 import 'react-modern-drawer/dist/index.css'
+
 
 function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails, flatCostUpdate, openFlatCostUpdate, closeFlatCostUpdate }) {
   if (!flatDetails) return null;
 
   const permissions = useEmployeeDetails(state => state.permissions);
-
-  console.log("flatDetails", flatDetails);
-
-  const typeToLabelMap = {
-    ThreeBHK: "3 BHK",
-  };
 
   const formatPrice = (price) => {
     if (price === null || price === undefined || price === "") return "---";
@@ -27,24 +20,24 @@ function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails,
   };
 
   const basicInfoItems = [
-    {
-      label: "Owner Name",
-      value: flatDetails?.customer?.first_name ? `${flatDetails?.customer?.prefixes || ''} ${flatDetails?.customer?.first_name}` : "---",
-      isLink: true,
-      linkType: "customer",
-    },
-    {
-      label: "Email",
-      value: flatDetails?.customer?.email ? flatDetails?.customer?.email : "---",
-      isLink: true,
-      linkType: "email",
-    },
-    {
-      label: "Phone Number",
-      value: flatDetails?.customer?.phone_number ? `+${flatDetails?.customer?.phone_code} ${flatDetails?.customer?.phone_number}` : "---",
-      isLink: true,
-      linkType: "phone",
-    },
+    // {
+    //   label: "Owner Name",
+    //   value: flatDetails?.customer?.first_name ? `${flatDetails?.customer?.prefixes || ''} ${flatDetails?.customer?.first_name}` : "---",
+    //   isLink: true,
+    //   linkType: "customer",
+    // },
+    // {
+    //   label: "Email",
+    //   value: flatDetails?.customer?.email ? flatDetails?.customer?.email : "---",
+    //   isLink: true,
+    //   linkType: "email",
+    // },
+    // {
+    //   label: "Phone Number",
+    //   value: flatDetails?.customer?.phone_number ? `+${flatDetails?.customer?.phone_code} ${flatDetails?.customer?.phone_number}` : "---",
+    //   isLink: true,
+    //   linkType: "phone",
+    // },
     // { label: "Group/Owner", value: flatDetails?.group_owner?.name ? flatDetails?.group_owner?.name : "---" },
     // { label: "UDL Number", value: flatDetails?.udl ? flatDetails?.udl : "---" },
     // { label: "Deed Number", value: flatDetails?.deed_number ? flatDetails?.deed_number : "---" },
@@ -83,12 +76,10 @@ function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails,
     // }
   ];
 
-  console.log("customerFlatDetails", customerFlatDetails);
-
   return (
     <>
-      <div className="flex flex-col gap-6">
-        <div className="w-full grid grid-cols-3 gap-4">
+      <div className="flex flex-col gap-3">
+        <div className="w-full grid grid-cols-3 gap-3">
           {basicInfoItems.map(({ label, value, isStatus, isLink, linkType }) => {
             let content = value || "---";
             const hasValue = value && value !== "---";
@@ -170,7 +161,7 @@ function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails,
             <p className="text-sm text-gray-900 font-semibold">{flatDetails?.description ? flatDetails?.description : "---"}</p>
           </div> */}
         </div>
-        {customerFlatDetails && (
+        {/* {customerFlatDetails && (
           <>
             <hr className="border !border-[#ebecef]" />
             <div className="flex items-center justify-between">
@@ -178,7 +169,7 @@ function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails,
               <button onClick={openFlatCostUpdate} className="text-[14px] text-white px-5 py-1.5 cursor-pointer !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">Update</button>
             </div>
 
-            <div className="w-full grid grid-cols-3 gap-4">
+            <div className="w-full grid grid-cols-3 gap-3">
               <div className="flex flex-col gap-y-1">
                 <p className="text-sm text-gray-600">Booking Date</p>
                 <p className='text-sm font-semibold text-gray-900'> {customerFlatDetails?.application_date
@@ -243,11 +234,10 @@ function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails,
                 <p className="text-sm text-gray-600">Cost of Unit with Tax (₹)</p>
                 <p className='text-sm font-semibold text-gray-900'> {formatPrice(customerFlatDetails?.costofunitwithtax)}</p>
               </div>
-              {/* <div className="flex flex-col gap-y-1">
+              <div className="flex flex-col gap-y-1">
                 <p className="text-sm text-gray-600">Registration (₹)</p>
                 <p className='text-sm font-semibold text-gray-900'> ₹ {parseFloat(customerFlatDetails?.registrationcharge).toFixed(2) || '---'}</p>
-              </div> */}
-
+              </div>
               <div className="flex flex-col gap-y-1">
                 <p className="text-sm text-gray-600">Manjeera Connection Charge (₹)</p>
                 <p className='text-sm font-semibold text-gray-900'> {formatPrice(customerFlatDetails?.manjeera_connection_charge)}</p>
@@ -266,6 +256,7 @@ function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails,
               </div>
             </div>
 
+
             {customerFlatDetails?.custom_note && (
               <div className="w-full grid grid-cols-3 gap-4">
                 <div className="flex flex-col gap-y-1">
@@ -275,7 +266,7 @@ function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails,
               </div>
             )}
           </>
-        )}
+        )} */}
       </div >
 
       {/* <Drawer
