@@ -13,6 +13,7 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
     const permissions = useEmployeeDetails((state) => state.permissions);
 
     const [customerFlatsData, setCustomerFlatsData] = useState({});
+    const [paymentSummary, setPaymentSummary] = useState({});
 
     async function getCustomerFlatsData(customerUuid) {
         if (customerUuid === null) {
@@ -44,8 +45,11 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
                     setIsLoadingEffect(false);
                     return false;
                 }
+
+                console.log("data____:", data)
                 if (data !== null) {
                     setCustomerFlatsData(data?.data || {});
+                    setPaymentSummary(data?.data.map((ele) => ele.paymentSummary) || {});
                 }
                 setIsLoadingEffect(false);
                 return false;
@@ -69,6 +73,8 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
                 return false;
             });
     }
+
+    console.log("pay:", paymentSummary)
 
     useEffect(() => {
         setIsLoadingEffect(true);
@@ -170,7 +176,7 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
                                 {/* Cost Details & Financial Summary Table */}
                                 <div className="mt-4 border-t border-[#ebecef] pt-4">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Cost Details</h3>
-                                    <Overviewtab customerFlatDetails={ele} paymentsList={flats?.payment_history || []} />
+                                    <Overviewtab customerFlatDetails={ele} paymentSummary={paymentSummary} />
                                 </div>
 
                                 {/* Payment History */}
