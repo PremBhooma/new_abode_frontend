@@ -24,7 +24,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     useEffect(() => {
         if (location.pathname.startsWith("/employees") || location.pathname.startsWith("/roles")) {
             setOpenSubmenu("employee");
-        } else if (location.pathname.startsWith("/ageing-records") || location.pathname.startsWith("/refund-records")) {
+        } else if (
+            location.pathname.startsWith("/ageing-records") ||
+            location.pathname.startsWith("/refund-records") ||
+            location.pathname.startsWith("/reward-records")
+        ) {
             setOpenSubmenu("records");
         } else {
             setOpenSubmenu(null);
