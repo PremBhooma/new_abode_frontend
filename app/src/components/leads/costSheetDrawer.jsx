@@ -249,11 +249,14 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
         }
     };
 
-    async function getAmenitiesData(flatType) {
+    async function getAmenitiesData(flatType, projectId) {
         try {
             setIsLoadingEffect(true);
             const response = await Settingsapi.get(`get-list-amenities`, {
-                params: { flatType: flatType }
+                params: {
+                    flatType: flatType,
+                    project_id: projectId
+                }
             });
             const data = response?.data;
             if (data?.status === "error") {
@@ -289,7 +292,7 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
         const fetchAndSetData = async () => {
             if (selectedFlat) {
                 // Fetch Amenities
-                getAmenitiesData(selectedFlat?.type);
+                getAmenitiesData(selectedFlat?.type, selectedFlat?.project_id);
 
                 // Fetch Project Charges
                 if (selectedFlat?.project_id) {

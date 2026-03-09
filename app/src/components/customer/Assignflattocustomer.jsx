@@ -89,7 +89,7 @@ function Assignflattocustomer({ closeAssignFlatToCustomer, customerUuid, refresh
     useEffect(() => {
         const fetchAndSetData = async () => {
             if (selectedFlat) {
-                getAmenitiesData(selectedFlat?.type);
+                getAmenitiesData(selectedFlat?.type, selectedFlat?.project_id);
 
                 // Fetch Project Charges
                 if (selectedFlat?.project_id) {
@@ -393,13 +393,14 @@ function Assignflattocustomer({ closeAssignFlatToCustomer, customerUuid, refresh
     const [manjeeraMeterCharge, setManjeeraMeterCharge] = useState("15000");
     const [manjeeraMeterChargeError, setManjeeraMeterChargeError] = useState('');
 
-    async function getAmenitiesData(flatType) {
+    async function getAmenitiesData(flatType, projectId) {
         try {
             setIsLoadingEffect(true);
 
             const response = await Settingsapi.get(`get-list-amenities`, {
                 params: {
                     flatType: flatType,
+                    project_id: projectId
                 }
             }, {
                 headers: {
