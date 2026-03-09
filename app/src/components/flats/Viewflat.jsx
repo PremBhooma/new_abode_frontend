@@ -755,7 +755,7 @@ function Viewflat() {
           permissions?.flats_page?.includes("flat_info_single_flat") && (
             customerFlatDetails && (
               <div className="space-y-3">
-                <Costsheet />
+                <Costsheet customerFlatDetails={customerFlatDetails} flatDetails={flatDetails} fetchFlat={fetchFlat} />
 
                 <div className="flex items-center justify-between">
                   <p className="text-lg font-semibold">Flat Cost Details :</p>
