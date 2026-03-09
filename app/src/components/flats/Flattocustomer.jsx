@@ -53,7 +53,16 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
     const [projectRates, setProjectRates] = useState({
         floor_rise: 0,
         east_facing: 0,
-        corner: 0
+        corner: 0,
+        gst_percentage: 0,
+        manjeera_connection_charges: 0,
+        manjeera_meter_charges: 0,
+        documentation_fee: 0,
+        registration_percentage: 0,
+        registration_base_charge: 0,
+        maintenance_rate_per_sqft: 0,
+        maintenance_duration_months: 0,
+        corpus_fund: 0
     });
 
     const getProjectCharges = async (projectId) => {
@@ -221,12 +230,24 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                         setProjectRates({
                             floor_rise: charges.floor_rise_price || 0,
                             east_facing: charges.east_price || 0,
-                            corner: charges.corner_price || 0
+                            corner: charges.corner_price || 0,
+                            gst_percentage: charges.gst_percentage || 0,
+                            manjeera_connection_charges: charges.manjeera_connection_charges || 0,
+                            manjeera_meter_charges: charges.manjeera_meter_charges || 0,
+                            documentation_fee: charges.documentation_fee || 0,
+                            registration_percentage: charges.registration_percentage || 0,
+                            registration_base_charge: charges.registration_base_charge || 0,
+                            maintenance_rate_per_sqft: charges.maintenance_rate_per_sqft || 0,
+                            maintenance_duration_months: charges.maintenance_duration_months || 0,
+                            corpus_fund: charges.corpus_fund || 0
                         });
 
                         // Set Static Charges directly from project
                         setEastFacing(charges.east_price?.toString() || '0');
                         setCorner(charges.corner_price?.toString() || '0');
+                        setManjeeraConnectionCharge(charges.manjeera_connection_charges?.toString() || '0');
+                        setManjeeraMeterCharge(charges.manjeera_meter_charges?.toString() || '0');
+                        setDocumentationFee(charges.documentation_fee?.toString() || '0');
 
                         // Calculate Floor Rise based on new rates
                         if (selectedFlat?.floor_no && selectedFlat?.floor_no >= 6) {
@@ -238,7 +259,20 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                     }
                 }
             } else {
-                setProjectRates({ floor_rise: 0, east_facing: 0, corner: 0 });
+                setProjectRates({
+                    floor_rise: 0,
+                    east_facing: 0,
+                    corner: 0,
+                    gst_percentage: 0,
+                    manjeera_connection_charges: 0,
+                    manjeera_meter_charges: 0,
+                    documentation_fee: 0,
+                    registration_percentage: 0,
+                    registration_base_charge: 0,
+                    maintenance_rate_per_sqft: 0,
+                    maintenance_duration_months: 0,
+                    corpus_fund: 0
+                });
             }
         };
 
@@ -678,21 +712,21 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
     // 2️⃣ Recalculate dependent states whenever totalCostofUnit changes
     useEffect(() => {
         if (totalCostofUnit) {
-            const gstValue = (totalCostofUnit * 0.05).toFixed(2);
+            const gstValue = (totalCostofUnit * (parseFloat(projectRates.gst_percentage) / 100 || 0.05)).toFixed(2);
             setGst(gstValue);
 
             setCostofUnitWithTax(parseFloat(totalCostofUnit) + parseFloat(gstValue));
 
-            let registerCharge = ((parseFloat(totalCostofUnit) * 0.076) + 1050).toFixed(2);
+            let registerCharge = ((parseFloat(totalCostofUnit) * (parseFloat(projectRates.registration_percentage) / 100 || 0.076)) + (parseFloat(projectRates.registration_base_charge) || 1050)).toFixed(2);
             setRegistrationCharge(parseFloat(registerCharge));
 
             if (saleableAreaSqFt) {
-                let maintainCharge = ((parseFloat(saleableAreaSqFt) * 3) * 24).toFixed(2);
+                let maintainCharge = ((parseFloat(saleableAreaSqFt) * (parseFloat(projectRates.maintenance_rate_per_sqft) || 3)) * (parseFloat(projectRates.maintenance_duration_months) || 24)).toFixed(2);
                 setMaintenceCharge(parseFloat(maintainCharge));
-                let corpusFund = (parseFloat(saleableAreaSqFt) * 50).toFixed(2);
+                let corpusFund = (parseFloat(saleableAreaSqFt) * (parseFloat(projectRates.corpus_fund) || 50)).toFixed(2);
                 setCorpusFund(parseFloat(corpusFund));
 
-                setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge) + parseFloat(maintainCharge) + parseFloat(corpusFund) + parseFloat(documentationFee))
+                setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(registerCharge) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge) + parseFloat(maintainCharge) + parseFloat(corpusFund) + parseFloat(documentationFee))
             }
         } else {
             setGst("");
@@ -702,7 +736,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
             setCorpusFund("");
             setGrandTotal("");
         }
-    }, [totalCostofUnit, saleableAreaSqFt, documentationFee, manjeeraConnectionCharge, manjeeraMeterCharge]);
+    }, [totalCostofUnit, saleableAreaSqFt, documentationFee, manjeeraConnectionCharge, manjeeraMeterCharge, projectRates]);
 
 
     const handleSubmit = async () => {
@@ -877,7 +911,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                 toatlcostofuint: parseFloat(totalCostofUnit),
                 gst: parseFloat(gst),
                 costofunitwithtax: parseFloat(costofUnitWithTax),
-                // registrationcharge: parseFloat(registartionCharge),
+                registrationcharge: parseFloat(registartionCharge),
                 maintenancecharge: parseFloat(maintenceCharge),
                 documentaionfee: parseFloat(documentationFee),
                 corpusfund: parseFloat(corpusFund),
@@ -1244,7 +1278,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>GST (5%) (₹)</Label>
+                                    <Label>GST ({projectRates.gst_percentage || 5}%) (₹)</Label>
                                     <Input
                                         value={gst ? parseFloat(gst).toLocaleString('en-IN') : ''}
                                         readOnly
@@ -1262,13 +1296,22 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Manjeera Connection Charges (₹) <span className="text-red-500">*</span></Label>
+                                    <Label>Registration Charges (₹)</Label>
                                     <Input
-                                        value={manjeeraConnectionCharge ? parseFloat(manjeeraConnectionCharge).toLocaleString('en-IN') : ''}
-                                        onChange={(e) => setManjeeraConnectionCharge(e.target.value)}
-                                        placeholder="Enter Amount"
+                                        value={registartionCharge ? parseFloat(registartionCharge).toLocaleString('en-IN') : ''}
                                         readOnly
                                         className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Manjeera Connection Charges (₹) <span className="text-red-500">*</span></Label>
+                                    <Input
+                                        type="number"
+                                        value={manjeeraConnectionCharge}
+                                        onChange={(e) => setManjeeraConnectionCharge(e.target.value)}
+                                        placeholder="Enter Amount"
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                     {manjeeraConnectionChargeError && <p className="text-xs text-red-500">{manjeeraConnectionChargeError}</p>}
                                 </div>
@@ -1276,17 +1319,17 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                                 <div className="space-y-2">
                                     <Label>Manjeera Meter Charges (₹) <span className="text-red-500">*</span></Label>
                                     <Input
-                                        value={manjeeraMeterCharge ? parseFloat(manjeeraMeterCharge).toLocaleString('en-IN') : ''}
+                                        type="number"
+                                        value={manjeeraMeterCharge}
                                         onChange={(e) => setManjeeraMeterCharge(e.target.value)}
                                         placeholder="Enter Amount"
-                                        readOnly
-                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                     {manjeeraMeterChargeError && <p className="text-xs text-red-500">{manjeeraMeterChargeError}</p>}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Maintenance @3/- per sqft for 2 Yrs (₹)</Label>
+                                    <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Months (₹)</Label>
                                     <Input
                                         value={maintenceCharge ? parseFloat(maintenceCharge).toLocaleString('en-IN') : ''}
                                         readOnly
@@ -1297,15 +1340,15 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                                 <div className="space-y-2">
                                     <Label>Documentation Fee (₹) <span className="text-red-500">*</span></Label>
                                     <Input
-                                        value={documentationFee ? parseFloat(documentationFee).toLocaleString('en-IN') : ''}
-                                        readOnly
-                                        onChange={updateDocumenationFee}
-                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                        type="number"
+                                        value={documentationFee}
+                                        onChange={(e) => setDocumentationFee(e.target.value)}
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Corpus Fund (50 * SFT) (₹)</Label>
+                                    <Label>Corpus Fund ({projectRates.corpus_fund || 50} * SFT) (₹)</Label>
                                     <Input
                                         value={corpusFund ? parseFloat(corpusFund).toLocaleString('en-IN') : ''}
                                         readOnly

@@ -28,6 +28,15 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
     const [projectSixFloorPrice, setProjectSixFloorPrice] = useState('');
     const [projectRewards, setProjectRewards] = useState(false);
 
+    const [gstPercentage, setGstPercentage] = useState('');
+    const [manjeeraConnectionCharges, setManjeeraConnectionCharges] = useState('');
+    const [manjeeraMeterCharges, setManjeeraMeterCharges] = useState('');
+    const [documentationFee, setDocumentationFee] = useState('');
+    const [registrationPercentage, setRegistrationPercentage] = useState('');
+    const [registrationBaseCharge, setRegistrationBaseCharge] = useState('');
+    const [maintenanceRatePerSqft, setMaintenanceRatePerSqft] = useState('');
+    const [maintenanceDurationMonths, setMaintenanceDurationMonths] = useState('');
+    const [corpusFund, setCorpusFund] = useState('');
 
     const handleSubmit = () => {
         setIsLoadingEffect(true);
@@ -36,11 +45,6 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
             setProjectNameError('Enter project name');
             return false;
         }
-        // if (projectAddress === '') {
-        //     setIsLoadingEffect(false);
-        //     setProjectAddressError('Enter project address');
-        //     return false;
-        // }
 
         const apiEndpoint = isEdit ? 'update-project' : 'add-project';
         const payload = {
@@ -50,6 +54,15 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
             project_east_price: projectEastPrice,
             project_six_floor_onwards_price: projectSixFloorPrice,
             project_rewards: projectRewards,
+            gst_percentage: gstPercentage,
+            manjeera_connection_charges: manjeeraConnectionCharges,
+            manjeera_meter_charges: manjeeraMeterCharges,
+            documentation_fee: documentationFee,
+            registration_percentage: registrationPercentage,
+            registration_base_charge: registrationBaseCharge,
+            maintenance_rate_per_sqft: maintenanceRatePerSqft,
+            maintenance_duration_months: maintenanceDurationMonths,
+            corpus_fund: corpusFund,
             ...(isEdit && { uuid: projectData?.uuid }),
         };
 
@@ -82,6 +95,15 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
             setProjectEastPrice(projectData.project_east_price || '');
             setProjectSixFloorPrice(projectData.project_six_floor_onwards_price || '');
             setProjectRewards(projectData.project_rewards || false);
+            setGstPercentage(projectData.gst_percentage || '');
+            setManjeeraConnectionCharges(projectData.manjeera_connection_charges || '');
+            setManjeeraMeterCharges(projectData.manjeera_meter_charges || '');
+            setDocumentationFee(projectData.documentation_fee || '');
+            setRegistrationPercentage(projectData.registration_percentage || '');
+            setRegistrationBaseCharge(projectData.registration_base_charge || '');
+            setMaintenanceRatePerSqft(projectData.maintenance_rate_per_sqft || '');
+            setMaintenanceDurationMonths(projectData.maintenance_duration_months || '');
+            setCorpusFund(projectData.corpus_fund || '');
         } else {
             setProjectName('');
             setProjectAddress('');
@@ -89,6 +111,15 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
             setProjectEastPrice('');
             setProjectSixFloorPrice('');
             setProjectRewards(false);
+            setGstPercentage('');
+            setManjeeraConnectionCharges('');
+            setManjeeraMeterCharges('');
+            setDocumentationFee('');
+            setRegistrationPercentage('');
+            setRegistrationBaseCharge('');
+            setMaintenanceRatePerSqft('');
+            setMaintenanceDurationMonths('');
+            setCorpusFund('');
         }
     }, [projectData, isEdit])
 
@@ -100,7 +131,7 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                 </DialogTitle>
             </DialogHeader>
 
-            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+            <div className="flex-1 max-h-[60vh] overflow-y-auto px-6 py-4 space-y-4">
                 <div className="grid gap-2">
                     <Label htmlFor="projectName" className="font-semibold">Project Name</Label>
                     <Input
@@ -116,55 +147,150 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                     {projectNameError && <p className="text-sm text-red-500">{projectNameError}</p>}
                 </div>
 
-                {/* <div className="grid gap-2">
-                    <Label htmlFor="projectAddress" className="font-semibold">Project Address</Label>
-                    <Input
-                        id="projectAddress"
-                        placeholder="Enter project address"
-                        value={projectAddress}
-                        onChange={(e) => {
-                            setProjectAddress(e.target.value);
-                            setProjectAddressError('');
-                        }}
-                        className={`bg-white ${projectAddressError ? 'border-red-500' : ''}`}
-                    />
-                    {projectAddressError && <p className="text-sm text-red-500">{projectAddressError}</p>}
-                </div> */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                        <Label htmlFor="projectCornerPrice" className="font-semibold">Corner Price</Label>
+                        <Input
+                            id="projectCornerPrice"
+                            type="number"
+                            placeholder="Price"
+                            value={projectCornerPrice}
+                            onChange={(e) => setProjectCornerPrice(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="projectCornerPrice" className="font-semibold">Project Corner Price</Label>
-                    <Input
-                        id="projectCornerPrice"
-                        type="number"
-                        placeholder="Enter Corner Price"
-                        value={projectCornerPrice}
-                        onChange={(e) => setProjectCornerPrice(e.target.value)}
-                        className="bg-white"
-                    />
-                </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="projectEastPrice" className="font-semibold">East Price</Label>
+                        <Input
+                            id="projectEastPrice"
+                            type="number"
+                            placeholder="Price"
+                            value={projectEastPrice}
+                            onChange={(e) => setProjectEastPrice(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="projectEastPrice" className="font-semibold">Project East Price</Label>
-                    <Input
-                        id="projectEastPrice"
-                        type="number"
-                        placeholder="Enter East Price"
-                        value={projectEastPrice}
-                        onChange={(e) => setProjectEastPrice(e.target.value)}
-                        className="bg-white"
-                    />
-                </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="projectSixFloorPrice" className="font-semibold">6th Floor+ Price</Label>
+                        <Input
+                            id="projectSixFloorPrice"
+                            type="number"
+                            placeholder="Price"
+                            value={projectSixFloorPrice}
+                            onChange={(e) => setProjectSixFloorPrice(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="projectSixFloorPrice" className="font-semibold">Six Floor Onwards Price</Label>
-                    <Input
-                        id="projectSixFloorPrice"
-                        type="number"
-                        placeholder="Enter Six Floor Onwards Price"
-                        value={projectSixFloorPrice}
-                        onChange={(e) => setProjectSixFloorPrice(e.target.value)}
-                        className="bg-white"
-                    />
+                    <div className="grid gap-2">
+                        <Label htmlFor="gstPercentage" className="font-semibold">GST (%)</Label>
+                        <Input
+                            id="gstPercentage"
+                            type="number"
+                            placeholder="e.g. 5"
+                            value={gstPercentage}
+                            onChange={(e) => setGstPercentage(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="manjeeraConnection" className="font-semibold">Manjeera Conn.</Label>
+                        <Input
+                            id="manjeeraConnection"
+                            type="number"
+                            placeholder="Charges"
+                            value={manjeeraConnectionCharges}
+                            onChange={(e) => setManjeeraConnectionCharges(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="manjeeraMeter" className="font-semibold">Manjeera Meter</Label>
+                        <Input
+                            id="manjeeraMeter"
+                            type="number"
+                            placeholder="Charges"
+                            value={manjeeraMeterCharges}
+                            onChange={(e) => setManjeeraMeterCharges(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="documentationFee" className="font-semibold">Doc. Fee</Label>
+                        <Input
+                            id="documentationFee"
+                            type="number"
+                            placeholder="Fee"
+                            value={documentationFee}
+                            onChange={(e) => setDocumentationFee(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="registrationPercentage" className="font-semibold">Reg. (%)</Label>
+                        <Input
+                            id="registrationPercentage"
+                            type="number"
+                            placeholder="Percentage"
+                            value={registrationPercentage}
+                            onChange={(e) => setRegistrationPercentage(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="registrationBase" className="font-semibold">Reg. Base Charge</Label>
+                        <Input
+                            id="registrationBase"
+                            type="number"
+                            placeholder="Charge"
+                            value={registrationBaseCharge}
+                            onChange={(e) => setRegistrationBaseCharge(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="maintenanceRate" className="font-semibold">Maint. /sqft</Label>
+                        <Input
+                            id="maintenanceRate"
+                            type="number"
+                            placeholder="Rate"
+                            value={maintenanceRatePerSqft}
+                            onChange={(e) => setMaintenanceRatePerSqft(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="maintenanceDuration" className="font-semibold">Maint. Month(s)</Label>
+                        <Input
+                            id="maintenanceDuration"
+                            type="number"
+                            placeholder="Months"
+                            value={maintenanceDurationMonths}
+                            onChange={(e) => setMaintenanceDurationMonths(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="corpusFund" className="font-semibold">Corpus Fund</Label>
+                        <Input
+                            id="corpusFund"
+                            type="number"
+                            placeholder="Amount/Rate"
+                            value={corpusFund}
+                            onChange={(e) => setCorpusFund(e.target.value)}
+                            className="bg-white"
+                        />
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-2 mt-2">

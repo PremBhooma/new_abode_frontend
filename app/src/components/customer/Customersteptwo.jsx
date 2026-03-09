@@ -34,7 +34,16 @@ const Customersteptwo = forwardRef((props, ref) => {
     const [projectRates, setProjectRates] = useState({
         floor_rise: 0,
         east_facing: 0,
-        corner: 0
+        corner: 0,
+        gst_percentage: 5,
+        manjeera_connection_charges: 50000,
+        manjeera_meter_charges: 15000,
+        documentation_fee: 20000,
+        registration_percentage: 0,
+        registration_base_charge: 0,
+        maintenance_rate_per_sqft: 3,
+        maintenance_duration_months: 24,
+        corpus_fund: 50
     });
 
     const getProjectCharges = async (projectId) => {
@@ -94,12 +103,24 @@ const Customersteptwo = forwardRef((props, ref) => {
                         setProjectRates({
                             floor_rise: charges.floor_rise_price || 0,
                             east_facing: charges.east_price || 0,
-                            corner: charges.corner_price || 0
+                            corner: charges.corner_price || 0,
+                            gst_percentage: charges.gst_percentage ?? 5,
+                            manjeera_connection_charges: charges.manjeera_connection_charges ?? 50000,
+                            manjeera_meter_charges: charges.manjeera_meter_charges ?? 15000,
+                            documentation_fee: charges.documentation_fee ?? 20000,
+                            registration_percentage: charges.registration_percentage ?? 0,
+                            registration_base_charge: charges.registration_base_charge ?? 0,
+                            maintenance_rate_per_sqft: charges.maintenance_rate_per_sqft ?? 3,
+                            maintenance_duration_months: charges.maintenance_duration_months ?? 24,
+                            corpus_fund: charges.corpus_fund ?? 50
                         });
 
                         // Set Static Charges directly from project
                         setEastFacing(charges.east_price?.toString() || '0');
                         setCorner(charges.corner_price?.toString() || '0');
+                        setManjeeraConnectionCharge(charges.manjeera_connection_charges?.toString() || '50000');
+                        setManjeeraMeterCharge(charges.manjeera_meter_charges?.toString() || '15000');
+                        setDocumentationFee(charges.documentation_fee?.toString() || '20000');
 
                         // Calculate Floor Rise based on new rates
                         if (selectedFlat?.floor_no && selectedFlat?.floor_no >= 6) {
@@ -111,7 +132,20 @@ const Customersteptwo = forwardRef((props, ref) => {
                     }
                 }
             } else {
-                setProjectRates({ floor_rise: 0, east_facing: 0, corner: 0 });
+                setProjectRates({
+                    floor_rise: 0,
+                    east_facing: 0,
+                    corner: 0,
+                    gst_percentage: 5,
+                    manjeera_connection_charges: 50000,
+                    manjeera_meter_charges: 15000,
+                    documentation_fee: 20000,
+                    registration_percentage: 0,
+                    registration_base_charge: 0,
+                    maintenance_rate_per_sqft: 3,
+                    maintenance_duration_months: 24,
+                    corpus_fund: 50
+                });
                 setAmenties('');
                 setSaleableAreaSqFt('');
                 setFloorRise('0');
@@ -559,21 +593,23 @@ const Customersteptwo = forwardRef((props, ref) => {
     // 2️⃣ Recalculate dependent states whenever totalCostofUnit changes
     useEffect(() => {
         if (totalCostofUnit) {
-            const gstValue = (totalCostofUnit * 0.05).toFixed(2);
+            const gstValue = (totalCostofUnit * (projectRates.gst_percentage / 100)).toFixed(2);
             setGst(gstValue);
 
             setCostofUnitWithTax(parseFloat(totalCostofUnit) + parseFloat(gstValue));
 
-            let registerCharge = ((parseFloat(totalCostofUnit) * 0.076) + 1050).toFixed(2);
+            // let registerCharge = ((parseFloat(totalCostofUnit) * 0.076) + 1050).toFixed(2);
+            // setRegistrationCharge(parseFloat(registerCharge));
+            let registerCharge = ((parseFloat(totalCostofUnit) * (parseFloat(projectRates.registration_percentage) / 100 || 0.076)) + (parseFloat(projectRates.registration_base_charge) || 1050)).toFixed(2);
             setRegistrationCharge(parseFloat(registerCharge));
 
             if (saleableAreaSqFt) {
-                let maintainCharge = ((parseFloat(saleableAreaSqFt) * 3) * 24).toFixed(2);
+                let maintainCharge = ((parseFloat(saleableAreaSqFt) * projectRates.maintenance_rate_per_sqft) * projectRates.maintenance_duration_months).toFixed(2);
                 setMaintenceCharge(parseFloat(maintainCharge));
-                let corpusFund = (parseFloat(saleableAreaSqFt) * 50).toFixed(2);
+                let corpusFund = (parseFloat(saleableAreaSqFt) * projectRates.corpus_fund).toFixed(2);
                 setCorpusFund(parseFloat(corpusFund));
 
-                setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(maintainCharge) + parseFloat(corpusFund) + parseFloat(documentationFee) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge))
+                setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(registerCharge) + parseFloat(maintainCharge) + parseFloat(corpusFund) + parseFloat(documentationFee) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge))
             }
         } else {
             setGst("");
@@ -583,7 +619,7 @@ const Customersteptwo = forwardRef((props, ref) => {
             setCorpusFund("");
             setGrandTotal("");
         }
-    }, [totalCostofUnit, saleableAreaSqFt, documentationFee, manjeeraConnectionCharge, manjeeraMeterCharge]);
+    }, [totalCostofUnit, saleableAreaSqFt, documentationFee, manjeeraConnectionCharge, manjeeraMeterCharge, projectRates]);
 
 
     const validateAndSubmit = async () => {
@@ -639,11 +675,11 @@ const Customersteptwo = forwardRef((props, ref) => {
             setIsLoadingEffect(false)
             return false
         }
-        // if (registartionCharge === "") {
-        //     setRegistrationChargeError('Enter Registartion Charge')
-        //     setIsLoadingEffect(false)
-        //     return false
-        // }
+        if (registartionCharge === "") {
+            setRegistrationChargeError('Enter Registartion Charge')
+            setIsLoadingEffect(false)
+            return false
+        }
         if (maintenceCharge === "") {
             setMaintenceChargeError('Enter Maintence Charge')
             setIsLoadingEffect(false)
@@ -740,7 +776,7 @@ const Customersteptwo = forwardRef((props, ref) => {
                 toatlcostofuint: parseFloat(totalCostofUnit),
                 gst: parseFloat(gst),
                 costofunitwithtax: parseFloat(costofUnitWithTax),
-                // registrationcharge: parseFloat(registartionCharge),
+                registrationcharge: parseFloat(registartionCharge),
                 maintenancecharge: parseFloat(maintenceCharge),
                 documentaionfee: parseFloat(documentationFee),
                 corpusfund: parseFloat(corpusFund),
@@ -1032,7 +1068,7 @@ const Customersteptwo = forwardRef((props, ref) => {
                         </div>
 
                         <div className="space-y-1">
-                            <Label>GST (5%) (₹) <span className="text-red-500">*</span></Label>
+                            <Label>GST ({projectRates.gst_percentage || 5}%) (₹) <span className="text-red-500">*</span></Label>
                             <Input
                                 placeholder="Enter GST"
                                 value={gst ? parseFloat(gst).toLocaleString('en-IN') : ''}
@@ -1055,16 +1091,17 @@ const Customersteptwo = forwardRef((props, ref) => {
                             {costofUnitWithTaxError && <p className="text-xs text-red-500">{costofUnitWithTaxError}</p>}
                         </div>
 
-                        {/* Registration Charge - Commented out as per requirement */}
-                        {/* <div className="space-y-1">
-                        <Label>Registration Charges (7.6%) (₹) <span className="text-red-500">*</span></Label>
-                        <Input
-                             value={registartionCharge}
-                             onChange={updateRegistrationCharge}
-                             disabled
-                             className="bg-gray-100"
-                        />
-                    </div> */}
+                        {/* Registration Charge */}
+                        <div className="space-y-1">
+                            <Label>Registration Charges (₹) <span className="text-red-500">*</span></Label>
+                            <Input
+                                value={registartionCharge ? parseFloat(registartionCharge).toLocaleString('en-IN') : ''}
+                                onChange={updateRegistrationCharge}
+                                readOnly
+                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                            />
+                            {registrationChargeError && <p className="text-xs text-red-500">{registrationChargeError}</p>}
+                        </div>
 
                         <div className="space-y-1">
                             <Label>Maintence Charges (₹) <span className="text-red-500">*</span></Label>
@@ -1080,17 +1117,17 @@ const Customersteptwo = forwardRef((props, ref) => {
                         <div className="space-y-1">
                             <Label>Manjeera Connection Charges (₹) <span className="text-red-500">*</span></Label>
                             <Input
-                                value={manjeeraConnectionCharge ? parseFloat(manjeeraConnectionCharge).toLocaleString('en-IN') : ''}
+                                type="number"
+                                value={manjeeraConnectionCharge}
                                 onChange={(e) => {
-                                    const val = e.target.value.replace(/,/g, '');
+                                    const val = e.target.value;
                                     if (!isNaN(val)) {
                                         setManjeeraConnectionCharge(val);
                                         setManjeeraConnectionChargeError('');
                                     }
                                 }}
                                 placeholder="Enter Amount"
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                             />
                             {manjeeraConnectionChargeError && <p className="text-xs text-red-500">{manjeeraConnectionChargeError}</p>}
                         </div>
@@ -1098,11 +1135,11 @@ const Customersteptwo = forwardRef((props, ref) => {
                         <div className="space-y-1">
                             <Label>Manjeera Meter Charges (₹) <span className="text-red-500">*</span></Label>
                             <Input
-                                value={manjeeraMeterCharge ? parseFloat(manjeeraMeterCharge).toLocaleString('en-IN') : ''}
+                                type="number"
+                                value={manjeeraMeterCharge}
                                 onChange={(e) => setManjeeraMeterCharge(e.target.value)}
                                 placeholder="Enter Amount"
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                             />
                             {manjeeraMeterChargeError && <p className="text-xs text-red-500">{manjeeraMeterChargeError}</p>}
                         </div>
@@ -1110,16 +1147,16 @@ const Customersteptwo = forwardRef((props, ref) => {
                         <div className="space-y-1">
                             <Label>Documentation Charges (₹) <span className="text-red-500">*</span></Label>
                             <Input
-                                value={documentationFee ? parseFloat(documentationFee).toLocaleString('en-IN') : ''}
+                                type="number"
+                                value={documentationFee}
                                 onChange={updateDocumenationFee}
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                             />
                             {documenationFeeError && <p className="text-xs text-red-500">{documenationFeeError}</p>}
                         </div>
 
                         <div className="space-y-1">
-                            <Label>Corpus Fund (₹) <span className="text-red-500">*</span></Label>
+                            <Label>Corpus Fund ({projectRates.corpus_fund || 50} * SFT) (₹) <span className="text-red-500">*</span></Label>
                             <Input
                                 value={corpusFund ? parseFloat(corpusFund).toLocaleString('en-IN') : ''}
                                 onChange={updateCorpusFund}

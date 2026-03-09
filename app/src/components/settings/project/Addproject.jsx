@@ -73,7 +73,7 @@ function Addproject({ refreshProject }) {
     return (
         <div className="px-3 rounded-md bg-transparent border border-[#ebecef] relative">
             <div className="py-2">
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 max-h-[70vh] overflow-y-auto pr-2">
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="projectName" className="text-sm font-medium text-gray-700">Add Project</Label>
                         <Input

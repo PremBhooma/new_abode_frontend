@@ -239,7 +239,16 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
     const [projectRates, setProjectRates] = useState({
         floor_rise: 0,
         east_facing: 0,
-        corner: 0
+        corner: 0,
+        gst_percentage: 5,
+        manjeera_connection_charges: 50000,
+        manjeera_meter_charges: 15000,
+        documentation_fee: 20000,
+        registration_percentage: 0,
+        registration_base_charge: 0,
+        maintenance_rate_per_sqft: 3,
+        maintenance_duration_months: 24,
+        corpus_fund: 50
     });
 
     const getProjectCharges = async (projectId) => {
@@ -266,7 +275,16 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
                     setProjectRates({
                         floor_rise: charges.floor_rise_price || 0,
                         east_facing: charges.east_price || 0,
-                        corner: charges.corner_price || 0
+                        corner: charges.corner_price || 0,
+                        gst_percentage: charges.gst_percentage ?? 5,
+                        manjeera_connection_charges: charges.manjeera_connection_charges ?? 50000,
+                        manjeera_meter_charges: charges.manjeera_meter_charges ?? 15000,
+                        documentation_fee: charges.documentation_fee ?? 20000,
+                        registration_percentage: charges.registration_percentage ?? 0,
+                        registration_base_charge: charges.registration_base_charge ?? 0,
+                        maintenance_rate_per_sqft: charges.maintenance_rate_per_sqft ?? 3,
+                        maintenance_duration_months: charges.maintenance_duration_months ?? 24,
+                        corpus_fund: charges.corpus_fund ?? 50
                     });
                 }
             }
@@ -372,16 +390,17 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
 
             // Calculate dependent values if we have a valid totalCost
             if (totalCost && totalCost !== "") {
-                // GST 5%
-                gstValue = (parseNum(totalCost) * 0.05).toFixed(2);
+                // Dynamic GST
+                gstValue = (parseNum(totalCost) * (projectRates.gst_percentage / 100)).toFixed(2);
                 setGst(gstValue);
+
+                // Registration Charge
+                registerCharge = ((parseNum(totalCost) * (parseFloat(projectRates.registration_percentage) / 100 || 0.076)) + (parseFloat(projectRates.registration_base_charge) || 1050)).toFixed(2);
+                setRegistrationCharge(parseFloat(registerCharge));
 
                 // Cost with GST
                 setCostofUnitWithTax(parseNum(totalCost) + parseNum(gstValue));
 
-                // Registration 7.6% + 1050
-                // registerCharge = ((parseFloat(totalCost) * 0.076) + 1050).toFixed(2);
-                // setRegistrationCharge(parseFloat(registerCharge));
             } else {
                 setGst("");
                 setCostofUnitWithTax("");
@@ -390,21 +409,20 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
 
             // Maintenance & Corpus
             if (saleableArea) {
-                let maintainCharge = ((parseFloat(saleableArea) * 3) * 24).toFixed(2);
+                let maintainCharge = ((parseFloat(saleableArea) * projectRates.maintenance_rate_per_sqft) * projectRates.maintenance_duration_months).toFixed(2);
                 setMaintenceCharge(parseFloat(maintainCharge));
-                let corpusFund = (parseFloat(saleableArea) * 50).toFixed(2);
-                setCorpusFund(parseFloat(corpusFund));
+                let corpusFundVal = (parseFloat(saleableArea) * projectRates.corpus_fund).toFixed(2);
+                setCorpusFund(parseFloat(corpusFundVal));
 
                 // FIXED: Calculate grand total with current values
                 const currentGstValue = parseNum(gstValue);
-                // const currentRegisterCharge = parseNum(registerCharge);
                 const currentMaintainCharge = parseNum(maintainCharge);
-                const currentCorpusFund = parseNum(corpusFund);
+                const currentCorpusFund = parseNum(corpusFundVal);
                 const currentDocFee = parseNum(documentationFeeVal);
                 const currentManjeeraConnectionCharge = parseNum(manjeeraConnectionChargeVal);
                 const currentManjeeraMeterCharge = parseNum(manjeeraMeterChargeVal);
 
-                setGrandTotal(parseNum(totalCost) + currentGstValue + currentManjeeraConnectionCharge + currentManjeeraMeterCharge + currentMaintainCharge + currentCorpusFund + currentDocFee);
+                setGrandTotal(parseNum(totalCost) + currentGstValue + parseNum(registerCharge) + currentManjeeraConnectionCharge + currentManjeeraMeterCharge + currentMaintainCharge + currentCorpusFund + currentDocFee);
             }
         } else {
             // Reset all if no base values
@@ -508,12 +526,12 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
             setTotalCostofUnit(customerFlatDetails?.toatlcostofuint || '');
             setGst(customerFlatDetails?.gst || '');
             setCostofUnitWithTax(customerFlatDetails?.costofunitwithtax || '');
-            // setRegistrationCharge(customerFlatDetails?.registrationcharge || '');
+            setRegistrationCharge(customerFlatDetails?.registrationcharge || '');
             setMaintenceCharge(customerFlatDetails?.maintenancecharge || '');
-            setDocumentationFee(customerFlatDetails?.documentaionfee || '');
+            setDocumentationFee(customerFlatDetails?.documentaionfee ?? projectRates.documentation_fee);
             setCorpusFund(customerFlatDetails?.corpusfund || '');
-            setManjeeraConnectionCharge(customerFlatDetails?.manjeera_connection_charge ?? '50000');
-            setManjeeraMeterCharge(customerFlatDetails?.manjeera_meter_charge ?? '15000');
+            setManjeeraConnectionCharge(customerFlatDetails?.manjeera_connection_charge ?? projectRates.manjeera_connection_charges);
+            setManjeeraMeterCharge(customerFlatDetails?.manjeera_meter_charge ?? projectRates.manjeera_meter_charges);
 
             // Logic to prioritize customerFlatDetails, fallback to projectRates if new booking/calc
             // Note: For existing bookings, we usually want to keep the saved values.
@@ -705,7 +723,7 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
                 toatlcostofuint: parseFloat(totalCostofUnit),
                 gst: parseFloat(gst),
                 costofunitwithtax: parseFloat(costofUnitWithTax),
-                // registrationcharge: parseFloat(registartionCharge) || 0,
+                registrationcharge: parseFloat(registartionCharge) || 0,
                 manjeeraConnectionCharge: parseFloat(manjeeraConnectionCharge),
                 manjeeraMeterCharge: parseFloat(manjeeraMeterCharge),
                 maintenancecharge: parseFloat(maintenceCharge),
@@ -921,7 +939,7 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
                             {totalCostofUnitError && <p className="text-xs text-red-500">{totalCostofUnitError}</p>}
                         </div>
                         <div className="space-y-2">
-                            <Label>GST (5%) (₹) <span className="text-red-500">*</span></Label>
+                            <Label>GST ({projectRates.gst_percentage || 5}%) (₹) <span className="text-red-500">*</span></Label>
                             <Input
                                 value={gst ? parseFloat(gst).toLocaleString('en-IN') : ''}
                                 readOnly
@@ -938,39 +956,37 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
                             />
                             {costofUnitWithTaxError && <p className="text-xs text-red-500">{costofUnitWithTaxError}</p>}
                         </div>
-                        {/* <Textinput
-                            placeholder="Enter registration charge (₹)"
-                            label="Registration @ 7.6% + 1050/- (₹)"
-                            withAsterisk
-                            inputProps={{ disabled: true }}
-                            value={registartionCharge}
-                            error={registrationChargeError}
-                            onChange={updateRegistrationCharge}
-                            labelClassName="text-sm font-medium text-gray-600 mb-1"
-                            inputClassName="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#044093] focus:outline-none transition-colors duration-200 placeholder-gray-400 cursor-not-allowed"
-                        /> */}
+                        <div className="space-y-2">
+                            <Label>Registration Charges (₹)</Label>
+                            <Input
+                                value={registartionCharge ? parseFloat(registartionCharge).toLocaleString('en-IN') : ''}
+                                readOnly
+                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                            />
+                            {registrationChargeError && <p className="text-xs text-red-500">{registrationChargeError}</p>}
+                        </div>
                         <div className="space-y-2">
                             <Label>Manjeera Connection Charge (₹) <span className="text-red-500">*</span></Label>
                             <Input
-                                value={manjeeraConnectionCharge ? parseFloat(manjeeraConnectionCharge).toLocaleString('en-IN') : ''}
-                                readOnly
+                                type="number"
+                                value={manjeeraConnectionCharge}
                                 onChange={updateManjeeraConnectionCharge}
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                             />
                             {manjeeraConnectionChargeError && <p className="text-xs text-red-500">{manjeeraConnectionChargeError}</p>}
                         </div>
                         <div className="space-y-2">
                             <Label>Manjeera Meter Charge (₹) <span className="text-red-500">*</span></Label>
                             <Input
-                                value={manjeeraMeterCharge ? parseFloat(manjeeraMeterCharge).toLocaleString('en-IN') : ''}
-                                readOnly
+                                type="number"
+                                value={manjeeraMeterCharge}
                                 onChange={updateManjeeraMeterCharge}
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                             />
                             {manjeeraMeterChargeError && <p className="text-xs text-red-500">{manjeeraMeterChargeError}</p>}
                         </div>
                         <div className="space-y-2">
-                            <Label>Maintenance @3/- per sqft for 2 Yrs (₹) <span className="text-red-500">*</span></Label>
+                            <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Months (₹) <span className="text-red-500">*</span></Label>
                             <Input
                                 value={maintenceCharge ? parseFloat(maintenceCharge).toLocaleString('en-IN') : ''}
                                 readOnly
@@ -981,15 +997,15 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
                         <div className="space-y-2">
                             <Label>Documentation Fee (₹) <span className="text-red-500">*</span></Label>
                             <Input
-                                value={documentationFee ? parseFloat(documentationFee).toLocaleString('en-IN') : ''}
-                                readOnly
+                                type="number"
+                                value={documentationFee}
                                 onChange={updateDocumenationFee}
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                             />
                             {documenationFeeError && <p className="text-xs text-red-500">{documenationFeeError}</p>}
                         </div>
                         <div className="space-y-2">
-                            <Label>Corpus Fund (50 * SFT) (₹) <span className="text-red-500">*</span></Label>
+                            <Label>Corpus Fund ({projectRates.corpus_fund || 50} * SFT) (₹) <span className="text-red-500">*</span></Label>
                             <Input
                                 value={corpusFund ? parseFloat(corpusFund).toLocaleString('en-IN') : ''}
                                 readOnly

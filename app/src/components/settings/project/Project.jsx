@@ -126,27 +126,45 @@ const Project = () => {
                                 <TableHead className="w-[80px] border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">S.No</TableHead>
                                 <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Project Name</TableHead>
                                 {/* <TableHead>Address</TableHead> */}
-                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Corner Price</TableHead>
-                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">East Price</TableHead>
-                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">6th Floor+ Price</TableHead>
-                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Rewards</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Corner Price</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">East Price</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">6th Floor+ Price</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">GST (%)</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Manjeera Conn.</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Manjeera Meter</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Doc. Fee</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Reg. (%)</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Reg. Base</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Maint. /sqft</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Maint. Months</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Corpus Fund</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Rewards</TableHead>
                                 <TableHead className="w-[120px] text-center border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                <TableLoadingEffect colspan={8} tr={4} />
+                                <TableLoadingEffect colspan={16} tr={4} />
                             ) : (
                                 projectList.length > 0 ? (
                                     projectList.map((project, index) => (
                                         <TableRow key={project.uuid} className="hover:bg-neutral-50">
                                             <TableCell className="font-medium border border-neutral-200 px-3 py-2">{index + 1}</TableCell>
-                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.project_name}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2 text-nowrap">{project.project_name}</TableCell>
                                             {/* <TableCell>{project.project_address || "-"}</TableCell> */}
                                             <TableCell className="border border-neutral-200 px-3 py-2">{project.project_corner_price || "-"}</TableCell>
                                             <TableCell className="border border-neutral-200 px-3 py-2">{project.project_east_price || "-"}</TableCell>
                                             <TableCell className="border border-neutral-200 px-3 py-2">{project.project_six_floor_onwards_price || "-"}</TableCell>
-                                            <TableCell className="border border-neutral-200 px-3 py-2">
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.gst_percentage || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.manjeera_connection_charges || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.manjeera_meter_charges || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.documentation_fee || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.registration_percentage || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.registration_base_charge || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.maintenance_rate_per_sqft || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.maintenance_duration_months || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.corpus_fund || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2 text-center">
                                                 {project.project_rewards ? (
                                                     <Badge variant="success">Yes</Badge>
                                                 ) : (
@@ -177,7 +195,7 @@ const Project = () => {
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={8} className="text-center py-8 text-neutral-500">No projects found</TableCell>
+                                        <TableCell colSpan={16} className="text-center py-8 text-neutral-500">No projects found</TableCell>
                                     </TableRow>
                                 )
                             )}
