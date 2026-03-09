@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Projectapi from "../../api/Projectapi.jsx";
 import Errorpanel from "../../shared/Errorpanel.jsx";
 import Updateprojectmodal from "./Updateprojectmodal";
-import Addproject from "./Addproject";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails.jsx";
 import { toast } from "react-toastify";
 import TableLoadingEffect from "../../shared/Tableloadingeffect.jsx";
@@ -17,6 +16,7 @@ import {
 } from "../../ui/table";
 import { Dialog, DialogContent } from "../../ui/dialog";
 import { Badge } from "../../ui/badge";
+import { Button } from "../../ui/button";
 
 const Project = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -24,9 +24,17 @@ const Project = () => {
     const [projectList, setProjectList] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     const [updateProjectModal, setUpdateProjectModal] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
 
     const openUpdateProjectModal = (project) => {
         setSelectedProject(project);
+        setIsEditMode(true);
+        setUpdateProjectModal(true);
+    };
+
+    const openAddProjectModal = () => {
+        setSelectedProject(null);
+        setIsEditMode(false);
         setUpdateProjectModal(true);
     };
 
@@ -103,85 +111,78 @@ const Project = () => {
             <div className="flex flex-col gap-4 border border-[#ebecef] rounded-xl bg-white p-8 min-h-[65vh]">
                 <div className="flex justify-between items-center">
                     <p className="text-[18px] font-semibold">Projects</p>
+                    {permissions?.settings_page?.includes("create_project") && (
+                        <Button onClick={openAddProjectModal} className="bg-[#0083bf] hover:bg-[#0083bf]/90 text-white">
+                            Add Project
+                        </Button>
+                    )}
                 </div>
                 <hr className="text-[#ebecef]" />
 
-                <div className="grid grid-cols-4 gap-4">
-                    {/* Add Project Form - Left Column */}
-                    {permissions?.settings_page?.includes("create_project") && (
-                        <div className="col-span-1 w-full">
-                            <Addproject refreshProject={refreshProject} />
-                        </div>
-                    )}
-
-                    {/* Project List - Right Column */}
-                    <div className="col-span-3 bg-white p-4 flex flex-col gap-4 w-full border border-[#ebecef] rounded-md">
-                        <div className="w-full relative overflow-x-auto border border-neutral-200 rounded-lg">
-                            <Table>
-                                <TableHeader className="bg-gray-50">
-                                    <TableRow>
-                                        <TableHead className="w-[80px] border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">S.No</TableHead>
-                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Project Name</TableHead>
-                                        {/* <TableHead>Address</TableHead> */}
-                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Corner Price</TableHead>
-                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">East Price</TableHead>
-                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">6th Floor+ Price</TableHead>
-                                        <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Rewards</TableHead>
-                                        <TableHead className="w-[120px] text-center border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {isLoading ? (
-                                        <TableLoadingEffect colspan={8} tr={4} />
-                                    ) : (
-                                        projectList.length > 0 ? (
-                                            projectList.map((project, index) => (
-                                                <TableRow key={project.uuid} className="hover:bg-neutral-50">
-                                                    <TableCell className="font-medium border border-neutral-200 px-3 py-2">{index + 1}</TableCell>
-                                                    <TableCell className="border border-neutral-200 px-3 py-2">{project.project_name}</TableCell>
-                                                    {/* <TableCell>{project.project_address || "-"}</TableCell> */}
-                                                    <TableCell className="border border-neutral-200 px-3 py-2">{project.project_corner_price || "-"}</TableCell>
-                                                    <TableCell className="border border-neutral-200 px-3 py-2">{project.project_east_price || "-"}</TableCell>
-                                                    <TableCell className="border border-neutral-200 px-3 py-2">{project.project_six_floor_onwards_price || "-"}</TableCell>
-                                                    <TableCell className="border border-neutral-200 px-3 py-2">
-                                                        {project.project_rewards ? (
-                                                            <Badge variant="success">Yes</Badge>
-                                                        ) : (
-                                                            <Badge variant="secondary">No</Badge>
-                                                        )}
-                                                    </TableCell>
-                                                    <TableCell className="border border-neutral-200 px-3 py-2">
-                                                        <div className="flex items-center justify-center gap-2">
-                                                            {permissions?.settings_page?.includes("update_project_info") && (
-                                                                <div
-                                                                    onClick={() => openUpdateProjectModal(project)}
-                                                                    className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600 cursor-pointer"
-                                                                >
-                                                                    <IconEdit size={18} />
-                                                                </div>
-                                                            )}
-                                                            {permissions?.settings_page?.includes("delete_project") && (
-                                                                <div
-                                                                    onClick={() => handleDeleteProject(project.uuid)}
-                                                                    className="p-1 hover:bg-red-50 rounded-md transition-colors text-neutral-500 hover:text-red-600 cursor-pointer"
-                                                                >
-                                                                    <IconTrash size={18} />
-                                                                </div>
-                                                            )}
+                <div className="w-full relative overflow-x-auto border border-neutral-200 rounded-lg">
+                    <Table>
+                        <TableHeader className="bg-gray-50">
+                            <TableRow>
+                                <TableHead className="w-[80px] border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">S.No</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Project Name</TableHead>
+                                {/* <TableHead>Address</TableHead> */}
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Corner Price</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">East Price</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">6th Floor+ Price</TableHead>
+                                <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Rewards</TableHead>
+                                <TableHead className="w-[120px] text-center border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {isLoading ? (
+                                <TableLoadingEffect colspan={8} tr={4} />
+                            ) : (
+                                projectList.length > 0 ? (
+                                    projectList.map((project, index) => (
+                                        <TableRow key={project.uuid} className="hover:bg-neutral-50">
+                                            <TableCell className="font-medium border border-neutral-200 px-3 py-2">{index + 1}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.project_name}</TableCell>
+                                            {/* <TableCell>{project.project_address || "-"}</TableCell> */}
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.project_corner_price || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.project_east_price || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">{project.project_six_floor_onwards_price || "-"}</TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">
+                                                {project.project_rewards ? (
+                                                    <Badge variant="success">Yes</Badge>
+                                                ) : (
+                                                    <Badge variant="secondary">No</Badge>
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="border border-neutral-200 px-3 py-2">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    {permissions?.settings_page?.includes("update_project_info") && (
+                                                        <div
+                                                            onClick={() => openUpdateProjectModal(project)}
+                                                            className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600 cursor-pointer"
+                                                        >
+                                                            <IconEdit size={18} />
                                                         </div>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))
-                                        ) : (
-                                            <TableRow>
-                                                <TableCell colSpan={8} className="text-center py-8 text-neutral-500">No projects found</TableCell>
-                                            </TableRow>
-                                        )
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </div>
+                                                    )}
+                                                    {permissions?.settings_page?.includes("delete_project") && (
+                                                        <div
+                                                            onClick={() => handleDeleteProject(project.uuid)}
+                                                            className="p-1 hover:bg-red-50 rounded-md transition-colors text-neutral-500 hover:text-red-600 cursor-pointer"
+                                                        >
+                                                            <IconTrash size={18} />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={8} className="text-center py-8 text-neutral-500">No projects found</TableCell>
+                                    </TableRow>
+                                )
+                            )}
+                        </TableBody>
+                    </Table>
                 </div>
             </div>
             {errorMessage && <Errorpanel errorMessages={errorMessage} setErrorMessages={setErrorMessage} />}
@@ -194,7 +195,7 @@ const Project = () => {
                             closeUpdateProjectModal={closeUpdateProjectModal}
                             projectData={selectedProject}
                             refreshProject={refreshProject}
-                            isEdit={true}
+                            isEdit={isEditMode}
                         />
                     }
                 </DialogContent>
