@@ -5,7 +5,7 @@ import Updateprojectmodal from "./Updateprojectmodal";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails.jsx";
 import { toast } from "react-toastify";
 import TableLoadingEffect from "../../shared/Tableloadingeffect.jsx";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconTrash, IconEye } from "@tabler/icons-react";
 import {
     Table,
     TableBody,
@@ -17,6 +17,7 @@ import {
 import { Dialog, DialogContent } from "../../ui/dialog";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
+import Singleprojectdetails from "./Singleprojectdetails";
 
 const Project = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -24,12 +25,18 @@ const Project = () => {
     const [projectList, setProjectList] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     const [updateProjectModal, setUpdateProjectModal] = useState(false);
+    const [viewProjectDrawer, setViewProjectDrawer] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
 
     const openUpdateProjectModal = (project) => {
         setSelectedProject(project);
         setIsEditMode(true);
         setUpdateProjectModal(true);
+    };
+
+    const openViewProjectDrawer = (project) => {
+        setSelectedProject(project);
+        setViewProjectDrawer(true);
     };
 
     const openAddProjectModal = () => {
@@ -173,10 +180,18 @@ const Project = () => {
                                             </TableCell>
                                             <TableCell className="border border-neutral-200 px-3 py-2">
                                                 <div className="flex items-center justify-center gap-2">
+                                                    <div
+                                                        onClick={() => openViewProjectDrawer(project)}
+                                                        className="p-1 hover:bg-green-50 rounded-md transition-colors text-neutral-500 hover:text-green-600 cursor-pointer"
+                                                        title="View Project Details"
+                                                    >
+                                                        <IconEye size={18} />
+                                                    </div>
                                                     {permissions?.settings_page?.includes("update_project_info") && (
                                                         <div
                                                             onClick={() => openUpdateProjectModal(project)}
                                                             className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600 cursor-pointer"
+                                                            title="Edit Project"
                                                         >
                                                             <IconEdit size={18} />
                                                         </div>
@@ -218,6 +233,12 @@ const Project = () => {
                     }
                 </DialogContent>
             </Dialog>
+
+            <Singleprojectdetails
+                projectData={selectedProject}
+                isOpen={viewProjectDrawer}
+                onClose={setViewProjectDrawer}
+            />
         </>
     );
 };
