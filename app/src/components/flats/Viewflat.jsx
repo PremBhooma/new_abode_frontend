@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import AgreementtemplateModal from "./templates/AgreementtemplateModal.jsx";
 import Downloadtemplate from "./templates/Downloadtemplate.jsx";
 import Overviewtab from "./viewflat/Overviewtab";
+import Costsheet from "./viewflat/Costsheet";
 
 function Viewflat() {
   const navigate = useNavigate();
@@ -754,6 +755,8 @@ function Viewflat() {
           permissions?.flats_page?.includes("flat_info_single_flat") && (
             customerFlatDetails && (
               <div className="space-y-3">
+                <Costsheet />
+
                 <div className="flex items-center justify-between">
                   <p className="text-lg font-semibold">Flat Cost Details :</p>
                   <button onClick={openFlatCostUpdate} className="text-[14px] text-white px-5 py-1.5 cursor-pointer !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">Update</button>
