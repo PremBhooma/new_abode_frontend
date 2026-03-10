@@ -20,6 +20,7 @@ import CustomDateFilter from "@/components/shared/CustomDateFilter";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Customerstepone = forwardRef((props, ref) => {
   const navigate = useNavigate();
@@ -961,122 +962,163 @@ const Customerstepone = forwardRef((props, ref) => {
   return (
     <>
       <div className="flex flex-col gap-3 w-full">
-        <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-3 gap-4">
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Project</label>
-              <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
-                <SelectTrigger className="w-full h-10 border border-gray-300 rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none placeholder-gray-400">
-                  <SelectValue placeholder="Select Project" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200">
-                  {projects.map((project) => (
-                    <SelectItem key={project.id} value={String(project.id)}>
-                      {project.project_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Prefix <span className="text-red-500">*</span></label>
-              <Select value={prefixes || undefined} onValueChange={updatePrefix}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!prefixes ? 'text-gray-400' : ''} ${prefixError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200">
-                  <SelectItem value="Mr">Mr</SelectItem>
-                  <SelectItem value="Mrs">Mrs</SelectItem>
-                  <SelectItem value="Miss">Miss</SelectItem>
-                  <SelectItem value="Mx">Mx</SelectItem>
-                </SelectContent>
-              </Select>
-              {prefixError && <p className="text-xs text-red-500">{prefixError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">First Name <span className="text-red-500">*</span></label>
-              <Input
-                placeholder="Enter First Name"
-                value={firstName}
-                onChange={updateFirstName}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${firstNameError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {firstNameError && <p className="text-xs text-red-500">{firstNameError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Last Name</label>
-              <Input
-                placeholder="Enter Last Name"
-                value={lastName}
-                onChange={updateLastName}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${lastNameError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {lastNameError && <p className="text-xs text-red-500">{lastNameError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Email Address</label>
-              <Input
-                placeholder="Enter Email Address"
-                value={email}
-                onChange={updateEmail}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {emailError && <p className="text-xs text-red-500">{emailError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Alternate Email Address</label>
-              <Input
-                placeholder="Enter Alternate Email Address"
-                value={email2}
-                onChange={updateEmail2}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError2 ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {emailError2 && <p className="text-xs text-red-500">{emailError2}</p>}
-            </div>
-            <div className="flex flex-col gap-1 w-full">
-              <label className="block text-sm font-medium text-gray-600 mb-1">
-                Phone Number <span className="text-red-500">*</span>
-              </label>
-              <div className="flex flex-row gap-x-4 w-full">
-                <div className="w-20">
-                  <Select value={phoneCode || undefined} onValueChange={updatePhoneCode}>
-                    <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!phoneCode ? 'text-gray-400' : ''} border-gray-300`}>
-                      <SelectValue placeholder="Code" />
-                    </SelectTrigger>
-                    <SelectContent className="border border-gray-200 max-h-[200px]">
-                      {countryCodes.map((item, index) => (
-                        <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+        {isLoadingEffect ? (
+          <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-3 gap-4">
+              {Array.from({ length: 15 }).map((_, i) => (
+                <div key={i} className="flex flex-col gap-1">
+                  <Skeleton className="h-4 w-24 mb-1" />
+                  <Skeleton className="h-10 w-full rounded-md" />
                 </div>
-                <div className="flex-1">
-                  <Input
-                    placeholder="Enter Phone Number"
-                    value={phoneNumber}
-                    onChange={updatePhoneNumber}
-                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${phoneNumberError ? 'border-red-500' : 'border-gray-300'}`}
-                  />
+              ))}
+            </div>
+            <hr className="border border-[#ebecef]" />
+            <div className="flex flex-col gap-3">
+              <Skeleton className="h-6 w-48 mb-1" />
+              <div className="grid grid-cols-3 gap-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex flex-col gap-1">
+                    <Skeleton className="h-4 w-24 mb-1" />
+                    <Skeleton className="h-10 w-full rounded-md" />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <hr className="border border-[#ebecef]" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-6 w-56 mb-1" />
+                <div className="flex items-center space-x-3 mt-1">
+                  <Skeleton className="h-6 w-11 rounded-full" />
+                  <Skeleton className="h-4 w-64" />
                 </div>
               </div>
-              {phoneCodeError !== "" && (
-                <p className="mt-1 text-xs text-red-500">
-                  {phoneCodeError}
-                </p>
-              )}
-              {phoneNumberError !== "" && (
-                <p className="mt-1 text-xs text-red-500">
-                  {phoneNumberError}
-                </p>
-              )}
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-6 w-56 mb-1" />
+                <div className="flex items-center space-x-3 mt-1">
+                  <Skeleton className="h-6 w-11 rounded-full" />
+                  <Skeleton className="h-4 w-64" />
+                </div>
+              </div>
             </div>
-            {/* <div className="w-full">
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-3 gap-4">
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Project</label>
+                <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
+                  <SelectTrigger className="w-full h-10 border border-gray-300 rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none placeholder-gray-400">
+                    <SelectValue placeholder="Select Project" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-gray-200">
+                    {projects.map((project) => (
+                      <SelectItem key={project.id} value={String(project.id)}>
+                        {project.project_name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Prefix <span className="text-red-500">*</span></label>
+                <Select value={prefixes || undefined} onValueChange={updatePrefix}>
+                  <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!prefixes ? 'text-gray-400' : ''} ${prefixError ? 'border-red-500' : 'border-gray-300'}`}>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-gray-200">
+                    <SelectItem value="Mr">Mr</SelectItem>
+                    <SelectItem value="Mrs">Mrs</SelectItem>
+                    <SelectItem value="Miss">Miss</SelectItem>
+                    <SelectItem value="Mx">Mx</SelectItem>
+                  </SelectContent>
+                </Select>
+                {prefixError && <p className="text-xs text-red-500">{prefixError}</p>}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">First Name <span className="text-red-500">*</span></label>
+                <Input
+                  placeholder="Enter First Name"
+                  value={firstName}
+                  onChange={updateFirstName}
+                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${firstNameError ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {firstNameError && <p className="text-xs text-red-500">{firstNameError}</p>}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Last Name</label>
+                <Input
+                  placeholder="Enter Last Name"
+                  value={lastName}
+                  onChange={updateLastName}
+                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${lastNameError ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {lastNameError && <p className="text-xs text-red-500">{lastNameError}</p>}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Email Address</label>
+                <Input
+                  placeholder="Enter Email Address"
+                  value={email}
+                  onChange={updateEmail}
+                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {emailError && <p className="text-xs text-red-500">{emailError}</p>}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Alternate Email Address</label>
+                <Input
+                  placeholder="Enter Alternate Email Address"
+                  value={email2}
+                  onChange={updateEmail2}
+                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError2 ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {emailError2 && <p className="text-xs text-red-500">{emailError2}</p>}
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <div className="flex flex-row gap-x-4 w-full">
+                  <div className="w-20">
+                    <Select value={phoneCode || undefined} onValueChange={updatePhoneCode}>
+                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!phoneCode ? 'text-gray-400' : ''} border-gray-300`}>
+                        <SelectValue placeholder="Code" />
+                      </SelectTrigger>
+                      <SelectContent className="border border-gray-200 max-h-[200px]">
+                        {countryCodes.map((item, index) => (
+                          <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      placeholder="Enter Phone Number"
+                      value={phoneNumber}
+                      onChange={updatePhoneNumber}
+                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${phoneNumberError ? 'border-red-500' : 'border-gray-300'}`}
+                    />
+                  </div>
+                </div>
+                {phoneCodeError !== "" && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {phoneCodeError}
+                  </p>
+                )}
+                {phoneNumberError !== "" && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {phoneNumberError}
+                  </p>
+                )}
+              </div>
+              {/* <div className="w-full">
               <label className="block text-sm font-medium text-gray-600 mb-1">
                 Landline Number
               </label>
@@ -1132,176 +1174,176 @@ const Customerstepone = forwardRef((props, ref) => {
               )}
             </div> */}
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Gender <span className="text-red-500">*</span></label>
-              <Select value={gender || undefined} onValueChange={updateGender}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!gender ? 'text-gray-400' : ''} ${genderError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200">
-                  <SelectItem value="Male">Male</SelectItem>
-                  <SelectItem value="Female">Female</SelectItem>
-                </SelectContent>
-              </Select>
-              {genderError && <p className="text-xs text-red-500">{genderError}</p>}
-            </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Gender <span className="text-red-500">*</span></label>
+                <Select value={gender || undefined} onValueChange={updateGender}>
+                  <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!gender ? 'text-gray-400' : ''} ${genderError ? 'border-red-500' : 'border-gray-300'}`}>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-gray-200">
+                    <SelectItem value="Male">Male</SelectItem>
+                    <SelectItem value="Female">Female</SelectItem>
+                  </SelectContent>
+                </Select>
+                {genderError && <p className="text-xs text-red-500">{genderError}</p>}
+              </div>
 
-            <CustomDateFilter
-              label="Date of Birth"
-              selected={dateOfBirth}
-              error={dateOfBirthError}
-              onChange={updateDateOfBirth}
-              maxDateToday={true}
-            />
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Father Name</label>
-              <Input
-                placeholder="Enter Father Name"
-                value={fatherName}
-                onChange={updateFatherName}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${fatherNameError ? 'border-red-500' : 'border-gray-300'}`}
+              <CustomDateFilter
+                label="Date of Birth"
+                selected={dateOfBirth}
+                error={dateOfBirthError}
+                onChange={updateDateOfBirth}
+                maxDateToday={true}
               />
-              {fatherNameError && <p className="text-xs text-red-500">{fatherNameError}</p>}
-            </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Marital Status</label>
-              <Select value={maritalStatus || undefined} onValueChange={updateMaritalStatus}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!maritalStatus ? 'text-gray-400' : ''} ${maritalStatusError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200">
-                  <SelectItem value="Single">Single</SelectItem>
-                  <SelectItem value="Married">Married</SelectItem>
-                </SelectContent>
-              </Select>
-              {maritalStatusError && <p className="text-xs text-red-500">{maritalStatusError}</p>}
-            </div>
-
-            {maritalStatus === "Married" && (
-              <>
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-gray-600 mb-1">Spouse Prefix</label>
-                  <Select value={spousePrefix || undefined} onValueChange={updateSpousePrefix}>
-                    <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!spousePrefix ? 'text-gray-400' : ''} ${spousePrefixError ? 'border-red-500' : 'border-gray-300'}`}>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent className="border border-gray-200">
-                      <SelectItem value="Mr">Mr</SelectItem>
-                      <SelectItem value="Mrs">Mrs</SelectItem>
-                      <SelectItem value="Miss">Miss</SelectItem>
-                      <SelectItem value="Mx">Mx</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {spousePrefixError && <p className="text-xs text-red-500">{spousePrefixError}</p>}
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-gray-600 mb-1">Spouse Name</label>
-                  <Input
-                    placeholder="Enter Spouse Name"
-                    value={spouseName}
-                    onChange={updateSpouseName}
-                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${spouseNameError ? 'border-red-500' : 'border-gray-300'}`}
-                  />
-                  {spouseNameError && <p className="text-xs text-red-500">{spouseNameError}</p>}
-                </div>
-
-                <CustomDateFilter
-                  label="Spouse DOB"
-                  selected={spouseDob}
-                  error={spouseDobError}
-                  onChange={updateSpouseDob}
-                  maxDateToday={true}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Father Name</label>
+                <Input
+                  placeholder="Enter Father Name"
+                  value={fatherName}
+                  onChange={updateFatherName}
+                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${fatherNameError ? 'border-red-500' : 'border-gray-300'}`}
                 />
+                {fatherNameError && <p className="text-xs text-red-500">{fatherNameError}</p>}
+              </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-gray-600 mb-1">Number of Children</label>
-                  <Input
-                    placeholder="Enter No of Children"
-                    type="number"
-                    value={numberOfChildren}
-                    onChange={updateNumberOfChildren}
-                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${numberOfChildrenError ? 'border-red-500' : 'border-gray-300'}`}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Marital Status</label>
+                <Select value={maritalStatus || undefined} onValueChange={updateMaritalStatus}>
+                  <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!maritalStatus ? 'text-gray-400' : ''} ${maritalStatusError ? 'border-red-500' : 'border-gray-300'}`}>
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-gray-200">
+                    <SelectItem value="Single">Single</SelectItem>
+                    <SelectItem value="Married">Married</SelectItem>
+                  </SelectContent>
+                </Select>
+                {maritalStatusError && <p className="text-xs text-red-500">{maritalStatusError}</p>}
+              </div>
+
+              {maritalStatus === "Married" && (
+                <>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-gray-600 mb-1">Spouse Prefix</label>
+                    <Select value={spousePrefix || undefined} onValueChange={updateSpousePrefix}>
+                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!spousePrefix ? 'text-gray-400' : ''} ${spousePrefixError ? 'border-red-500' : 'border-gray-300'}`}>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent className="border border-gray-200">
+                        <SelectItem value="Mr">Mr</SelectItem>
+                        <SelectItem value="Mrs">Mrs</SelectItem>
+                        <SelectItem value="Miss">Miss</SelectItem>
+                        <SelectItem value="Mx">Mx</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {spousePrefixError && <p className="text-xs text-red-500">{spousePrefixError}</p>}
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-gray-600 mb-1">Spouse Name</label>
+                    <Input
+                      placeholder="Enter Spouse Name"
+                      value={spouseName}
+                      onChange={updateSpouseName}
+                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${spouseNameError ? 'border-red-500' : 'border-gray-300'}`}
+                    />
+                    {spouseNameError && <p className="text-xs text-red-500">{spouseNameError}</p>}
+                  </div>
+
+                  <CustomDateFilter
+                    label="Spouse DOB"
+                    selected={spouseDob}
+                    error={spouseDobError}
+                    onChange={updateSpouseDob}
+                    maxDateToday={true}
                   />
-                  {numberOfChildrenError && <p className="text-xs text-red-500">{numberOfChildrenError}</p>}
-                </div>
 
-                <CustomDateFilter
-                  label="Wedding Anniversary"
-                  selected={weddingAniversary}
-                  error={weddingAniversaryError}
-                  onChange={updateWeddingAniversary}
-                  maxDateToday={true}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-gray-600 mb-1">Number of Children</label>
+                    <Input
+                      placeholder="Enter No of Children"
+                      type="number"
+                      value={numberOfChildren}
+                      onChange={updateNumberOfChildren}
+                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${numberOfChildrenError ? 'border-red-500' : 'border-gray-300'}`}
+                    />
+                    {numberOfChildrenError && <p className="text-xs text-red-500">{numberOfChildrenError}</p>}
+                  </div>
+
+                  <CustomDateFilter
+                    label="Wedding Anniversary"
+                    selected={weddingAniversary}
+                    error={weddingAniversaryError}
+                    onChange={updateWeddingAniversary}
+                    maxDateToday={true}
+                  />
+                </>
+              )}
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Pan Card No (e.g., XXXXX1234X)</label>
+                <Input
+                  placeholder="Enter Pan Card No"
+                  value={panCardNo}
+                  onChange={updatePanCardNo}
+                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${panCardNoError ? 'border-red-500' : 'border-gray-300'}`}
                 />
-              </>
-            )}
+                {panCardNoError && <p className="text-xs text-red-500">{panCardNoError}</p>}
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Pan Card No (e.g., XXXXX1234X)</label>
-              <Input
-                placeholder="Enter Pan Card No"
-                value={panCardNo}
-                onChange={updatePanCardNo}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${panCardNoError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {panCardNoError && <p className="text-xs text-red-500">{panCardNoError}</p>}
-            </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Aadhar Card No (e.g., XXXX XXXX XXXX)</label>
+                <Input
+                  placeholder="Enter Aadhar Card No"
+                  type="number"
+                  value={aadharCardNo}
+                  onChange={updateAadharCardNo}
+                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${aadharCardNoError ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {aadharCardNoError && <p className="text-xs text-red-500">{aadharCardNoError}</p>}
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Aadhar Card No (e.g., XXXX XXXX XXXX)</label>
-              <Input
-                placeholder="Enter Aadhar Card No"
-                type="number"
-                value={aadharCardNo}
-                onChange={updateAadharCardNo}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${aadharCardNoError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {aadharCardNoError && <p className="text-xs text-red-500">{aadharCardNoError}</p>}
-            </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Country of Citizenship</label>
+                <Select value={countryOfCitizenship || undefined} onValueChange={updateCountryOfCitizenship}>
+                  <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!countryOfCitizenship ? 'text-gray-400' : ''} ${countryOfCitizenshipError ? 'border-red-500' : 'border-gray-300'}`}>
+                    <SelectValue placeholder="Select Country" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-gray-200 max-h-[200px]">
+                    {countryNames.map((item, index) => (
+                      <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {countryOfCitizenshipError && <p className="text-xs text-red-500">{countryOfCitizenshipError}</p>}
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Country of Citizenship</label>
-              <Select value={countryOfCitizenship || undefined} onValueChange={updateCountryOfCitizenship}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!countryOfCitizenship ? 'text-gray-400' : ''} ${countryOfCitizenshipError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select Country" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200 max-h-[200px]">
-                  {countryNames.map((item, index) => (
-                    <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {countryOfCitizenshipError && <p className="text-xs text-red-500">{countryOfCitizenshipError}</p>}
-            </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Country of Residence</label>
+                <Select value={countryOfResidence || undefined} onValueChange={updateCountryOfResidence}>
+                  <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!countryOfResidence ? 'text-gray-400' : ''} ${countryOfResidenceError ? 'border-red-500' : 'border-gray-300'}`}>
+                    <SelectValue placeholder="Select Country" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-gray-200 max-h-[200px]">
+                    {countryNames.map((item, index) => (
+                      <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {countryOfResidenceError && <p className="text-xs text-red-500">{countryOfResidenceError}</p>}
+              </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Country of Residence</label>
-              <Select value={countryOfResidence || undefined} onValueChange={updateCountryOfResidence}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!countryOfResidence ? 'text-gray-400' : ''} ${countryOfResidenceError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select Country" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200 max-h-[200px]">
-                  {countryNames.map((item, index) => (
-                    <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {countryOfResidenceError && <p className="text-xs text-red-500">{countryOfResidenceError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Mother Tongue</label>
-              <Input
-                placeholder="Enter Mother Tongue"
-                value={motherTongue}
-                onChange={updateMotherTongue}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${motherTongueError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {motherTongueError && <p className="text-xs text-red-500">{motherTongueError}</p>}
-            </div>
-            {/* <Textinput
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-600 mb-1">Mother Tongue</label>
+                <Input
+                  placeholder="Enter Mother Tongue"
+                  value={motherTongue}
+                  onChange={updateMotherTongue}
+                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${motherTongueError ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                {motherTongueError && <p className="text-xs text-red-500">{motherTongueError}</p>}
+              </div>
+              {/* <Textinput
               placeholder="Enter Name of Power of Attorney"
               label="Name of Power of Attorney (POA) Holder"
               value={nameOfPoa}
@@ -1367,167 +1409,167 @@ const Customerstepone = forwardRef((props, ref) => {
                 inputClassName="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#044093] focus:outline-none transition-colors duration-200 placeholder-gray-400"
               />
             )} */}
-          </div>
-          <hr className="border border-[#ebecef]" />
-          <div className="flex flex-col gap-3">
-            <p className="font-semibold text-[16px] text-gray-700">
-              Professional Details
-            </p>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 mb-1">Current Designation</label>
-                <Input
-                  placeholder="Enter Current Designation"
-                  value={currentDesignation}
-                  onChange={updateCurrentDesignation}
-                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${currentDesignationError ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {currentDesignationError && <p className="text-xs text-red-500">{currentDesignationError}</p>}
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 mb-1">Current Organization</label>
-                <Input
-                  placeholder="Enter Current Organization"
-                  value={currentOrganization}
-                  onChange={updateCurrentOrganization}
-                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${currentOrganizationError ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {currentOrganizationError && <p className="text-xs text-red-500">{currentOrganizationError}</p>}
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 mb-1">Organization Address</label>
-                <Input
-                  placeholder="Enter Organization Address"
-                  value={organizationAddress}
-                  onChange={updateOrganizationAddress}
-                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${organizationAddressError ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {organizationAddressError && <p className="text-xs text-red-500">{organizationAddressError}</p>}
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 mb-1">Work Experience</label>
-                <Input
-                  placeholder="Enter Work Experience"
-                  type="number"
-                  value={workExperience}
-                  onChange={updateWorkExperience}
-                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${workExperienceError ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {workExperienceError && <p className="text-xs text-red-500">{workExperienceError}</p>}
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 mb-1">Annual Income</label>
-                <Input
-                  placeholder="Enter Annual Income"
-                  type="number"
-                  value={annualIncome}
-                  onChange={updateAnnualIncome}
-                  className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${annualIncomeError ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {annualIncomeError && <p className="text-xs text-red-500">{annualIncomeError}</p>}
+            </div>
+            <hr className="border border-[#ebecef]" />
+            <div className="flex flex-col gap-3">
+              <p className="font-semibold text-[16px] text-gray-700">
+                Professional Details
+              </p>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Current Designation</label>
+                  <Input
+                    placeholder="Enter Current Designation"
+                    value={currentDesignation}
+                    onChange={updateCurrentDesignation}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${currentDesignationError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {currentDesignationError && <p className="text-xs text-red-500">{currentDesignationError}</p>}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Current Organization</label>
+                  <Input
+                    placeholder="Enter Current Organization"
+                    value={currentOrganization}
+                    onChange={updateCurrentOrganization}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${currentOrganizationError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {currentOrganizationError && <p className="text-xs text-red-500">{currentOrganizationError}</p>}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Organization Address</label>
+                  <Input
+                    placeholder="Enter Organization Address"
+                    value={organizationAddress}
+                    onChange={updateOrganizationAddress}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${organizationAddressError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {organizationAddressError && <p className="text-xs text-red-500">{organizationAddressError}</p>}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Work Experience</label>
+                  <Input
+                    placeholder="Enter Work Experience"
+                    type="number"
+                    value={workExperience}
+                    onChange={updateWorkExperience}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${workExperienceError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {workExperienceError && <p className="text-xs text-red-500">{workExperienceError}</p>}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Annual Income</label>
+                  <Input
+                    placeholder="Enter Annual Income"
+                    type="number"
+                    value={annualIncome}
+                    onChange={updateAnnualIncome}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${annualIncomeError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {annualIncomeError && <p className="text-xs text-red-500">{annualIncomeError}</p>}
+                </div>
               </div>
             </div>
-          </div>
-          <hr className="border border-[#ebecef]" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="flex flex-col gap-2">
-              <p className="font-semibold text-[16px] text-gray-700">
-                Address of Correspondence
-              </p>
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={handleToggleAddressCorrespondence}
-                  type="button"
-                  role="switch"
-                  aria-checked={openAddressCorrespondence}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${openAddressCorrespondence ? "bg-[#0083bf]" : "bg-gray-300"
-                    }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${openAddressCorrespondence
-                      ? "translate-x-6"
-                      : "translate-x-1"
+            <hr className="border border-[#ebecef]" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-2">
+                <p className="font-semibold text-[16px] text-gray-700">
+                  Address of Correspondence
+                </p>
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={handleToggleAddressCorrespondence}
+                    type="button"
+                    role="switch"
+                    aria-checked={openAddressCorrespondence}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${openAddressCorrespondence ? "bg-[#0083bf]" : "bg-gray-300"
                       }`}
-                  />
-                </button>
-                <span className="text-[15px] font-medium text-gray-400">
-                  Please switch the toggle to add the address.
-                </span>
-              </div>
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${openAddressCorrespondence
+                        ? "translate-x-6"
+                        : "translate-x-1"
+                        }`}
+                    />
+                  </button>
+                  <span className="text-[15px] font-medium text-gray-400">
+                    Please switch the toggle to add the address.
+                  </span>
+                </div>
 
-              {openAddressCorrespondence && (
-                <>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-600 mb-1">Country</label>
-                    <Select value={correspondenceCountry || undefined} onValueChange={updateCorrespondenceCountry}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCountry ? 'text-gray-400' : ''} ${correspondenceCountryError ? 'border-red-500' : 'border-gray-300'}`}>
-                        <SelectValue placeholder="Select Country" />
-                      </SelectTrigger>
-                      <SelectContent className="border border-gray-200">
-                        <SelectItem value="101">India</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {correspondenceCountryError && <p className="text-xs text-red-500">{correspondenceCountryError}</p>}
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-600 mb-1">State</label>
-                    <Select value={correspondenceState || undefined} onValueChange={updateCorrespondenceState}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceState ? 'text-gray-400' : ''} ${correspondenceStateError ? 'border-red-500' : 'border-gray-300'}`}>
-                        <SelectValue placeholder="Select State" />
-                      </SelectTrigger>
-                      <SelectContent className="border border-gray-200 max-h-[200px]">
-                        {stateData.map((item, index) => (
-                          <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {correspondenceStateError && <p className="text-xs text-red-500">{correspondenceStateError}</p>}
-                  </div>
-
-                  {correspondenceState && (
+                {openAddressCorrespondence && (
+                  <>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-medium text-gray-600 mb-1">City</label>
-                      <Select value={correspondenceCity || undefined} onValueChange={updateCorrespondenceCity}>
-                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCity ? 'text-gray-400' : ''} ${correspondenceCityError ? 'border-red-500' : 'border-gray-300'}`}>
-                          <SelectValue placeholder="Select City" />
+                      <label className="text-sm font-medium text-gray-600 mb-1">Country</label>
+                      <Select value={correspondenceCountry || undefined} onValueChange={updateCorrespondenceCountry}>
+                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCountry ? 'text-gray-400' : ''} ${correspondenceCountryError ? 'border-red-500' : 'border-gray-300'}`}>
+                          <SelectValue placeholder="Select Country" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-gray-200">
+                          <SelectItem value="101">India</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {correspondenceCountryError && <p className="text-xs text-red-500">{correspondenceCountryError}</p>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-medium text-gray-600 mb-1">State</label>
+                      <Select value={correspondenceState || undefined} onValueChange={updateCorrespondenceState}>
+                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceState ? 'text-gray-400' : ''} ${correspondenceStateError ? 'border-red-500' : 'border-gray-300'}`}>
+                          <SelectValue placeholder="Select State" />
                         </SelectTrigger>
                         <SelectContent className="border border-gray-200 max-h-[200px]">
-                          {correspondenceCityData.map((item, index) => (
+                          {stateData.map((item, index) => (
                             <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      {correspondenceCityError && <p className="text-xs text-red-500">{correspondenceCityError}</p>}
+                      {correspondenceStateError && <p className="text-xs text-red-500">{correspondenceStateError}</p>}
                     </div>
-                  )}
 
-                  {correspondenceCity && (
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-medium text-gray-600 mb-1">Address</label>
-                      <Input
-                        placeholder="Enter your Address"
-                        value={correspondenceAddress}
-                        onChange={updateCorrespondenceAddress}
-                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${correspondenceAddressError ? 'border-red-500' : 'border-gray-300'}`}
-                      />
-                      {correspondenceAddressError && <p className="text-xs text-red-500">{correspondenceAddressError}</p>}
-                    </div>
-                  )}
+                    {correspondenceState && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-600 mb-1">City</label>
+                        <Select value={correspondenceCity || undefined} onValueChange={updateCorrespondenceCity}>
+                          <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCity ? 'text-gray-400' : ''} ${correspondenceCityError ? 'border-red-500' : 'border-gray-300'}`}>
+                            <SelectValue placeholder="Select City" />
+                          </SelectTrigger>
+                          <SelectContent className="border border-gray-200 max-h-[200px]">
+                            {correspondenceCityData.map((item, index) => (
+                              <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {correspondenceCityError && <p className="text-xs text-red-500">{correspondenceCityError}</p>}
+                      </div>
+                    )}
 
-                  {correspondenceAddress && (
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-medium text-gray-600 mb-1">Pin Code</label>
-                      <Input
-                        placeholder="Enter your pincode"
-                        value={correspondencePincode}
-                        onChange={updateCorrespondencePincode}
-                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${correspondencePincodeError ? 'border-red-500' : 'border-gray-300'}`}
-                      />
-                      {correspondencePincodeError && <p className="text-xs text-red-500">{correspondencePincodeError}</p>}
-                    </div>
-                  )}
-                  {/* <div className="mt-2 flex items-center gap-2">
+                    {correspondenceCity && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-600 mb-1">Address</label>
+                        <Input
+                          placeholder="Enter your Address"
+                          value={correspondenceAddress}
+                          onChange={updateCorrespondenceAddress}
+                          className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${correspondenceAddressError ? 'border-red-500' : 'border-gray-300'}`}
+                        />
+                        {correspondenceAddressError && <p className="text-xs text-red-500">{correspondenceAddressError}</p>}
+                      </div>
+                    )}
+
+                    {correspondenceAddress && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-600 mb-1">Pin Code</label>
+                        <Input
+                          placeholder="Enter your pincode"
+                          value={correspondencePincode}
+                          onChange={updateCorrespondencePincode}
+                          className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${correspondencePincodeError ? 'border-red-500' : 'border-gray-300'}`}
+                        />
+                        {correspondencePincodeError && <p className="text-xs text-red-500">{correspondencePincodeError}</p>}
+                      </div>
+                    )}
+                    {/* <div className="mt-2 flex items-center gap-2">
                     <input
                       type="checkbox"
                       id="sameAddress"
@@ -1539,109 +1581,109 @@ const Customerstepone = forwardRef((props, ref) => {
                       Is your present address also your permanent address?
                     </label>
                   </div> */}
-                </>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="font-semibold text-[16px] text-gray-700">
-                Permanent Address
-              </p>
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={handleToggleAddressPremanent}
-                  type="button"
-                  role="switch"
-                  aria-checked={openAddressPremanent}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${openAddressPremanent ? "bg-[#0083bf]" : "bg-gray-300"
-                    }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${openAddressPremanent ? "translate-x-6" : "translate-x-1"
-                      }`}
-                  />
-                </button>
-                <span className="text-[15px] font-medium text-gray-400">
-                  Please switch the toggle to add the address.
-                </span>
+                  </>
+                )}
               </div>
-              {openAddressPremanent && (
-                <>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-600 mb-1">Country</label>
-                    <Select value={permanentCountry || undefined} onValueChange={updatePermanentCountry}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCountry ? 'text-gray-400' : ''} ${permanentCountryError ? 'border-red-500' : 'border-gray-300'}`}>
-                        <SelectValue placeholder="Select Country" />
-                      </SelectTrigger>
-                      <SelectContent className="border border-gray-200">
-                        <SelectItem value="101">India</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {permanentCountryError && <p className="text-xs text-red-500">{permanentCountryError}</p>}
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-600 mb-1">State</label>
-                    <Select value={permanentState || undefined} onValueChange={updatePermanentState}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentState ? 'text-gray-400' : ''} ${permanentStateError ? 'border-red-500' : 'border-gray-300'}`}>
-                        <SelectValue placeholder="Select State" />
-                      </SelectTrigger>
-                      <SelectContent className="border border-gray-200 max-h-[200px]">
-                        {stateData.map((item, index) => (
-                          <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {permanentStateError && <p className="text-xs text-red-500">{permanentStateError}</p>}
-                  </div>
-
-                  {permanentState && (
+              <div className="flex flex-col gap-2">
+                <p className="font-semibold text-[16px] text-gray-700">
+                  Permanent Address
+                </p>
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={handleToggleAddressPremanent}
+                    type="button"
+                    role="switch"
+                    aria-checked={openAddressPremanent}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${openAddressPremanent ? "bg-[#0083bf]" : "bg-gray-300"
+                      }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${openAddressPremanent ? "translate-x-6" : "translate-x-1"
+                        }`}
+                    />
+                  </button>
+                  <span className="text-[15px] font-medium text-gray-400">
+                    Please switch the toggle to add the address.
+                  </span>
+                </div>
+                {openAddressPremanent && (
+                  <>
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm font-medium text-gray-600 mb-1">City</label>
-                      <Select value={permanentCity || undefined} onValueChange={updatePermanentCity}>
-                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCity ? 'text-gray-400' : ''} ${permanentCityError ? 'border-red-500' : 'border-gray-300'}`}>
-                          <SelectValue placeholder="Select City" />
+                      <label className="text-sm font-medium text-gray-600 mb-1">Country</label>
+                      <Select value={permanentCountry || undefined} onValueChange={updatePermanentCountry}>
+                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCountry ? 'text-gray-400' : ''} ${permanentCountryError ? 'border-red-500' : 'border-gray-300'}`}>
+                          <SelectValue placeholder="Select Country" />
+                        </SelectTrigger>
+                        <SelectContent className="border border-gray-200">
+                          <SelectItem value="101">India</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {permanentCountryError && <p className="text-xs text-red-500">{permanentCountryError}</p>}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-medium text-gray-600 mb-1">State</label>
+                      <Select value={permanentState || undefined} onValueChange={updatePermanentState}>
+                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentState ? 'text-gray-400' : ''} ${permanentStateError ? 'border-red-500' : 'border-gray-300'}`}>
+                          <SelectValue placeholder="Select State" />
                         </SelectTrigger>
                         <SelectContent className="border border-gray-200 max-h-[200px]">
-                          {permanentCityData.map((item, index) => (
+                          {stateData.map((item, index) => (
                             <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      {permanentCityError && <p className="text-xs text-red-500">{permanentCityError}</p>}
+                      {permanentStateError && <p className="text-xs text-red-500">{permanentStateError}</p>}
                     </div>
-                  )}
 
-                  {permanentCity && (
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-medium text-gray-600 mb-1">Address</label>
-                      <Input
-                        placeholder="Enter your Address"
-                        value={permanentAddress}
-                        onChange={updatePermanentAddress}
-                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${permanentAddressError ? 'border-red-500' : 'border-gray-300'}`}
-                      />
-                      {permanentAddressError && <p className="text-xs text-red-500">{permanentAddressError}</p>}
-                    </div>
-                  )}
+                    {permanentState && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-600 mb-1">City</label>
+                        <Select value={permanentCity || undefined} onValueChange={updatePermanentCity}>
+                          <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCity ? 'text-gray-400' : ''} ${permanentCityError ? 'border-red-500' : 'border-gray-300'}`}>
+                            <SelectValue placeholder="Select City" />
+                          </SelectTrigger>
+                          <SelectContent className="border border-gray-200 max-h-[200px]">
+                            {permanentCityData.map((item, index) => (
+                              <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {permanentCityError && <p className="text-xs text-red-500">{permanentCityError}</p>}
+                      </div>
+                    )}
 
-                  {permanentAddress && (
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-medium text-gray-600 mb-1">Pin Code</label>
-                      <Input
-                        placeholder="Enter your pincode"
-                        value={permanentPincode}
-                        onChange={updatePermanentPincode}
-                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${permanentPincodeError ? 'border-red-500' : 'border-gray-300'}`}
-                      />
-                      {permanentPincodeError && <p className="text-xs text-red-500">{permanentPincodeError}</p>}
-                    </div>
-                  )}
-                </>
-              )}
+                    {permanentCity && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-600 mb-1">Address</label>
+                        <Input
+                          placeholder="Enter your Address"
+                          value={permanentAddress}
+                          onChange={updatePermanentAddress}
+                          className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${permanentAddressError ? 'border-red-500' : 'border-gray-300'}`}
+                        />
+                        {permanentAddressError && <p className="text-xs text-red-500">{permanentAddressError}</p>}
+                      </div>
+                    )}
+
+                    {permanentAddress && (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-gray-600 mb-1">Pin Code</label>
+                        <Input
+                          placeholder="Enter your pincode"
+                          value={permanentPincode}
+                          onChange={updatePermanentPincode}
+                          className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${permanentPincodeError ? 'border-red-500' : 'border-gray-300'}`}
+                        />
+                        {permanentPincodeError && <p className="text-xs text-red-500">{permanentPincodeError}</p>}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
-
           </div>
-        </div>
+        )}
         {errorMessage && (
           <Errorpanel
             errorMessages={errorMessage}
@@ -1650,11 +1692,6 @@ const Customerstepone = forwardRef((props, ref) => {
         )}
       </div>
 
-      {isLoadingEffect && (
-        <div className="fixed inset-0 bg-[#2b2b2bcc] flex flex-row justify-center items-center z-50">
-          <Loadingoverlay visible={isLoadingEffect} overlayBg="" />
-        </div>
-      )}
     </>
   );
 });

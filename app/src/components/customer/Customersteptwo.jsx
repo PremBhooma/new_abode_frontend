@@ -10,6 +10,7 @@ import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IconX } from "@tabler/icons-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Customersteptwo = forwardRef((props, ref) => {
 
@@ -839,355 +840,377 @@ const Customersteptwo = forwardRef((props, ref) => {
 
     return (
         <>
-            <div className="grid grid-cols-[1fr_2fr]  gap-3 w-full">
-                <div className="flex flex-col gap-3">
-                    <div className="relative w-full">
-                        <Input
-                            placeholder="Search with Flats No"
-                            value={searchedFlat}
-                            onChange={updateSearchedLocation}
-                            className="w-full bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                        />
+            {isLoadingEffect ? (
+                <div className="grid grid-cols-[1fr_2fr] gap-3 w-full">
+                    <div className="flex flex-col gap-3">
+                        <Skeleton className="h-10 w-full" />
+                        <div className="border border-gray-300 rounded-md p-3 pb-8 h-[calc(100vh-190px)] space-y-4">
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <div key={i} className="flex flex-col gap-3">
+                                    <Skeleton className="h-4 w-1/4" />
+                                    <Skeleton className="h-24 w-full" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="border border-gray-300 p-3 rounded-md">
+                        <div className="grid grid-cols-2 gap-4">
+                            {Array.from({ length: 12 }).map((_, i) => (
+                                <div key={i} className="space-y-1">
+                                    <Skeleton className="h-4 w-1/2 mb-1" />
+                                    <Skeleton className="h-10 w-full" />
+                                </div>
+                            ))}
+                            <div className="space-y-1 col-span-2 mt-2">
+                                <Skeleton className="h-5 w-1/4 mb-1" />
+                                <Skeleton className="h-14 w-full" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="grid grid-cols-[1fr_2fr] gap-3 w-full relative">
+                    <div className="flex flex-col gap-3">
+                        <div className="relative w-full">
+                            <Input
+                                placeholder="Search with Flats No"
+                                value={searchedFlat}
+                                onChange={updateSearchedLocation}
+                                className="w-full bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                            />
 
-                        {showDropdown && (
-                            <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto mt-1">
-                                <div className="">
-                                    {flatLoading ? (
-                                        <div className="p-3 text-sm text-gray-500">Loading...</div>
-                                    ) : flat.length > 0 ? (
-                                        <ul>
-                                            {flat.map((flat) => (
-                                                <li
-                                                    key={flat?.value}
-                                                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
-                                                    onClick={() => handleSelectCity(flat)}
-                                                >
-                                                    {flat?.label}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <div className="p-3 text-sm text-gray-500">No Result</div>
-                                    )}
+                            {showDropdown && (
+                                <div className="absolute z-50 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto mt-1">
+                                    <div className="">
+                                        {flatLoading ? (
+                                            <div className="p-3 text-sm text-gray-500">Loading...</div>
+                                        ) : flat.length > 0 ? (
+                                            <ul>
+                                                {flat.map((flat) => (
+                                                    <li
+                                                        key={flat?.value}
+                                                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                                                        onClick={() => handleSelectCity(flat)}
+                                                    >
+                                                        {flat?.label}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <div className="p-3 text-sm text-gray-500">No Result</div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {selectedFlat && (
+                            <div className="bg-white border border-gray-300 rounded-md max-h-96 overflow-y-auto w-full">
+                                <div className="p-4 border-b last:border-none hover:bg-gray-50 transition">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="text-md font-semibold text-gray-800">
+                                            {selectedFlat?.project_name}
+                                        </div>
+                                        <div className="text-md font-semibold text-gray-800">Flat No: {selectedFlat?.flat_no}</div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
+                                        <div><span className="font-medium">Facing:</span> {selectedFlat?.facing}</div>
+                                        <div><span className="font-medium">Floor:</span> {selectedFlat?.floor_no}</div>
+                                        <div><span className="font-medium">Area:</span> {selectedFlat?.square_feet} sqft</div>
+                                        <div><span className="font-medium">Type:</span> {selectedFlat?.type}</div>
+                                    </div>
                                 </div>
                             </div>
                         )}
+                        {selectedFlat !== '' && (
+                            <p className="mt-1 text-xs text-red-600 font-medium">{selectedFlatError}</p>
+                        )}
+
+                        <div className="space-y-2 md:col-span-2">
+                            <Label>Custom Note</Label>
+                            <textarea
+                                value={customNote}
+                                onChange={updateCustomNote}
+                                placeholder="Enter any additional requirements need for this flat..."
+                                rows={3}
+                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-[4px] focus:outline-none focus:border-black resize-none text-sm"
+                            />
+                        </div>
                     </div>
 
-                    {selectedFlat && (
-                        <div className="bg-white border border-gray-300 rounded-md max-h-96 overflow-y-auto w-full">
-                            <div className="p-4 border-b last:border-none hover:bg-gray-50 transition">
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="text-md font-semibold text-gray-800">
-                                        {selectedFlat?.project_name}
-                                    </div>
-                                    <div className="text-md font-semibold text-gray-800">Flat No: {selectedFlat?.flat_no}</div>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
-                                    <div><span className="font-medium">Facing:</span> {selectedFlat?.facing}</div>
-                                    <div><span className="font-medium">Floor:</span> {selectedFlat?.floor_no}</div>
-                                    <div><span className="font-medium">Area:</span> {selectedFlat?.square_feet} sqft</div>
-                                    <div><span className="font-medium">Type:</span> {selectedFlat?.type}</div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    {selectedFlat !== '' && (
-                        <p className="mt-1 text-xs text-red-600 font-medium">{selectedFlatError}</p>
-                    )}
-
-                    <div className="space-y-2 md:col-span-2">
-                        <Label>Custom Note</Label>
-                        <textarea
-                            value={customNote}
-                            onChange={updateCustomNote}
-                            placeholder="Enter any additional requirements need for this flat..."
-                            rows={3}
-                            className="w-full px-3 py-2 bg-white border border-gray-300 rounded-[4px] focus:outline-none focus:border-black resize-none text-sm"
-                        />
-                    </div>
-                </div>
-
-                <div className="border border-gray-300 p-3 rounded-md">
-                    <div className="grid grid-cols-2 gap-4">
-                        <CustomDateFilter
-                            label={<span>Booking Date <span className="text-red-500">*</span></span>}
-                            selected={applicationDate}
-                            error={applicationDateError}
-                            onChange={updateApplicationDate}
-                            className="bg-white -mt-2"
-                            maxDateToday={true}
-                        />
-
-                        <div className="space-y-2">
-                            <Label>Saleable Area (sq.ft.) <span className="text-red-500">*</span></Label>
-                            <Input
-                                placeholder="Enter Saleable Area (sq.ft.)"
-                                value={saleableAreaSqFt}
-                                onChange={updateSaleableAreaSqFt}
-                                type="number"
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                    <div className="border border-gray-300 p-3 rounded-md">
+                        <div className="grid grid-cols-2 gap-4">
+                            <CustomDateFilter
+                                label={<span>Booking Date <span className="text-red-500">*</span></span>}
+                                selected={applicationDate}
+                                error={applicationDateError}
+                                onChange={updateApplicationDate}
+                                className="bg-white -mt-2"
+                                maxDateToday={true}
                             />
-                            {saleableAreaSqFtError && <p className="text-xs text-red-500">{saleableAreaSqFtError}</p>}
-                        </div>
 
-                        <div className="space-y-1">
-                            <Label>Rate Per Sq.ft (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                placeholder="Enter Rate Per Sq.ft"
-                                value={ratePerSqFt}
-                                min={0}
-                                onChange={updateRatePerSqFt}
-                                onWheel={(e) => e.target.blur()}
-                                type="number"
-                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                            />
-                            {ratePerSqFtError && <p className="text-xs text-red-500">{ratePerSqFtError}</p>}
-                            {totalBaseCost > 0 && <p className="text-xs text-muted-foreground">Saleable Area * Rate = <span className="font-medium">₹ {parseFloat(totalBaseCost).toLocaleString('en-IN')}</span></p>}
-                        </div>
-
-                        {permissions?.assigning_settings?.includes("discount_assigning") && (
-                            <div className="space-y-1">
-                                <Label>Discount (₹)</Label>
+                            <div className="space-y-2">
+                                <Label>Saleable Area (sq.ft.) <span className="text-red-500">*</span></Label>
                                 <Input
-                                    placeholder="Enter Discount"
-                                    value={discount}
+                                    placeholder="Enter Saleable Area (sq.ft.)"
+                                    value={saleableAreaSqFt}
+                                    onChange={updateSaleableAreaSqFt}
+                                    type="number"
+                                    readOnly
+                                    className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {saleableAreaSqFtError && <p className="text-xs text-red-500">{saleableAreaSqFtError}</p>}
+                            </div>
+
+                            <div className="space-y-1">
+                                <Label>Rate Per Sq.ft (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    placeholder="Enter Rate Per Sq.ft"
+                                    value={ratePerSqFt}
                                     min={0}
-                                    onChange={updateDiscount}
+                                    onChange={updateRatePerSqFt}
                                     onWheel={(e) => e.target.blur()}
                                     type="number"
                                     className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                                 />
-                                {totalDiscount > 0 && <p className="text-xs text-green-600">Discount Applied: ₹ {parseFloat(totalDiscount).toLocaleString('en-IN')}</p>}
+                                {ratePerSqFtError && <p className="text-xs text-red-500">{ratePerSqFtError}</p>}
+                                {totalBaseCost > 0 && <p className="text-xs text-muted-foreground">Saleable Area * Rate = <span className="font-medium">₹ {parseFloat(totalBaseCost).toLocaleString('en-IN')}</span></p>}
                             </div>
-                        )}
 
-                        <div className="space-y-1">
-                            <Label>Base Cost Unit (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                placeholder="Enter Base Cost Unit"
-                                value={baseCostUnit ? parseFloat(baseCostUnit).toLocaleString('en-IN') : ''}
-                                onChange={updateBaseCostUnit}
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {baseCostUnitError && <p className="text-xs text-red-500">{baseCostUnitError}</p>}
-                        </div>
-
-                        {selectedFlat?.floor_no >= 6 && (
-                            <div className="space-y-1">
-                                <Label>Floor Rise (₹)</Label>
-                                <div className="flex gap-2">
+                            {permissions?.assigning_settings?.includes("discount_assigning") && (
+                                <div className="space-y-1">
+                                    <Label>Discount (₹)</Label>
                                     <Input
-                                        placeholder="Per Sq.ft"
-                                        value={floorRise ? parseFloat(floorRise).toLocaleString('en-IN') : ''}
-                                        onChange={updateFloorRise}
-                                        className="w-1/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                                        readOnly
+                                        placeholder="Enter Discount"
+                                        value={discount}
+                                        min={0}
+                                        onChange={updateDiscount}
+                                        onWheel={(e) => e.target.blur()}
+                                        type="number"
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                                     />
-                                    <Input
-                                        placeholder="Total Floor Rise"
-                                        value={floorRiseXPerSft ? parseFloat(floorRiseXPerSft).toLocaleString('en-IN') : ''}
-                                        onChange={updateFloorRiseXPerSft}
-                                        className="w-2/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                                        readOnly
-                                    />
+                                    {totalDiscount > 0 && <p className="text-xs text-green-600">Discount Applied: ₹ {parseFloat(totalDiscount).toLocaleString('en-IN')}</p>}
                                 </div>
-                                {floorRiseError && <p className="text-xs text-red-500">{floorRiseError}</p>}
-                            </div>
-                        )}
-                        {selectedFlat?.facing === "East" && (
+                            )}
+
                             <div className="space-y-1">
-                                <Label>East Facing (₹)</Label>
-                                <div className="flex gap-2">
-                                    <Input
-                                        placeholder="Per Sq.ft"
-                                        value={eastFacing ? parseFloat(eastFacing).toLocaleString('en-IN') : ''}
-                                        onChange={updateEastFacing}
-                                        className="w-1/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                                        readOnly
-                                    />
-                                    <Input
-                                        placeholder="Total East Facing"
-                                        value={eastFacingXPerSft ? parseFloat(eastFacingXPerSft).toLocaleString('en-IN') : ''}
-                                        onChange={updateEastFacingXPerSft}
-                                        className="w-2/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                                        readOnly
-                                    />
-                                </div>
-                                {eastFacingError && <p className="text-xs text-red-500">{eastFacingError}</p>}
+                                <Label>Base Cost Unit (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    placeholder="Enter Base Cost Unit"
+                                    value={baseCostUnit ? parseFloat(baseCostUnit).toLocaleString('en-IN') : ''}
+                                    onChange={updateBaseCostUnit}
+                                    readOnly
+                                    className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {baseCostUnitError && <p className="text-xs text-red-500">{baseCostUnitError}</p>}
                             </div>
-                        )}
 
-                        {selectedFlat?.corner === true && (
+                            {selectedFlat?.floor_no >= 6 && (
+                                <div className="space-y-1">
+                                    <Label>Floor Rise (₹)</Label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            placeholder="Per Sq.ft"
+                                            value={floorRise ? parseFloat(floorRise).toLocaleString('en-IN') : ''}
+                                            onChange={updateFloorRise}
+                                            className="w-1/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                            readOnly
+                                        />
+                                        <Input
+                                            placeholder="Total Floor Rise"
+                                            value={floorRiseXPerSft ? parseFloat(floorRiseXPerSft).toLocaleString('en-IN') : ''}
+                                            onChange={updateFloorRiseXPerSft}
+                                            className="w-2/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                            readOnly
+                                        />
+                                    </div>
+                                    {floorRiseError && <p className="text-xs text-red-500">{floorRiseError}</p>}
+                                </div>
+                            )}
+                            {selectedFlat?.facing === "East" && (
+                                <div className="space-y-1">
+                                    <Label>East Facing (₹)</Label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            placeholder="Per Sq.ft"
+                                            value={eastFacing ? parseFloat(eastFacing).toLocaleString('en-IN') : ''}
+                                            onChange={updateEastFacing}
+                                            className="w-1/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                            readOnly
+                                        />
+                                        <Input
+                                            placeholder="Total East Facing"
+                                            value={eastFacingXPerSft ? parseFloat(eastFacingXPerSft).toLocaleString('en-IN') : ''}
+                                            onChange={updateEastFacingXPerSft}
+                                            className="w-2/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                            readOnly
+                                        />
+                                    </div>
+                                    {eastFacingError && <p className="text-xs text-red-500">{eastFacingError}</p>}
+                                </div>
+                            )}
+
+                            {selectedFlat?.corner === true && (
+                                <div className="space-y-1">
+                                    <Label>Corner (₹)</Label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            placeholder="Per Sq.ft"
+                                            value={corner ? parseFloat(corner).toLocaleString('en-IN') : ''}
+                                            onChange={updateCorner}
+                                            className="w-1/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                            readOnly
+                                        />
+                                        <Input
+                                            placeholder="Total Corner"
+                                            value={cornerXPerSft ? parseFloat(cornerXPerSft).toLocaleString('en-IN') : ''}
+                                            onChange={updateCornerXPerSft}
+                                            className="w-2/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                            readOnly
+                                        />
+                                    </div>
+                                    {cornerError && <p className="text-xs text-red-500">{cornerError}</p>}
+                                </div>
+                            )}
+
                             <div className="space-y-1">
-                                <Label>Corner (₹)</Label>
-                                <div className="flex gap-2">
-                                    <Input
-                                        placeholder="Per Sq.ft"
-                                        value={corner ? parseFloat(corner).toLocaleString('en-IN') : ''}
-                                        onChange={updateCorner}
-                                        className="w-1/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                                        readOnly
-                                    />
-                                    <Input
-                                        placeholder="Total Corner"
-                                        value={cornerXPerSft ? parseFloat(cornerXPerSft).toLocaleString('en-IN') : ''}
-                                        onChange={updateCornerXPerSft}
-                                        className="w-2/3 bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                                        readOnly
-                                    />
-                                </div>
-                                {cornerError && <p className="text-xs text-red-500">{cornerError}</p>}
+                                <Label>Ammenities (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    placeholder="Enter Amenities"
+                                    value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
+                                    onChange={updateAmenities}
+                                    readOnly
+                                    className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {amenitiesError && <p className="text-xs text-red-500">{amenitiesError}</p>}
                             </div>
-                        )}
 
-                        <div className="space-y-1">
-                            <Label>Ammenities (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                placeholder="Enter Amenities"
-                                value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
-                                onChange={updateAmenities}
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {amenitiesError && <p className="text-xs text-red-500">{amenitiesError}</p>}
-                        </div>
+                            <div className="space-y-1">
+                                <Label>Total Cost of Unit (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    placeholder="Enter Total Cost of Unit"
+                                    value={totalCostofUnit ? parseFloat(totalCostofUnit).toLocaleString('en-IN') : ''}
+                                    onChange={updateTotalCostofUnit}
+                                    readOnly
+                                    className="bg-gray-50 font-bold border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {totalCostofUnitError && <p className="text-xs text-red-500">{totalCostofUnitError}</p>}
+                            </div>
 
-                        <div className="space-y-1">
-                            <Label>Total Cost of Unit (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                placeholder="Enter Total Cost of Unit"
-                                value={totalCostofUnit ? parseFloat(totalCostofUnit).toLocaleString('en-IN') : ''}
-                                onChange={updateTotalCostofUnit}
-                                readOnly
-                                className="bg-gray-50 font-bold border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {totalCostofUnitError && <p className="text-xs text-red-500">{totalCostofUnitError}</p>}
-                        </div>
+                            <div className="space-y-1">
+                                <Label>GST ({projectRates.gst_percentage || 5}%) (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    placeholder="Enter GST"
+                                    value={gst ? parseFloat(gst).toLocaleString('en-IN') : ''}
+                                    onChange={updateGst}
+                                    readOnly
+                                    className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {gstError && <p className="text-xs text-red-500">{gstError}</p>}
+                            </div>
 
-                        <div className="space-y-1">
-                            <Label>GST ({projectRates.gst_percentage || 5}%) (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                placeholder="Enter GST"
-                                value={gst ? parseFloat(gst).toLocaleString('en-IN') : ''}
-                                onChange={updateGst}
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {gstError && <p className="text-xs text-red-500">{gstError}</p>}
-                        </div>
+                            <div className="space-y-1">
+                                <Label>Cost of Unit with Tax (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    placeholder="Enter Cost of Unit with Tax"
+                                    value={costofUnitWithTax ? parseFloat(costofUnitWithTax).toLocaleString('en-IN') : ''}
+                                    onChange={updateCostofUnitWithTax}
+                                    readOnly
+                                    className="bg-gray-50 font-semibold border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {costofUnitWithTaxError && <p className="text-xs text-red-500">{costofUnitWithTaxError}</p>}
+                            </div>
 
-                        <div className="space-y-1">
-                            <Label>Cost of Unit with Tax (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                placeholder="Enter Cost of Unit with Tax"
-                                value={costofUnitWithTax ? parseFloat(costofUnitWithTax).toLocaleString('en-IN') : ''}
-                                onChange={updateCostofUnitWithTax}
-                                readOnly
-                                className="bg-gray-50 font-semibold border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {costofUnitWithTaxError && <p className="text-xs text-red-500">{costofUnitWithTaxError}</p>}
-                        </div>
+                            {/* Registration Charge */}
+                            <div className="space-y-1">
+                                <Label>Registration Charges (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    value={registartionCharge ? parseFloat(registartionCharge).toLocaleString('en-IN') : ''}
+                                    onChange={updateRegistrationCharge}
+                                    readOnly
+                                    className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {registrationChargeError && <p className="text-xs text-red-500">{registrationChargeError}</p>}
+                            </div>
 
-                        {/* Registration Charge */}
-                        <div className="space-y-1">
-                            <Label>Registration Charges (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                value={registartionCharge ? parseFloat(registartionCharge).toLocaleString('en-IN') : ''}
-                                onChange={updateRegistrationCharge}
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {registrationChargeError && <p className="text-xs text-red-500">{registrationChargeError}</p>}
-                        </div>
+                            <div className="space-y-1">
+                                <Label>Maintence Charges (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    value={maintenceCharge ? parseFloat(maintenceCharge).toLocaleString('en-IN') : ''}
+                                    onChange={updateMaintenceCharge}
+                                    readOnly
+                                    className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {maintenceChargeError && <p className="text-xs text-red-500">{maintenceChargeError}</p>}
+                            </div>
 
-                        <div className="space-y-1">
-                            <Label>Maintence Charges (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                value={maintenceCharge ? parseFloat(maintenceCharge).toLocaleString('en-IN') : ''}
-                                onChange={updateMaintenceCharge}
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {maintenceChargeError && <p className="text-xs text-red-500">{maintenceChargeError}</p>}
-                        </div>
+                            <div className="space-y-1">
+                                <Label>Manjeera Connection Charges (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    type="number"
+                                    value={manjeeraConnectionCharge}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (!isNaN(val)) {
+                                            setManjeeraConnectionCharge(val);
+                                            setManjeeraConnectionChargeError('');
+                                        }
+                                    }}
+                                    placeholder="Enter Amount"
+                                    className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {manjeeraConnectionChargeError && <p className="text-xs text-red-500">{manjeeraConnectionChargeError}</p>}
+                            </div>
 
-                        <div className="space-y-1">
-                            <Label>Manjeera Connection Charges (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                type="number"
-                                value={manjeeraConnectionCharge}
-                                onChange={(e) => {
-                                    const val = e.target.value;
-                                    if (!isNaN(val)) {
-                                        setManjeeraConnectionCharge(val);
-                                        setManjeeraConnectionChargeError('');
-                                    }
-                                }}
-                                placeholder="Enter Amount"
-                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {manjeeraConnectionChargeError && <p className="text-xs text-red-500">{manjeeraConnectionChargeError}</p>}
-                        </div>
+                            <div className="space-y-1">
+                                <Label>Manjeera Meter Charges (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    type="number"
+                                    value={manjeeraMeterCharge}
+                                    onChange={(e) => setManjeeraMeterCharge(e.target.value)}
+                                    placeholder="Enter Amount"
+                                    className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {manjeeraMeterChargeError && <p className="text-xs text-red-500">{manjeeraMeterChargeError}</p>}
+                            </div>
 
-                        <div className="space-y-1">
-                            <Label>Manjeera Meter Charges (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                type="number"
-                                value={manjeeraMeterCharge}
-                                onChange={(e) => setManjeeraMeterCharge(e.target.value)}
-                                placeholder="Enter Amount"
-                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {manjeeraMeterChargeError && <p className="text-xs text-red-500">{manjeeraMeterChargeError}</p>}
-                        </div>
+                            <div className="space-y-1">
+                                <Label>Documentation Charges (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    type="number"
+                                    value={documentationFee}
+                                    onChange={updateDocumenationFee}
+                                    className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {documenationFeeError && <p className="text-xs text-red-500">{documenationFeeError}</p>}
+                            </div>
 
-                        <div className="space-y-1">
-                            <Label>Documentation Charges (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                type="number"
-                                value={documentationFee}
-                                onChange={updateDocumenationFee}
-                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {documenationFeeError && <p className="text-xs text-red-500">{documenationFeeError}</p>}
-                        </div>
+                            <div className="space-y-1">
+                                <Label>Corpus Fund ({projectRates.corpus_fund || 50} * SFT) (₹) <span className="text-red-500">*</span></Label>
+                                <Input
+                                    value={corpusFund ? parseFloat(corpusFund).toLocaleString('en-IN') : ''}
+                                    onChange={updateCorpusFund}
+                                    readOnly
+                                    className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                                {corpusFundError && <p className="text-xs text-red-500">{corpusFundError}</p>}
+                            </div>
 
-                        <div className="space-y-1">
-                            <Label>Corpus Fund ({projectRates.corpus_fund || 50} * SFT) (₹) <span className="text-red-500">*</span></Label>
-                            <Input
-                                value={corpusFund ? parseFloat(corpusFund).toLocaleString('en-IN') : ''}
-                                onChange={updateCorpusFund}
-                                readOnly
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
-                            {corpusFundError && <p className="text-xs text-red-500">{corpusFundError}</p>}
-                        </div>
-
-                        <div className="space-y-1 col-span-2">
-                            <Label className="text-base font-bold">Grand Total (₹)</Label>
-                            <Input
-                                value={grandTotal ? parseFloat(grandTotal).toLocaleString('en-IN') : ''}
-                                readOnly
-                                className="text-lg font-bold bg-green-50 border-green-200 text-green-700 h-14 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
-                            />
+                            <div className="space-y-1 col-span-2">
+                                <Label className="text-base font-bold">Grand Total (₹)</Label>
+                                <Input
+                                    value={grandTotal ? parseFloat(grandTotal).toLocaleString('en-IN') : ''}
+                                    readOnly
+                                    className="text-lg font-bold bg-green-50 border-green-200 text-green-700 h-14 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {isLoadingEffect && (
-                <div className="fixed inset-0 bg-[#2b2b2bcc] flex flex-row justify-center items-center z-50">
-                    <Loadingoverlay
-                        visible={isLoadingEffect}
-                        overlayBg=""
-                    />
-                </div>
             )}
-
-            {errorMessage && <Errorpanel errorMessages={errorMessage} setErrorMessages={setErrorMessage} />}
+            {errorMessage && <Errorpanel errorMessages={errorMessage} setErrorMessages={setErrorMessage} />
+            }
         </>
     );
 })
