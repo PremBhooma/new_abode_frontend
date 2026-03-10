@@ -205,7 +205,7 @@ function Excelflattemplate({ closeDownloadTemplate }) {
         worksheet.addRow([
             projectsData[0]?.project_name || "", // Project
             "101",                        // Flat No (dummy)
-            { formula: "FloorNoList!A1" },                          // Floor No (dummy)
+            "1",                          // Floor No (dummy)
             blocksData[0]?.name || "",    // Block
             // groupOwnerData[0]?.name || "",// Group/Owner
             "1200",                       // Area

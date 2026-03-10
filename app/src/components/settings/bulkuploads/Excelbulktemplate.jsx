@@ -114,7 +114,7 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
 
         // Sample row
         flatSheet.addRow([
-            projectsData[0]?.project_name || '', '101', { formula: 'FloorNoList!A1' },
+            projectsData[0]?.project_name || '', '101', '1',
             blocksData[0]?.name || '', '1200', flatTypes[0], 'East',
             'Park View', 'City View', 'Garden View', 'Road View', 'Yes', 'Yes',
         ]);
@@ -225,30 +225,30 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
         // ══════════════════════════════════════════════════════════════
         // SHEET 3: Assign Flat Template  (project-based dynamic pricing)
         // Cols:
-        //   A=Project, B=Flat No, C=Block, D=Customer, E=Customer Email,
-        //   F=Booking Date, G=Saleable Area, H=Rate Per Sqft, I=Discount Rate,
-        //   J=Base Cost (formula: G*H - G*I)
-        //   K=Floor Rise Per Sqft (VLOOKUP → col B of ProjectRates)
-        //   L=Total Floor Rise (formula: K*G)
-        //   M=East Facing Per Sqft (VLOOKUP → col C)
-        //   N=Total East Facing (formula: M*G)
-        //   O=Corner Per Sqft (VLOOKUP → col D)
-        //   P=Total Corner (formula: O*G)
-        //   Q=Amenities
-        //   R=Total Cost of Unit (formula: J+L+N+P+Q)
-        //   S=GST (formula: R * VLOOKUP(gst%) / 100)
-        //   T=Cost With Tax (formula: R+S)
-        //   U=Registration (formula: R*VLOOKUP(reg%)/100 + VLOOKUP(reg_base))
-        //   V=Maintenance (formula: G * VLOOKUP(maint_rate) * VLOOKUP(maint_months))
-        //   W=Documentation Fee (VLOOKUP → col K)
-        //   X=Corpus Fund (formula: G * VLOOKUP(corpus))
-        //   Y=Manjeera Connection (VLOOKUP → col L)
-        //   Z=Manjeera Meter (VLOOKUP → col M)
-        //   AA=Grand Total (formula: R+S+U+V+W+X+Y+Z)
+        //   A=Project, B=Flat No, C=Block, D=Customer Phone,
+        //   E=Booking Date, F=Saleable Area, G=Rate Per Sqft, H=Discount Rate,
+        //   I=Base Cost (formula: F*G - F*H)
+        //   J=Floor Rise Per Sqft (VLOOKUP → col B of ProjectRates)
+        //   K=Total Floor Rise (formula: J*F)
+        //   L=East Facing Per Sqft (VLOOKUP → col C)
+        //   M=Total East Facing (formula: L*F)
+        //   N=Corner Per Sqft (VLOOKUP → col D)
+        //   O=Total Corner (formula: N*F)
+        //   P=Amenities
+        //   Q=Total Cost of Unit (formula: I+K+M+O+P)
+        //   R=GST (formula: Q * VLOOKUP(gst%) / 100)
+        //   S=Cost With Tax (formula: Q+R)
+        //   T=Registration (formula: Q*VLOOKUP(reg%)/100 + VLOOKUP(reg_base))
+        //   U=Maintenance (formula: F * VLOOKUP(maint_rate) * VLOOKUP(maint_months))
+        //   V=Documentation Fee (VLOOKUP → col K)
+        //   W=Corpus Fund (formula: F * VLOOKUP(corpus))
+        //   X=Manjeera Connection (VLOOKUP → col L)
+        //   Y=Manjeera Meter (VLOOKUP → col M)
+        //   Z=Grand Total (formula: Q+R+T+U+V+W+X+Y)
         // ══════════════════════════════════════════════════════════════
         const assignFlatSheet = workbook.addWorksheet('Assign Flat Template');
         assignFlatSheet.addRow([
-            'Project', 'Flat No', 'Block', 'Customer', 'Customer Email',
+            'Project', 'Flat No', 'Block', 'Customer Phone',
             'Booking Date',
             'Saleable Area (sq.ft.)',
             'Rate Per Sq.ft (₹)',
@@ -275,24 +275,24 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
         assignFlatSheet.getRow(1).font = { bold: true };
         assignFlatSheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFF2CC' } };
         assignFlatSheet.columns.forEach(col => (col.width = 28));
-        assignFlatSheet.getColumn(6).numFmt = '@'; // Booking Date as text
+        assignFlatSheet.getColumn(5).numFmt = '@'; // Booking Date as text
 
         // Sample row (project charges auto-fill via formulas in data rows below)
         assignFlatSheet.addRow([
             projectsData[0]?.project_name || '',
             '101', blocksData[0]?.name || '',
-            'Customer Name', 'customer@email.com',
+            '9876543210',
             dayjs(new Date()).format('DD-MM-YYYY'),
-            1200, // G: Saleable Area
-            4500, // H: Rate Per Sq.ft
-            0,    // I: Discount
-            null, null, null, null, null, null, null, // J–P (formulas below for row 2)
-            0,    // Q: Amenities
-            null, null, null, null, null, null, null, null, null, null, // R–AA
+            1200, // F: Saleable Area
+            4500, // G: Rate Per Sq.ft
+            0,    // H: Discount
+            null, null, null, null, null, null, null, // I–O (formulas below for row 2)
+            0,    // P: Amenities
+            null, null, null, null, null, null, null, null, null, null, // Q–Z
         ]);
 
         for (let i = 2; i <= 5000; i++) {
-            const cond = `AND($A${i}<>"",$G${i}<>"")`;
+            const cond = `AND($A${i}<>"",$F${i}<>"")`;
             const vlookup = (col) => `IFERROR(VLOOKUP(A${i},ProjectRates!$A:$M,${col},FALSE),0)`;
 
             // Project dropdown
@@ -306,58 +306,58 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
                 showErrorMessage: true, errorTitle: 'Invalid Block', error: 'Please select a valid Block.',
             };
             // Booking Date as text
-            assignFlatSheet.getCell(`F${i}`).numFmt = '@';
+            assignFlatSheet.getCell(`E${i}`).numFmt = '@';
 
-            // J: Base Cost = G*H - G*I
-            assignFlatSheet.getCell(`J${i}`).value = { formula: `IF(${cond},G${i}*H${i}-(G${i}*I${i}),"")` };
+            // I: Base Cost = F*G - F*H
+            assignFlatSheet.getCell(`I${i}`).value = { formula: `IF(${cond},F${i}*G${i}-(F${i}*H${i}),"")` };
 
-            // K: Floor Rise Per Sqft (VLOOKUP col B → project_six_floor_onwards_price)
-            assignFlatSheet.getCell(`K${i}`).value = { formula: `IF(A${i}<>"",${vlookup(2)},"")` };
+            // J: Floor Rise Per Sqft (VLOOKUP col B → project_six_floor_onwards_price)
+            assignFlatSheet.getCell(`J${i}`).value = { formula: `IF(A${i}<>"",${vlookup(2)},"")` };
 
-            // L: Total Floor Rise = K * G
-            assignFlatSheet.getCell(`L${i}`).value = { formula: `IF(${cond},K${i}*G${i},"")` };
+            // K: Total Floor Rise = J * F
+            assignFlatSheet.getCell(`K${i}`).value = { formula: `IF(${cond},J${i}*F${i},"")` };
 
-            // M: East Facing Per Sqft (VLOOKUP col C → project_east_price)
-            assignFlatSheet.getCell(`M${i}`).value = { formula: `IF(A${i}<>"",${vlookup(3)},"")` };
+            // L: East Facing Per Sqft (VLOOKUP col C → project_east_price)
+            assignFlatSheet.getCell(`L${i}`).value = { formula: `IF(A${i}<>"",${vlookup(3)},"")` };
 
-            // N: Total East Facing = M * G
-            assignFlatSheet.getCell(`N${i}`).value = { formula: `IF(${cond},M${i}*G${i},"")` };
+            // M: Total East Facing = L * F
+            assignFlatSheet.getCell(`M${i}`).value = { formula: `IF(${cond},L${i}*F${i},"")` };
 
-            // O: Corner Per Sqft (VLOOKUP col D → project_corner_price)
-            assignFlatSheet.getCell(`O${i}`).value = { formula: `IF(A${i}<>"",${vlookup(4)},"")` };
+            // N: Corner Per Sqft (VLOOKUP col D → project_corner_price)
+            assignFlatSheet.getCell(`N${i}`).value = { formula: `IF(A${i}<>"",${vlookup(4)},"")` };
 
-            // P: Total Corner = O * G
-            assignFlatSheet.getCell(`P${i}`).value = { formula: `IF(${cond},O${i}*G${i},"")` };
+            // O: Total Corner = N * F
+            assignFlatSheet.getCell(`O${i}`).value = { formula: `IF(${cond},N${i}*F${i},"")` };
 
-            // R: Total Cost = J + L + N + P + Q
-            assignFlatSheet.getCell(`R${i}`).value = { formula: `IF(${cond},J${i}+L${i}+N${i}+P${i}+Q${i},"")` };
+            // Q: Total Cost = I + K + M + O + P
+            assignFlatSheet.getCell(`Q${i}`).value = { formula: `IF(${cond},I${i}+K${i}+M${i}+O${i}+P${i},"")` };
 
-            // S: GST = R * gst_percentage / 100
-            assignFlatSheet.getCell(`S${i}`).value = { formula: `IF(${cond},R${i}*${vlookup(5)}/100,"")` };
+            // R: GST = Q * gst_percentage / 100
+            assignFlatSheet.getCell(`R${i}`).value = { formula: `IF(${cond},Q${i}*${vlookup(5)}/100,"")` };
 
-            // T: Cost With Tax = R + S
-            assignFlatSheet.getCell(`T${i}`).value = { formula: `IF(${cond},R${i}+S${i},"")` };
+            // S: Cost With Tax = Q + R
+            assignFlatSheet.getCell(`S${i}`).value = { formula: `IF(${cond},Q${i}+R${i},"")` };
 
-            // U: Registration = R * reg% / 100 + reg_base
-            assignFlatSheet.getCell(`U${i}`).value = { formula: `IF(${cond},(R${i}*${vlookup(6)}/100)+${vlookup(7)},"")` };
+            // T: Registration = Q * reg% / 100 + reg_base
+            assignFlatSheet.getCell(`T${i}`).value = { formula: `IF(${cond},(Q${i}*${vlookup(6)}/100)+${vlookup(7)},"")` };
 
-            // V: Maintenance = G * maint_rate * maint_months
-            assignFlatSheet.getCell(`V${i}`).value = { formula: `IF(${cond},G${i}*${vlookup(8)}*${vlookup(9)},"")` };
+            // U: Maintenance = F * maint_rate * maint_months
+            assignFlatSheet.getCell(`U${i}`).value = { formula: `IF(${cond},F${i}*${vlookup(8)}*${vlookup(9)},"")` };
 
-            // W: Documentation Fee (VLOOKUP col K)
-            assignFlatSheet.getCell(`W${i}`).value = { formula: `IF(A${i}<>"",${vlookup(11)},"")` };
+            // V: Documentation Fee (VLOOKUP col K)
+            assignFlatSheet.getCell(`V${i}`).value = { formula: `IF(A${i}<>"",${vlookup(11)},"")` };
 
-            // X: Corpus Fund = G * corpus_fund_per_sqft
-            assignFlatSheet.getCell(`X${i}`).value = { formula: `IF(${cond},G${i}*${vlookup(10)},"")` };
+            // W: Corpus Fund = F * corpus_fund_per_sqft
+            assignFlatSheet.getCell(`W${i}`).value = { formula: `IF(${cond},F${i}*${vlookup(10)},"")` };
 
-            // Y: Manjeera Connection (VLOOKUP col L)
-            assignFlatSheet.getCell(`Y${i}`).value = { formula: `IF(A${i}<>"",${vlookup(12)},"")` };
+            // X: Manjeera Connection (VLOOKUP col L)
+            assignFlatSheet.getCell(`X${i}`).value = { formula: `IF(A${i}<>"",${vlookup(12)},"")` };
 
-            // Z: Manjeera Meter (VLOOKUP col M)
-            assignFlatSheet.getCell(`Z${i}`).value = { formula: `IF(A${i}<>"",${vlookup(13)},"")` };
+            // Y: Manjeera Meter (VLOOKUP col M)
+            assignFlatSheet.getCell(`Y${i}`).value = { formula: `IF(A${i}<>"",${vlookup(13)},"")` };
 
-            // AA: Grand Total = R + S + U + V + W + X + Y + Z
-            assignFlatSheet.getCell(`AA${i}`).value = { formula: `IF(${cond},R${i}+S${i}+U${i}+V${i}+W${i}+X${i}+Y${i}+Z${i},"")` };
+            // Z: Grand Total = Q + R + T + U + V + W + X + Y
+            assignFlatSheet.getCell(`Z${i}`).value = { formula: `IF(${cond},Q${i}+R${i}+T${i}+U${i}+V${i}+W${i}+X${i}+Y${i},"")` };
         }
 
         // ══════════════════════════════════════════════════════════════
