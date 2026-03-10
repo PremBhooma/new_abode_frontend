@@ -14,7 +14,7 @@ import Leadstageswrapper from "./leadstages/Leadstageswrapper.jsx";
 import Templates from "./templates/Templates.jsx"
 import Bankstab from "./banks/Bankstab.jsx";
 import Rewardstab from "./rewards/Rewardstab.jsx";
-import { Blocks as BlocksIcon, Building2, Group as GroupIcon, NotepadText, SquareChartGantt, Landmark, Funnel, LayoutTemplate, Gift } from "lucide-react";
+import { Blocks as BlocksIcon, Building2, Group as GroupIcon, NotepadText, SquareChartGantt, Landmark, Funnel, LayoutTemplate, Gift, Database } from "lucide-react";
 
 function Settingswrapper() {
 
@@ -64,7 +64,7 @@ function Settingswrapper() {
                         { id: 'banks', label: 'Banks', icon: Landmark, permission: 'project_tab' },
                         { id: 'amenities', label: 'Amenities Prices', icon: NotepadText, permission: 'amenities_tab' },
                         // { id: 'group_owner', label: 'Group/Owner', icon: GroupIcon, permission: 'group_owner_tab' },
-                        // { id: 'bulk_uploads_tab', label: 'Global Upload', icon: IconDatabase, permission: 'global_tab' },
+                        { id: 'bulk_uploads_tab', label: 'Global Upload', icon: Database, permission: 'global_tab' },
                         // { id: 'backup', label: 'Backup', icon: IconRestore, permission: 'backup_tab' },
                         { id: 'lead_stages', label: 'Lead Stages', icon: Funnel, permission: 'lead_stage_tab' }, // Assuming no specific permission or always visible
                         // { id: 'templates', label: 'Templates', icon: LayoutTemplate, permission: 'templates_tab' },

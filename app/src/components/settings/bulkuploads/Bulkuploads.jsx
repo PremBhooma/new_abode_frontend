@@ -1,17 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Modal } from "@nayeshdaggula/tailify";
-import Errorpanel from "../../shared/Errorpanel";
-import Excelbulktemplate from "./ExcelBulktemplate";
-import Excelglobalupload from "./Excelglobalupload";
+import { useState } from 'react';
+import { Modal } from '@nayeshdaggula/tailify';
+import { Upload, Download, RotateCcw } from 'lucide-react';
+import Excelbulktemplate from './ExcelBulktemplate';
+import Excelglobalupload from './Excelglobalupload';
+import Skippedrecords from './Skippedrecords';
 
 const BulkUploads = () => {
-    const navigate = useNavigate();
-
-    const [errorMessage, setErrorMessage] = useState("");
-    const [reqData, setReqData] = useState({});
-    const [openSection, setOpenSection] = useState(null);
-
+    const [reqData, setReqData] = useState(null);
     const [downloadTemplate, setDownloadTemplate] = useState(false);
     const [uploadGlobalExcel, setUploadGlobalExcel] = useState(false);
 
@@ -21,103 +16,95 @@ const BulkUploads = () => {
     const openUploadGlobalExcel = () => setUploadGlobalExcel(true);
     const closeUploadGlobalExcel = () => setUploadGlobalExcel(false);
 
-    const renderSection = (title, section) => {
-        if (!section) return null;
-
-        return (
-            <div className="border rounded-md p-4 shadow-sm mb-6 bg-white">
-                <div className="flex flex-col gap-2 cursor-pointer" onClick={() => setOpenSection(openSection === title ? null : title)}>
-                    <h2 className="text-lg font-semibold">{title}</h2>
-                    <div className="flex gap-4 text-sm">
-                        <span className="text-green-600">Inserted: {section.inserted}</span>
-                        <span className="text-red-600">Skipped: {section.skipped}</span>
-                    </div>
-                </div>
-
-                {/* {openSection === title && ( */}
-                <div className="mt-4">
-                    <h3 className="text-sm font-medium text-gray-700">
-                        Skipped Rows ({section.skipped})
-                    </h3>
-                    <ul className="mt-2 space-y-2">
-                        {section.skippedRows?.map((item, idx) => (
-                            <li
-                                key={idx}
-                                className="p-3 border rounded-md bg-gray-50 text-sm"
-                            >
-                                <p className="text-red-600 font-medium">
-                                    Reason: {item.reason}
-                                </p>
-                                <pre className="mt-1 text-gray-700 text-xs overflow-auto">
-                                    {JSON.stringify(item.row, null, 2)}
-                                </pre>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                {/* )} */}
-            </div>
-        );
+    // Build sections object for Skippedrecords
+    const buildSections = (data) => {
+        if (!data) return {};
+        const map = {};
+        if (data.flats) map['Flats'] = data.flats;
+        if (data.customers) map['Customers'] = data.customers;
+        if (data.assignFlatToCustomer) map['Assign Flat To Customer'] = data.assignFlatToCustomer;
+        if (data.payments) map['Payments'] = data.payments;
+        return map;
     };
 
     return (
         <>
-            <div className="flex flex-col gap-4 border border-[#ebecef] rounded-xl bg-white p-8 min-h-auto">
-                <div className="flex justify-between items-center">
-                    <p className="text-[18px] font-semibold">Global Upload</p>
-
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={openDownloadTemplate}
-                            className="text-[14px] font-semibold text-white bg-[#0083bf] hover:bg-[#026d9f] cursor-pointer rounded-md px-4 py-2"
-                        >
-                            Download Global Template
-                        </button>
-                        <button
-                            onClick={openUploadGlobalExcel}
-                            className="text-[14px] font-semibold text-white bg-emerald-500 hover:bg-emerald-600 cursor-pointer rounded-md px-4 py-2"
-                        >
-                            Upload Global File
-                        </button>
+            <div className="flex flex-col gap-6">
+                {/* Header card */}
+                <div className="flex flex-col gap-4 border border-[#ebecef] rounded-xl bg-white p-6">
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <p className="text-[18px] font-semibold text-neutral-800">Global Upload</p>
+                            <p className="text-sm text-neutral-400 mt-0.5">
+                                Upload flats, customers, assignments &amp; payments in one file
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={openDownloadTemplate}
+                                className="flex items-center gap-2 text-[13px] font-medium text-white bg-[#0083bf] hover:bg-[#026d9f] cursor-pointer rounded-lg px-4 py-2.5"
+                            >
+                                <Download size={15} />
+                                Download Template
+                            </button>
+                            <button
+                                onClick={openUploadGlobalExcel}
+                                className="flex items-center gap-2 text-[13px] font-medium text-white bg-emerald-500 hover:bg-emerald-600 cursor-pointer rounded-lg px-4 py-2.5"
+                            >
+                                <Upload size={15} />
+                                Upload File
+                            </button>
+                        </div>
                     </div>
 
+                    {/* Instructions */}
+                    <div className="grid grid-cols-4 gap-3">
+                        {[
+                            { step: '1', label: 'Select Project', desc: 'Choose the project for template download & upload' },
+                            { step: '2', label: 'Download Template', desc: 'Get the Excel file with pre-filled dropdowns' },
+                            { step: '3', label: 'Fill Data', desc: 'Enter flats, customers, assignments & payments' },
+                            { step: '4', label: 'Upload File', desc: 'Upload the filled file to process all data' },
+                        ].map(({ step, label, desc }) => (
+                            <div key={step} className="flex flex-col gap-1.5 bg-neutral-50 border border-neutral-100 rounded-xl p-3">
+                                <span className="w-6 h-6 rounded-full bg-[#0083bf] text-white text-xs font-bold flex items-center justify-center">
+                                    {step}
+                                </span>
+                                <p className="text-sm font-semibold text-neutral-700">{label}</p>
+                                <p className="text-xs text-neutral-400">{desc}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                {reqData?.status && (
-                    <div className="w-[70%] mx-auto p-6">
-                        <h1 className="text-2xl font-bold mb-6">
-                            Upload Result – Status:{" "}
-                            <span
-                                className={
-                                    reqData.status === "success"
-                                        ? "text-green-600"
-                                        : "text-red-600"
-                                }
+                {/* Results */}
+                {reqData ? (
+                    <div className="border border-[#ebecef] rounded-xl bg-white p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <p className="text-[16px] font-semibold text-neutral-800">Upload Result</p>
+                            <button
+                                onClick={() => setReqData(null)}
+                                className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-800 border border-neutral-200 rounded-md px-3 py-1.5 cursor-pointer"
                             >
-                                {reqData.status}
-                            </span>
-                        </h1>
-
-                        {renderSection("Flats", reqData.flats)}
-                        {renderSection("Customers", reqData.customers)}
-                        {renderSection("Assign Flat To Customer", reqData.assignFlatToCustomer)}
-                        {renderSection("Payments", reqData.payments)}
+                                <RotateCcw size={13} />
+                                Clear
+                            </button>
+                        </div>
+                        <Skippedrecords
+                            sections={buildSections(reqData)}
+                            status={reqData.status}
+                        />
                     </div>
+                ) : (
+                    <p className="text-sm font-normal text-gray-400 px-1">
+                        Note: After the upload of file, result will be shown here.
+                    </p>
                 )}
             </div>
-            {!reqData?.status && <p className="px-8 text-sm font-normal mt-2 text-gray-400">Note: After the upload of file, result will be shown here.</p>}
 
-
-            {errorMessage && (
-                <Errorpanel
-                    errorMessages={errorMessage}
-                    setErrorMessages={setErrorMessage}
-                />
-            )}
-
+            {/* Download Template Modal */}
             <Modal
                 open={downloadTemplate}
-                onClose={downloadTemplate}
+                onClose={closeDownloadTemplate}
                 size="md"
                 withCloseButton={false}
                 centered
@@ -128,9 +115,10 @@ const BulkUploads = () => {
                 )}
             </Modal>
 
+            {/* Upload Modal */}
             <Modal
                 open={uploadGlobalExcel}
-                onClose={uploadGlobalExcel}
+                onClose={closeUploadGlobalExcel}
                 size="md"
                 withCloseButton={false}
                 centered
@@ -148,4 +136,3 @@ const BulkUploads = () => {
 };
 
 export default BulkUploads;
-
