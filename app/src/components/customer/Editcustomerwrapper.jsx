@@ -311,11 +311,12 @@ function Editcustomerwrapper() {
     setIfOwnedProjectNameError("");
   };
 
-  const [stateData, setStateData] = useState([]);
+  const [correspondenceStateData, setCorrespondenceStateData] = useState([]);
+  const [permanentStateData, setPermanentStateData] = useState([]);
   const [correspondenceCityData, setCorrespondenceCityData] = useState([]);
   const [permanentCityData, setPermanentCityData] = useState([]);
 
-  const [correspondenceCountry, setCorrespondenceCountry] = useState("101");
+  const [correspondenceCountry, setCorrespondenceCountry] = useState("");
   const [correspondenceCountryError, setCorrespondenceCountryError] =
     useState("");
   const updateCorrespondenceCountry = (value) => {
@@ -356,7 +357,7 @@ function Editcustomerwrapper() {
     setCorrespondenceAddressError("");
   };
 
-  const [permanentCountry, setPermanentCountry] = useState("101");
+  const [permanentCountry, setPermanentCountry] = useState("");
   const [permanentCountryError, setPermanentCountryError] = useState("");
   const updatePermanentCountry = (value) => {
     setPermanentCountry(value);
@@ -454,8 +455,13 @@ function Editcustomerwrapper() {
   };
 
 
-  async function getStates() {
-    await Settingsapi.get("/get-states")
+  async function getStates(countryId, isCorrespondence) {
+    if (!countryId) return;
+    await Settingsapi.get("/get-states", {
+      params: {
+        country_id: countryId,
+      },
+    })
       .then((response) => {
         const data = response?.data;
         if (data?.status === "error") {
@@ -468,7 +474,11 @@ function Editcustomerwrapper() {
           setIsLoadingEffect(false);
           return;
         }
-        setStateData(data?.data || []);
+        if (isCorrespondence) {
+          setCorrespondenceStateData(data?.data || []);
+        } else {
+          setPermanentStateData(data?.data || []);
+        }
         setIsLoadingEffect(false);
       })
       .catch((error) => {
@@ -499,8 +509,22 @@ function Editcustomerwrapper() {
   }
 
   useEffect(() => {
-    getStates();
-  }, []);
+    if (correspondenceCountry) {
+      getStates(correspondenceCountry, true);
+    } else {
+      setCorrespondenceStateData([]);
+      if (!isSameAddress) setCorrespondenceState("");
+    }
+  }, [correspondenceCountry]);
+
+  useEffect(() => {
+    if (permanentCountry) {
+      getStates(permanentCountry, false);
+    } else {
+      setPermanentStateData([]);
+      if (!isSameAddress) setPermanentState("");
+    }
+  }, [permanentCountry]);
 
   useEffect(() => {
     if (correspondenceState) {
@@ -665,14 +689,12 @@ function Editcustomerwrapper() {
           setNoOfYearsCity(data?.data?.no_of_years_city || "");
           setHaveYouOwnedAbode(data?.data?.have_you_owned_abode || "");
           setIfOwnedProjectName(data?.data?.if_owned_project_name || "");
-          setCorrespondenceCountry(
-            data?.data?.correspondenceCountryId || "101"
-          );
+          setCorrespondenceCountry(data?.data?.correspondenceCountryId || "");
           setCorrespondenceState(data?.data?.correspondenceStateId || "");
           setCorrespondenceCity(data?.data?.correspondenceCityId || "");
           setCorrespondenceAddress(data?.data?.correspondenceAddress || "");
           setCorrespondencePincode(data?.data?.correspondencePincode || "");
-          setPermanentCountry(data?.data?.permanentCountryId || "101");
+          setPermanentCountry(data?.data?.permanentCountryId || "");
           setPermanentState(data?.data?.permanentStateId || "");
           setPermanentCity(data?.data?.permanentCityId || "");
           setPermanentAddress(data?.data?.permanentAddress || "");
@@ -940,6 +962,18 @@ function Editcustomerwrapper() {
     setIsLoadingEffect(true);
     if (customerId) getSingleCustomerData(customerId);
   }, [customerId]);
+
+  useEffect(() => {
+    if (countryNames.length > 0) {
+      const india = countryNames.find((c) => c.label === "India");
+      if (india) {
+        if (!countryOfCitizenship) setCountryOfCitizenship(india.value);
+        if (!countryOfResidence) setCountryOfResidence(india.value);
+        if (!correspondenceCountry) setCorrespondenceCountry(india.value);
+        if (!permanentCountry) setPermanentCountry(india.value);
+      }
+    }
+  }, [countryNames, countryOfCitizenship, countryOfResidence, correspondenceCountry, permanentCountry]);
 
   const [openAddressCorrespondence, setOpenAddressCorrespondence] = useState(false);
   const [openAddressPremanent, setOpenAddressPremanent] = useState(false);
@@ -1384,7 +1418,9 @@ function Editcustomerwrapper() {
                         <SelectValue placeholder="Select Country" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200">
-                        <SelectItem value="101">India</SelectItem>
+                        {countryNames.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {correspondenceCountryError && <p className="text-xs text-red-500">{correspondenceCountryError}</p>}
@@ -1397,7 +1433,7 @@ function Editcustomerwrapper() {
                         <SelectValue placeholder="Select State" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200 max-h-[200px]">
-                        {stateData.map((item) => (
+                        {correspondenceStateData.map((item) => (
                           <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
                         ))}
                       </SelectContent>
@@ -1484,7 +1520,9 @@ function Editcustomerwrapper() {
                         <SelectValue placeholder="Select Country" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200">
-                        <SelectItem value="101">India</SelectItem>
+                        {countryNames.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {permanentCountryError && <p className="text-xs text-red-500">{permanentCountryError}</p>}
@@ -1497,7 +1535,7 @@ function Editcustomerwrapper() {
                         <SelectValue placeholder="Select State" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200 max-h-[200px]">
-                        {stateData.map((item) => (
+                        {permanentStateData.map((item) => (
                           <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
                         ))}
                       </SelectContent>

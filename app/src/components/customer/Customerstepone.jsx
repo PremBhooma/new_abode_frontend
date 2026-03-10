@@ -239,7 +239,7 @@ const Customerstepone = forwardRef((props, ref) => {
     setAadharCardNoError("");
   };
 
-  const [countryOfCitizenship, setCountryOfCitizenship] = useState("101");
+  const [countryOfCitizenship, setCountryOfCitizenship] = useState("");
   const [countryOfCitizenshipError, setCountryOfCitizenshipError] =
     useState("");
   const updateCountryOfCitizenship = (value) => {
@@ -247,7 +247,7 @@ const Customerstepone = forwardRef((props, ref) => {
     setCountryOfCitizenshipError("");
   };
 
-  const [countryOfResidence, setCountryOfResidence] = useState("101");
+  const [countryOfResidence, setCountryOfResidence] = useState("");
   const [countryOfResidenceError, setCountryOfResidenceError] = useState("");
   const updateCountryOfResidence = (value) => {
     setCountryOfResidence(value);
@@ -311,11 +311,12 @@ const Customerstepone = forwardRef((props, ref) => {
     setIfOwnedProjectNameError("");
   };
 
-  const [stateData, setStateData] = useState([]);
+  const [correspondenceStateData, setCorrespondenceStateData] = useState([]);
+  const [permanentStateData, setPermanentStateData] = useState([]);
   const [correspondenceCityData, setCorrespondenceCityData] = useState([]);
   const [permanentCityData, setPermanentCityData] = useState([]);
 
-  const [correspondenceCountry, setCorrespondenceCountry] = useState("101");
+  const [correspondenceCountry, setCorrespondenceCountry] = useState("");
   const [correspondenceCountryError, setCorrespondenceCountryError] =
     useState("");
   const updateCorrespondenceCountry = (value) => {
@@ -353,7 +354,7 @@ const Customerstepone = forwardRef((props, ref) => {
     setCorrespondenceAddressError("");
   };
 
-  const [permanentCountry, setPermanentCountry] = useState("101");
+  const [permanentCountry, setPermanentCountry] = useState("");
   const [permanentCountryError, setPermanentCountryError] = useState("");
   const updatePermanentCountry = (value) => {
     setPermanentCountry(value);
@@ -510,8 +511,13 @@ const Customerstepone = forwardRef((props, ref) => {
     }
   }
 
-  async function getStates() {
-    await Settingsapi.get("/get-states")
+  async function getStates(countryId, isCorrespondence = false) {
+    if (!countryId) return;
+    await Settingsapi.get("/get-states", {
+      params: {
+        country_id: countryId,
+      },
+    })
       .then((response) => {
         const data = response?.data;
         if (data?.status === "error") {
@@ -524,7 +530,11 @@ const Customerstepone = forwardRef((props, ref) => {
           setIsLoadingEffect(false);
           return;
         }
-        setStateData(data?.data || []);
+        if (isCorrespondence) {
+          setCorrespondenceStateData(data?.data || []);
+        } else {
+          setPermanentStateData(data?.data || []);
+        }
         setIsLoadingEffect(false);
       })
       .catch((error) => {
@@ -555,8 +565,20 @@ const Customerstepone = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
-    getStates();
-  }, []);
+    if (correspondenceCountry) {
+      getStates(correspondenceCountry, true);
+    } else {
+      setCorrespondenceStateData([]);
+    }
+  }, [correspondenceCountry]);
+
+  useEffect(() => {
+    if (permanentCountry) {
+      getStates(permanentCountry, false);
+    } else {
+      setPermanentStateData([]);
+    }
+  }, [permanentCountry]);
 
   useEffect(() => {
     if (correspondenceState) {
@@ -593,6 +615,18 @@ const Customerstepone = forwardRef((props, ref) => {
     fetchCountryCodes();
     fetchCountryNames();
   }, []);
+
+  useEffect(() => {
+    if (!customerId && countryNames && countryNames.length > 0) {
+      const indiaFeature = countryNames.find((c) => c.label === "India");
+      if (indiaFeature) {
+        if (!countryOfCitizenship) setCountryOfCitizenship(indiaFeature.value);
+        if (!countryOfResidence) setCountryOfResidence(indiaFeature.value);
+        if (!correspondenceCountry) setCorrespondenceCountry(indiaFeature.value);
+        if (!permanentCountry) setPermanentCountry(indiaFeature.value);
+      }
+    }
+  }, [countryNames, customerId]);
 
   async function getSingleCustomerData(customerId) {
     if (customerId === null) {
@@ -666,13 +700,13 @@ const Customerstepone = forwardRef((props, ref) => {
           setHaveYouOwnedAbode(data?.data?.have_you_owned_abode);
           setIfOwnedProjectName(data?.data?.if_owned_project_name || "");
           setCorrespondenceCountry(
-            data?.data?.correspondenceCountryId || "101"
+            data?.data?.correspondenceCountryId || countryNames?.find(c => c.label === "India")?.value || ""
           );
           setCorrespondenceState(data?.data?.correspondenceStateId || "");
           setCorrespondenceCity(data?.data?.correspondenceCityId || "");
           setCorrespondenceAddress(data?.data?.correspondenceAddress || "");
           setCorrespondencePincode(data?.data?.correspondencePincode || "");
-          setPermanentCountry(data?.data?.permanentCountryId || "101");
+          setPermanentCountry(data?.data?.permanentCountryId || countryNames?.find(c => c.label === "India")?.value || "");
           setPermanentState(data?.data?.permanentStateId || "");
           setPermanentCity(data?.data?.permanentCityId || "");
           setPermanentAddress(data?.data?.permanentAddress || "");
@@ -1505,8 +1539,10 @@ const Customerstepone = forwardRef((props, ref) => {
                         <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCountry ? 'text-gray-400' : ''} ${correspondenceCountryError ? 'border-red-500' : 'border-gray-300'}`}>
                           <SelectValue placeholder="Select Country" />
                         </SelectTrigger>
-                        <SelectContent className="border border-gray-200">
-                          <SelectItem value="101">India</SelectItem>
+                        <SelectContent className="border border-gray-200\">
+                          {countryNames.map((item, index) => (
+                            <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       {correspondenceCountryError && <p className="text-xs text-red-500">{correspondenceCountryError}</p>}
@@ -1519,7 +1555,7 @@ const Customerstepone = forwardRef((props, ref) => {
                           <SelectValue placeholder="Select State" />
                         </SelectTrigger>
                         <SelectContent className="border border-gray-200 max-h-[200px]">
-                          {stateData.map((item, index) => (
+                          {correspondenceStateData.map((item, index) => (
                             <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
                           ))}
                         </SelectContent>
@@ -1615,7 +1651,9 @@ const Customerstepone = forwardRef((props, ref) => {
                           <SelectValue placeholder="Select Country" />
                         </SelectTrigger>
                         <SelectContent className="border border-gray-200">
-                          <SelectItem value="101">India</SelectItem>
+                          {countryNames.map((item, index) => (
+                            <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       {permanentCountryError && <p className="text-xs text-red-500">{permanentCountryError}</p>}
@@ -1628,7 +1666,7 @@ const Customerstepone = forwardRef((props, ref) => {
                           <SelectValue placeholder="Select State" />
                         </SelectTrigger>
                         <SelectContent className="border border-gray-200 max-h-[200px]">
-                          {stateData.map((item, index) => (
+                          {permanentStateData.map((item, index) => (
                             <SelectItem key={`${item.value}-${index}`} value={item.value}>{item.label}</SelectItem>
                           ))}
                         </SelectContent>
