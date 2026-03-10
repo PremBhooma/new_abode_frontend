@@ -10,7 +10,7 @@ import ProjectAllocation from "./ProjectAllocation";
 import Employeeapi from "../../api/Employeeapi";
 import Errorpanel from "../../shared/Errorpanel";
 import Uploademployeeprofile from "../../shared/Uploademployeeprofile";
-import profileStatic from "../../../../public/assets/customer_static_image.jpg";
+import profileStatic from "@/assets/customer_static_image.jpg";
 import {
   Dialog,
   DialogContent,

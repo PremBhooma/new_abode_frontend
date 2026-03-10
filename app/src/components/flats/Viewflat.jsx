@@ -8,12 +8,25 @@ import Paymentstab from "./viewflat/paymenttab/Paymentstab";
 import Assignflattocustomer from "./viewflat/Assignflattocustomer.jsx";
 import Flatdocumentswrapper from "./documents/Flatdocumentswrapper";
 import Customerflatinformation from "./viewflat/Customerflatinformation";
-import flatStaticImage from "../../../public/assets/imageplaceholder.png";
+import flatStaticImage from "@/assets/imageplaceholder.png";
 import { IconArrowLeft, IconDownload, IconEdit, IconPencil } from "@tabler/icons-react";
 import { useNavigate, useParams, Link, NavLink } from "react-router-dom";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
-import { Fileinput, Loadingoverlay, Modal, Select } from "@nayeshdaggula/tailify";
-
+import { Loadingoverlay } from "@nayeshdaggula/tailify";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 import Bookingstages from "./viewflat/Bookingstages.jsx";
@@ -47,7 +60,7 @@ function Viewflat() {
   }
 
   const [formate, setFormate] = useState("word");
-  const { uuid } = useParams();
+  const { id } = useParams();
 
   const formatPrice = (price) => {
     if (price === null || price === undefined || price === "") return "---";
@@ -118,13 +131,13 @@ function Viewflat() {
   };
 
   const refreshUserDetails = () => {
-    fetchFlat(uuid);
+    fetchFlat(id);
   };
 
-  const fetchFlat = async (uuid) => {
-    setIsLoadingEffect(true);
+  const fetchFlat = async (id, showLoading = true) => {
+    if (showLoading) setIsLoadingEffect(true);
 
-    Flatapi.get(`get-flat/${uuid}`, {
+    Flatapi.get(`get-flat/${id}`, {
       params: {
         employeeId: employeeId
       },
@@ -146,7 +159,7 @@ function Viewflat() {
         setCanAssignFlat(data?.canAssignFlat)
         setCustomerFlatDetails(data?.getCustomerFlat)
         setPaymentSummary(data?.paymentSummary)
-        setIsLoadingEffect(false);
+        if (showLoading) setIsLoadingEffect(false);
         return false;
       }).catch((error) => {
         let finalresponse;
@@ -169,8 +182,8 @@ function Viewflat() {
   // console.log("Customer Flat Details", customerFlatDetails)
 
   useEffect(() => {
-    fetchFlat(uuid);
-  }, [uuid]);
+    fetchFlat(id);
+  }, [id]);
 
   const allTabs = [
     "flat-info",
@@ -186,7 +199,7 @@ function Viewflat() {
     Flatapi.get('/download-sale-deed', {
       params: {
         formate: formate,
-        flatuuid: uuid
+        flatid: id
       },
       responseType: "blob",
     }).then(async (response) => {
@@ -215,7 +228,7 @@ function Viewflat() {
         if (sections.includes("customer")) {
           link = `/customers/editcustomer/${data.customerUid}`;
         } else if (sections.includes("flat")) {
-          link = `/flats/edit-flat/${uuid}`;
+          link = `/flats/edit-flat/${id}`;
         } else if (sections.includes("payment")) {
           link = "/payments/addnew";
         }
@@ -249,7 +262,7 @@ function Viewflat() {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-      fetchFlat(uuid);
+      fetchFlat(id);
       setIsSaleDeedModalOpen(false);
       setIsLoadingEffect(false);
       return false;
@@ -389,7 +402,7 @@ function Viewflat() {
     Flatapi.get('/downloadagreementtemplate', {
       params: {
         formate: formate,
-        flatuuid: uuid
+        flatid: id
       },
       responseType: "blob",
     }).then(async (response) => {
@@ -418,7 +431,7 @@ function Viewflat() {
         if (sections.includes("customer")) {
           link = `/customers/editcustomer/${data.customerUid}`;
         } else if (sections.includes("flat")) {
-          link = `/flats/edit-flat/${uuid}`;
+          link = `/flats/edit-flat/${id}`;
         } else if (sections.includes("payment")) {
           link = "/payments/addnew";
         }
@@ -452,7 +465,7 @@ function Viewflat() {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-      fetchFlat(uuid);
+      fetchFlat(id);
       closeCreateAgreementModal(false);
       setIsLoadingEffect(false);
       return false;
@@ -573,7 +586,7 @@ function Viewflat() {
               </>
             )}
             {permissions?.flats_page?.includes("edit_flat") && (
-              <Link to={`/flats/edit-flat/${uuid}`} className="text-[14px] text-white font-semibold px-5 py-[7px] border border-[#0083bf] !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">
+              <Link to={`/flats/edit-flat/${id}`} className="text-[14px] text-white font-semibold px-5 py-[7px] border border-[#0083bf] !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">
                 Edit
               </Link>
             )}
@@ -674,7 +687,7 @@ function Viewflat() {
                   flatDetails?.status === 'Sold' && (
                     <div className="p-3 ">
                       <Bookingstages
-                        flat_uuid={uuid}
+                        flat_id={id}
                       />
                     </div>
                   )
@@ -688,7 +701,12 @@ function Viewflat() {
                     ${activeTab === tab
                           ? "text-[#0083bf] bg-white shadow-md"
                           : "text-gray-900 bg-transparent"}`}
-                      onClick={() => setActiveTab(tab)}
+                      onClick={() => {
+                        setActiveTab(tab);
+                        if (tab === "flat-info" && activeTab !== "flat-info") {
+                          fetchFlat(id, false);
+                        }
+                      }}
                     >
                       {tab
                         .replace("-tab", "")
@@ -734,7 +752,7 @@ function Viewflat() {
                   {activeTab === "activities-tab" && (
                     <div className="text-center text-gray-500">
                       {permissions?.flats_page?.includes("activities_single_flat") && (
-                        <Activitiestab flat_uuid={uuid} />
+                        <Activitiestab flat_id={id} />
                       )}
                     </div>
                   )}
@@ -775,181 +793,173 @@ function Viewflat() {
       {errorMessage && (
         <Errorpanel errorMessages={errorMessage} setErrorMessages={setErrorMessage} />
       )}
-      <Modal
+      <Dialog
         open={uploadFileModal}
-        close={closeUploadFileModal}
-        padding="px-5"
-        withCloseButton={false}
-        containerClassName="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px]"
+        onOpenChange={setUploadFileModal}
       >
-        {uploadFileModal && (
-          <Uploadprofile
-            closeUploadFileModal={closeUploadFileModal}
-            setIsLoadingEffect={setIsLoadingEffect}
-            flat_id={flatDetails?.id}
-            refreshUserDetails={refreshUserDetails}
-          />
-        )}
-      </Modal>
+        <DialogContent className="sm:max-w-[440px] p-0 overflow-hidden">
+          {uploadFileModal && (
+            <Uploadprofile
+              closeUploadFileModal={closeUploadFileModal}
+              setIsLoadingEffect={setIsLoadingEffect}
+              flat_id={flatDetails?.id}
+              refreshUserDetails={refreshUserDetails}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
 
-      <Modal
+      <Dialog
         open={isSaleDeedModalOpen}
-        close={closeSaleDeedModal}
-        withCloseButton={false}
-        padding="0"
-        containerClassName="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px]"
+        onOpenChange={setIsSaleDeedModalOpen}
       >
-        {isSaleDeedModalOpen && (
-          <div>
-            <div className="flex items-center justify-between py-3 border-b px-5 mb-3">
-              <p className="font-semibold text-lg text-[#0083bf]">Select Formate</p>
-              <X className="x-11 cursor-pointer text-[#0083bf] hover:text-[#00628f]/50" onClick={closeSaleDeedModal} />
+        <DialogContent className="sm:max-w-[440px] p-0 overflow-hidden">
+          {isSaleDeedModalOpen && (
+            <div>
+              <DialogHeader className="py-3 border-b px-5 mb-3">
+                <DialogTitle className="text-[#0083bf]">Select Formate</DialogTitle>
+              </DialogHeader>
+              <div className="px-5">
+                <Select value={formate} onValueChange={(value) => setFormate(value)}>
+                  <SelectTrigger className="w-full text-[#000000] font-semibold">
+                    <SelectValue placeholder="Please select the formate" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="word">Word</SelectItem>
+                    <SelectItem value="pdf">PDF</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="w-full justify-end flex border-t py-3 px-5 mt-5">
+                <button
+                  onClick={downloadSaleDeed}
+                  className="px-3 py-2 bg-[#0083bf] text-white cursor-pointer rounded-md hover:bg-[#00628f]"
+                >
+                  Download
+                </button>
+              </div>
             </div>
-            <Select
-              placeholder="Please select the formate"
-              value={formate}
-              onChange={(value) => setFormate(value)}
-              data={[
-                { label: "Word", value: 'word' },
-                { label: "PDF", value: 'pdf' }
-              ]}
-              mainContainerClass="!px-5"
-              selectWrapperClass="!text-[#000000] font-semibold"
-            />
-            <div className="w-full justify-end flex border-t py-3 px-5 mt-3">
-              <button
-                onClick={downloadSaleDeed}
-                className="px-3 py-2 bg-[#0083bf] text-white cursor-pointer rounded-md hover:bg-[#00628f]"
-              >
-                Download
-              </button>
-            </div>
-          </div>
-        )}
-      </Modal>
+          )}
+        </DialogContent>
+      </Dialog>
 
-      <Modal
+      <Dialog
         open={isSaleDeedTemplateModalOpen}
-        close={closeSaleDeedTemplateModal}
-        withCloseButton={false}
-        padding="0"
-        containerClassName="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px]"
+        onOpenChange={setIsSaleDeedTemplateModalOpen}
       >
-        {isSaleDeedTemplateModalOpen && (
-          <div>
-            <div className="flex items-center justify-between py-3 border-b px-5 mb-3">
-              <p className="font-semibold text-lg text-[#0083bf]">Upload Template</p>
-              <X className="x-11 cursor-pointer text-[#0083bf] hover:text-[#00628f]/50" onClick={closeSaleDeedTemplateModal} />
+        <DialogContent className="sm:max-w-[440px] p-0 overflow-hidden">
+          {isSaleDeedTemplateModalOpen && (
+            <div>
+              <DialogHeader className="py-3 border-b px-5 mb-3">
+                <DialogTitle className="text-[#0083bf]">Upload Template</DialogTitle>
+              </DialogHeader>
+              <div className="px-5 mb-3 text-sm text-black">
+                <p className="font-medium">Guidelines:</p>
+                <p className="mt-1">
+                  The placeholders should be wrapped inside <code>&lt;&lt; &gt;&gt;</code> tags, e.g.{" "}
+                  <code>&lt;&lt;FLAT_NAME&gt;&gt;</code>.
+                </p>
+                <p className="mt-1">
+                  Available placeholders:{" "}
+                  <span className="block mt-1 text-black">
+                    DATE, NUM_KEY, NAME, GUARDIAN_NAME, AGE, OCCUPATION, AADHAAR_NUMBER,
+                    PAN_NUMBER, ADDRESS, PROJECT_NAME, FLAT_NO, FLOOR_NO, BLOCK_NO, SFT,
+                    CAR_PARKING, UDS, SALE_VALUE, RCPT_NUM, RCPT_VALUE, RCPT_TYPE, RCPT_DATE,
+                    NORTH, SOUTH, EAST, WEST
+                  </span>
+                </p>
+              </div>
+              <div className="px-5">
+                <Input
+                  type="file"
+                  accept=".docx"
+                  onChange={updateFile}
+                  className="w-full"
+                />
+                {fileError && <p className="text-red-500 text-xs mt-1">{fileError}</p>}
+              </div>
+              <div className="w-full justify-end flex border-t py-3 px-5 mt-5">
+                <button
+                  disabled={!file}
+                  onClick={uploadTemplate}
+                  className={`px-3 py-2 bg-[#0083bf] text-white rounded-md hover:bg-[#00628f] ${!file ? "cursor-not-allowed" : "cursor-pointer"}`}
+                >
+                  Upload
+                </button>
+              </div>
             </div>
-            <div className="px-5 mb-3 text-sm text-black">
-              <p className="font-medium">Guidelines:</p>
-              <p className="mt-1">
-                The placeholders should be wrapped inside <code>&lt;&lt; &gt;&gt;</code> tags, e.g.{" "}
-                <code>&lt;&lt;FLAT_NAME&gt;&gt;</code>.
-              </p>
-              <p className="mt-1">
-                Available placeholders:{" "}
-                <span className="block mt-1 text-black">
-                  DATE, NUM_KEY, NAME, GUARDIAN_NAME, AGE, OCCUPATION, AADHAAR_NUMBER,
-                  PAN_NUMBER, ADDRESS, PROJECT_NAME, FLAT_NO, FLOOR_NO, BLOCK_NO, SFT,
-                  CAR_PARKING, UDS, SALE_VALUE, RCPT_NUM, RCPT_VALUE, RCPT_TYPE, RCPT_DATE,
-                  NORTH, SOUTH, EAST, WEST
-                </span>
-              </p>
-            </div>
-            <Fileinput
-              placeholder="Click here to select a file"
-              accept=".docx"
-              error={fileError}
-              value={file}
-              onChange={updateFile}
-              mainContainerClass="!px-5"
-            />
-            <div className="w-full justify-end flex border-t py-3 px-5 mt-3">
-              <button
-                disabled={!file}
-                onClick={uploadTemplate}
-                className={`px-3 py-2 bg-[#0083bf] text-white rounded-md hover:bg-[#00628f] ${!file ? "cursor-not-allowed" : "cursor-pointer"}`}
-              >
-                Upload
-              </button>
-            </div>
-          </div>
-        )}
-      </Modal>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* agreement template modal */}
-      <Modal
+      <Dialog
         open={agreementTemplate}
-        close={closeAgreementTemplateModal}
-        withCloseButton={false}
-        padding="0"
-        containerClassName="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px]"
+        onOpenChange={setAgreementTemplate}
       >
-        {agreementTemplate && (
-          <AgreementtemplateModal
-            closeAgreementTemplateModal={closeAgreementTemplateModal}
-            agreementTemplateFile={agreementTemplateFile}
-            agreementTemplateFileError={agreementTemplateFileError}
-            updateAgreementTemplateFile={updateAgreementTemplateFile}
-            uploadAgreementTemplate={uploadAgreementTemplate}
-          />
-        )}
-      </Modal>
+        <DialogContent className="sm:max-w-[440px] p-0 overflow-hidden">
+          {agreementTemplate && (
+            <AgreementtemplateModal
+              closeAgreementTemplateModal={closeAgreementTemplateModal}
+              agreementTemplateFile={agreementTemplateFile}
+              agreementTemplateFileError={agreementTemplateFileError}
+              updateAgreementTemplateFile={updateAgreementTemplateFile}
+              uploadAgreementTemplate={uploadAgreementTemplate}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* create agreement modal */}
-      <Modal
+      <Dialog
         open={createAgreement}
-        close={closeCreateAgreementModal}
-        withCloseButton={false}
-        padding="0"
-        containerClassName="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px]"
+        onOpenChange={setCreateAgreement}
       >
-        {createAgreement && (
-          <div>
-            <div className="flex items-center justify-between py-3 border-b border-[#ebecef] px-5 mb-3">
-              <p className="font-semibold text-lg text-[#0083bf]">Select Formate</p>
-              <X className="x-11 cursor-pointer text-[#0083bf] hover:text-[#00628f]/50" onClick={closeCreateAgreementModal} />
+        <DialogContent className="sm:max-w-[440px] p-0 overflow-hidden">
+          {createAgreement && (
+            <div>
+              <DialogHeader className="py-3 border-b border-[#ebecef] px-5 mb-3">
+                <DialogTitle className="text-[#0083bf]">Select Formate</DialogTitle>
+              </DialogHeader>
+              <div className="px-5">
+                <Select value={formate} onValueChange={(value) => setFormate(value)}>
+                  <SelectTrigger className="w-full text-[#000000] font-semibold">
+                    <SelectValue placeholder="Please select the formate" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="word">Word</SelectItem>
+                    <SelectItem value="pdf">PDF</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="w-full justify-end flex border-t border-[#ebecef] py-3 px-5 mt-5">
+                <button
+                  onClick={downloadAgreement}
+                  className="px-3 py-1.5 text-[12px] bg-[#0083bf] text-white cursor-pointer rounded-md hover:bg-[#00628f]"
+                >
+                  Download
+                </button>
+              </div>
             </div>
-            <Select
-              placeholder="Please select the formate"
-              value={formate}
-              onChange={(value) => setFormate(value)}
-              data={[
-                { label: "Word", value: 'word' },
-                { label: "PDF", value: 'pdf' }
-              ]}
-              mainContainerClass="!px-5"
-              selectWrapperClass="!text-[#000000] font-semibold"
-            />
-            <div className="w-full justify-end flex border-t border-[#ebecef] py-3 px-5 mt-3">
-              <button
-                onClick={downloadAgreement}
-                className="px-3 py-1.5 text-[12px] bg-[#0083bf] text-white cursor-pointer rounded-md hover:bg-[#00628f]"
-              >
-                Download
-              </button>
-            </div>
-          </div>
-        )}
-      </Modal>
+          )}
+        </DialogContent>
+      </Dialog>
 
-      <Modal
+      <Dialog
         open={downloadTemplate}
-        close={closeDownloadTemplate}
-        withCloseButton={false}
-        padding="0"
-        containerClassName="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px]"
+        onOpenChange={setDownloadTemplate}
       >
-        {
-          downloadTemplate &&
-          <Downloadtemplate
-            closeDownloadTemplate={closeDownloadTemplate}
-            flatDetails={flatDetails}
-            type={type}
-          />
-        }
-      </Modal>
+        <DialogContent className="sm:max-w-[440px] p-0 overflow-hidden">
+          {
+            downloadTemplate &&
+            <Downloadtemplate
+              closeDownloadTemplate={closeDownloadTemplate}
+              flatDetails={flatDetails}
+              type={type}
+            />
+          }
+        </DialogContent>
+      </Dialog>
 
       <Drawer
         open={flatToCustomer}

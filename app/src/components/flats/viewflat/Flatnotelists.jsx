@@ -4,14 +4,14 @@ import { useParams } from 'react-router-dom';
 import Flatapi from '../../api/Flatapi';
 import { toast } from 'react-toastify';
 import Errorpanel from '../../shared/Errorpanel';
-import defaultuser from '../../../../public/assets/user_avatar.jpg'
+import defaultuser from "@/assets/user_avatar.jpg";
 
 function Flatnotelists({ refreshKey }) {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const access_token = useEmployeeDetails((state) => state.access_token);
     const user_id = employeeInfo?.id || null;
 
-    const { uuid: flat_uuid } = useParams();
+    const { id: flat_id } = useParams();
 
     const [flatDetails, setFlatDetails] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
@@ -22,7 +22,7 @@ function Flatnotelists({ refreshKey }) {
         try {
             const response = await Flatapi.get('get-flat-notes', {
                 params: {
-                    flat_uuid,
+                    flat_id,
                     user_id,
                 },
                 headers: {

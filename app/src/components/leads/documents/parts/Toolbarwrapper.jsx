@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+﻿import React, { useState } from 'react'
 import { Button, Modal } from "@nayeshdaggula/tailify"
 import Addfoldermodal from './Addfoldermodal'
 import UploadfileModal from './UploadfileModal'
@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import Errorpanel from '../../../shared/Errorpanel'
 import DeleteModal from '../../../shared/DeleteModal'
 
-function Toolbarwrapper({ refreshFolderDeatils, currentFolderUid, currentFolderId, folderPath, lead_uuid }) {
+function Toolbarwrapper({ refreshFolderDeatils, currentFolderUid, currentFolderId, folderPath, leadId }) {
 
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const employeeId = employeeInfo?.id || null;
@@ -49,7 +49,7 @@ function Toolbarwrapper({ refreshFolderDeatils, currentFolderUid, currentFolderI
         await Leaddocumentsapi.post(
             "/syncfilesystemwithdb",
             {
-                lead_uuid: lead_uuid,
+                leadId: leadId,
                 employee_id: employeeId
             },
             {

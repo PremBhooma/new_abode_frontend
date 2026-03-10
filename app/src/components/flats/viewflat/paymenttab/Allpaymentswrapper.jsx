@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+﻿import React, { useCallback, useEffect, useState, useRef } from "react";
 import dayjs from "dayjs";
 import Flatapi from "../../../api/Flatapi";
 import Addflatpayment from "./Addflatpayment";
@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import { Link, NavLink } from "react-router";
 import { Pagination, Select } from "@nayeshdaggula/tailify";
 import { useEmployeeDetails } from "../../../zustand/useEmployeeDetails";
-import { IconDownload, IconEdit, IconEye, IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconDownload, IconEdit, IconEye, IconSearch, IconTrash, IconSettings } from "@tabler/icons-react";
 
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
@@ -185,9 +185,9 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
 
     const [flatPaymentUUID, setFlatPaymentUUID] = useState('');
     const [editFlatPayment, setEditFlatPayment] = useState(false);
-    const openEditFlatPayment = (uuid) => {
+    const openEditFlatPayment = (id) => {
         setEditFlatPayment(true);
-        setFlatPaymentUUID(uuid);
+        setFlatPaymentUUID(id);
     };
     const closeEditFlatPayment = () => {
         setEditFlatPayment(false);
@@ -195,9 +195,9 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
     };
 
     const [viewFlatPayment, setViewFlatPayment] = useState(false);
-    const openViewFlatPayment = (uuid) => {
+    const openViewFlatPayment = (id) => {
         setViewFlatPayment(true);
-        setFlatPaymentUUID(uuid);
+        setFlatPaymentUUID(id);
     };
     const closeViewFlatPayment = () => {
         setViewFlatPayment(false);
@@ -570,7 +570,7 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                                 onClick={() => setShowColumnToggle(!showColumnToggle)}
                                 className="cursor-pointer whitespace-nowrap flex items-center gap-1 px-2 py-2 h-9 text-sm border border-[#ebecef] rounded-sm bg-white hover:bg-gray-50"
                             >
-                                ⚙️ Columns
+                  <IconSettings size={16} className="mr-1" /> Columns
                             </button>
 
                             {showColumnToggle && (
@@ -674,15 +674,15 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                                     <tr key={index} className="border-b-[0.6px] border-b-[#ebecef] align-top bg-white">
                                         {/* {visibleColumns.reference && (
                                             <td className="px-4 py-3 whitespace-normal break-words w-[140px] sticky left-0 z-10 bg-white border-r border-[#ebecef]">
-                                                <NavLink to={`/singlepaymentview/${payment.uuid}`}>
-                                                    <p className="text-[#4b5563] text-[13px] font-normal leading-[18px]">{payment?.uuid}</p>
+                                                <NavLink to={`/singlepaymentview/${payment.id}`}>
+                                                    <p className="text-[#4b5563] text-[13px] font-normal leading-[18px]">{payment?.id}</p>
                                                 </NavLink>
                                             </td>
                                         )} */}
                                         {visibleColumns.transactionId && (
                                             <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
                                                 {permissions?.payments_page?.includes("view_payment") ? (
-                                                    // <NavLink to={`/singlepaymentview/${payment?.uuid}`}>
+                                                    // <NavLink to={`/singlepaymentview/${payment?.id}`}>
                                                     <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
                                                         {payment?.transaction_id}
                                                     </p>
@@ -711,7 +711,7 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                                         {visibleColumns.customer && (
                                             <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
                                                 <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px] capitalize">
-                                                    {/* <NavLink to={`/customers/${payment?.customer_uuid}`}> */}
+                                                    {/* <NavLink to={`/customers/${payment?.customerId}`}> */}
                                                     {payment.customer_prefixes || ""} {payment.customer_first_name || "----"} {payment.customer_last_name}
                                                     {/* </NavLink> */}
                                                 </p>
@@ -763,7 +763,7 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                                             <div className="flex flex-row items-center gap-1">
                                                 {permissions?.payments_page?.includes("view_payment") && (
                                                     <Link
-                                                        to={`/singlepaymentview/${payment.uuid}`}
+                                                        to={`/singlepaymentview/${payment.id}`}
                                                         className="cursor-pointer"
                                                     >
                                                         <IconEye size={20} color="#4b5563" />
@@ -772,7 +772,7 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
 
                                                 {permissions?.payments_page?.includes("edit_payment") && (
                                                     <Link
-                                                        to={`/payments/edit/${payment.uuid}`}
+                                                        to={`/payments/edit/${payment.id}`}
                                                         className="cursor-pointer"
                                                     >
                                                         <IconEdit size={20} color="#4b5563" />

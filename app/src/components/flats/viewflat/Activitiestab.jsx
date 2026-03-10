@@ -1,17 +1,17 @@
-'use client'
+﻿'use client'
 import React, { useState, useEffect } from 'react'
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 import { Text } from '@nayeshdaggula/tailify';
 import Flatapi from '../../api/Flatapi';
 import { format, formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
-import profileStatic from "../../../../public/assets/customer_static_image.jpg";
+import profileStatic from "@/assets/customer_static_image.jpg";
 import { NavLink } from 'react-router';
 
-function Activitiestab({ flat_uuid }) {
+function Activitiestab({ flat_id }) {
     const employeeInfo = useEmployeeDetails(state => state.employeeInfo);
     const access_token = useEmployeeDetails(state => state.access_token);
     const permissions = useEmployeeDetails(state => state.permissions);
-    const employee_uuid = employeeInfo?.uuid || null;
+    const employeeId = employeeInfo?.id || null;
 
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -38,8 +38,8 @@ function Activitiestab({ flat_uuid }) {
         try {
             const response = await Flatapi.get(`flat/activities`, {
                 params: {
-                    employee_uuid: employee_uuid,
-                    flat_uuid: flat_uuid,
+                    employeeId: employeeId,
+                    flat_id: flat_id,
                     limit: limit,
                     offset: currentOffset
                 },
@@ -88,7 +88,7 @@ function Activitiestab({ flat_uuid }) {
 
     useEffect(() => {
         getTasksactivities();
-    }, [flat_uuid]);
+    }, [flat_id]);
 
     if (isLoadingEffect) {
         return (
@@ -122,8 +122,8 @@ function Activitiestab({ flat_uuid }) {
                         >
                             <div
                                 className={`${index !== taskActvities.length - 1
-                                        ? "min-w-[30px] w-[30px] min-h-[30px] h-[45px]"
-                                        : "min-w-[30px] w-[30px] min-h-[30px] h-[30px]"
+                                    ? "min-w-[30px] w-[30px] min-h-[30px] h-[45px]"
+                                    : "min-w-[30px] w-[30px] min-h-[30px] h-[30px]"
                                     } rounded-full overflow-hidden flex justify-center items-center bg-gray-200`}
                             >
                                 <img

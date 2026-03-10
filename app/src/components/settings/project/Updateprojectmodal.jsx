@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+﻿import React, { useEffect, useState } from 'react'
 import Projectapi from '../../api/Projectapi.jsx';
 import Errorpanel from '../../shared/Errorpanel.jsx';
 import { toast } from 'react-toastify';
@@ -63,7 +63,7 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
             maintenance_rate_per_sqft: maintenanceRatePerSqft,
             maintenance_duration_months: maintenanceDurationMonths,
             corpus_fund: corpusFund,
-            ...(isEdit && { uuid: projectData?.uuid }),
+            ...(isEdit && {  id: projectData?.id }),
         };
 
         Projectapi.post(apiEndpoint, payload)

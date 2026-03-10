@@ -1,4 +1,4 @@
-import Drawer from 'react-modern-drawer'
+﻿import Drawer from 'react-modern-drawer'
 import Flatcostupdate from "./Flatcostupdate";
 import { Link } from "react-router-dom";
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
@@ -89,7 +89,7 @@ function Flatinformation({ flatDetails, customerFlatDetails, refreshUserDetails,
                 if (permissions?.customers_page?.includes("view_single_customer")) {
                   content = (
                     <Link
-                      to={`/customers/${flatDetails?.customer?.uuid}`}
+                      to={`/customers/${flatDetails?.customer?.id}`}
                       className="text-blue-500 hover:underline"
                     >
                       {value}

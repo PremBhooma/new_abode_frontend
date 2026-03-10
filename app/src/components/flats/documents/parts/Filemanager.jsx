@@ -1,18 +1,18 @@
 import React from 'react';
-import file_icon from '../../../../../public/assets/file_icon.png';
-import pdf_logo from '../../../../../public/assets/fileicons/pdf.png';
-import image_icon from '../../../../../public/assets/image_icon.png';
-import docx from '../../../../../public/assets/fileicons/doc.png';
-import file from '../../../../../public/assets/fileicons/file.png';
-import gif from '../../../../../public/assets/fileicons/gif.png';
-import html from '../../../../../public/assets/fileicons/html.png';
-import mp3 from '../../../../../public/assets/fileicons/mp3.png';
-import mp4 from '../../../../../public/assets/fileicons/mp4.png';
-import rar from '../../../../../public/assets/fileicons/rar.png';
-import svg from '../../../../../public/assets/fileicons/svg.png';
-import txt from '../../../../../public/assets/fileicons/txt.png';
-import xls from '../../../../../public/assets/fileicons/xls.png';
-import zip from '../../../../../public/assets/fileicons/zip.png';
+import file_icon from "@/assets/file_icon.png";
+import pdf_logo from "@/assets/fileicons/pdf.png";
+import image_icon from "@/assets/image_icon.png";
+import docx from "@/assets/fileicons/doc.png";
+import file from "@/assets/fileicons/file.png";
+import gif from "@/assets/fileicons/gif.png";
+import html from "@/assets/fileicons/html.png";
+import mp3 from "@/assets/fileicons/mp3.png";
+import mp4 from "@/assets/fileicons/mp4.png";
+import rar from "@/assets/fileicons/rar.png";
+import svg from "@/assets/fileicons/svg.png";
+import txt from "@/assets/fileicons/txt.png";
+import xls from "@/assets/fileicons/xls.png";
+import zip from "@/assets/fileicons/zip.png";
 import dayjs from 'dayjs';
 import { IconDotsVertical, IconDownload, IconEye, IconTrash } from '@tabler/icons-react';
 import TableLoadingEffect from '../../../shared/Tableloadingeffect';
@@ -103,7 +103,7 @@ function Filemanager({ fileStructure, folderselect, isLoadingEffect, openDeleteF
                                                     <img src={icon} alt={item.name} className='h-[20px] w-[20px]' />
                                                     {
                                                         item.file_type === 'folder' ?
-                                                            <p className='text-[#4b5563] text-[13px] not-italic font-normal leading-[18px] cursor-pointer' onClick={() => folderselect(item.uuid, item.id)}>
+                                                            <p className='text-[#4b5563] text-[13px] not-italic font-normal leading-[18px] cursor-pointer' onClick={() => folderselect(item.id, item.id)}>
                                                                 {item.name}
                                                             </p>
                                                             :

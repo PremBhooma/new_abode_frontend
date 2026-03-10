@@ -22,7 +22,7 @@ function Flatnotestab() {
     const access_token = useEmployeeDetails((state) => state.access_token);
     const user_id = employeeInfo?.id || null;
 
-    const { uuid: flat_uuid } = useParams();
+    const {  id: flat_id } = useParams();
 
     const updateNote = (e) => {
         setNoteMessage(e.target.value);
@@ -44,7 +44,7 @@ function Flatnotestab() {
                 {
                     user_id,
                     note: noteMessage,
-                    flat_uuid,
+                    flat_id,
                     employee_id: employeeId
                 },
                 {

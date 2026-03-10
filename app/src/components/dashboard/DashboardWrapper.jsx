@@ -180,10 +180,10 @@ function DashboardWrapper() {
     fetchGetAllData();
   }, []);
 
-  const openSingleFlatView = (uuid) => navigate(`/singlepaymentview/${uuid}`);
-  const openSingleCustomer = (uuid) => navigate(`/customers/${uuid}`);
-  const openSingleLead = (uuid) => navigate(`/lead/${uuid}`);
-  const openSingleFlat = (uuid) => navigate(`/flats/view-flat/${uuid}`);
+  const openSingleFlatView = (id) => navigate(`/singlepaymentview/${ id}`);
+  const openSingleCustomer = (id) => navigate(`/customers/${ id}`);
+  const openSingleLead = (id) => navigate(`/lead/${ id}`);
+  const openSingleFlat = (id) => navigate(`/flats/view-flat/${ id}`);
 
   // Generate years for the dropdown (2020 to 2040)
   const years = Array.from({ length: 21 }, (_, i) => 2020 + i).map(year => ({
@@ -499,7 +499,7 @@ function DashboardWrapper() {
                           {new Date(flat.created_at).toLocaleDateString()}
                         </td>
                         <td className="px-3 py-2 text-right">
-                          <button onClick={() => openSingleFlat(flat.uuid)} className="p-1.5 text-neutral-400 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-all">
+                          <button onClick={() => openSingleFlat(flat.id)} className="p-1.5 text-neutral-400 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-all">
                             <IconEye size={16} />
                           </button>
                         </td>
@@ -521,7 +521,7 @@ function DashboardWrapper() {
 
             <div className="space-y-6">
               {dashboardData.leadsData.slice(0, 5).map((lead, index) => (
-                <div key={lead.id || index} className="flex items-center justify-between group cursor-pointer" onClick={() => openSingleLead(lead.uuid)}>
+                <div key={lead.id || index} className="flex items-center justify-between group cursor-pointer" onClick={() => openSingleLead(lead.id)}>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-600 font-semibold text-sm overflow-hidden border border-neutral-100 shrink-0">
                       {lead.full_name?.slice(0, 2).toUpperCase()}
@@ -618,7 +618,7 @@ function DashboardWrapper() {
                         {new Date(flat.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-3 py-2 text-right">
-                        <button onClick={() => openSingleFlat(flat.uuid)} className="p-1.5 text-neutral-400 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-all">
+                        <button onClick={() => openSingleFlat(flat.id)} className="p-1.5 text-neutral-400 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-all">
                           <IconEye size={16} />
                         </button>
                       </td>
@@ -665,7 +665,7 @@ function DashboardWrapper() {
                               </div>
                               <div>
                                 <p className="text-neutral-900 text-xs font-semibold leading-[18px]">{customer.prefixes} {customer.first_name}</p>
-                                <p className="text-neutral-500 text-[10px] leading-[18px]">{customer.uuid}</p>
+                                <p className="text-neutral-500 text-[10px] leading-[18px]">{customer.id}</p>
                               </div>
                             </div>
                           </td>
@@ -679,7 +679,7 @@ function DashboardWrapper() {
                             {new Date(customer.created_at).toLocaleDateString()}
                           </td>
                           <td className="px-3 py-2 text-right">
-                            <button onClick={() => openSingleCustomer(customer.uuid)} className="p-1.5 text-neutral-400 hover:text-teal-600 hover:bg-teal-50 rounded-md transition-all">
+                            <button onClick={() => openSingleCustomer(customer.id)} className="p-1.5 text-neutral-400 hover:text-teal-600 hover:bg-teal-50 rounded-md transition-all">
                               <IconEye size={16} />
                             </button>
                           </td>
@@ -725,7 +725,7 @@ function DashboardWrapper() {
                               </div>
                               <div>
                                 <p className="text-neutral-900 text-xs font-semibold leading-[18px]s">{payment.customer_prefixes} {payment.customer_name}</p>
-                                <p className="text-neutral-500 text-[10px] leading-[18px]">{payment.uuid}</p>
+                                <p className="text-neutral-500 text-[10px] leading-[18px]">{payment.id}</p>
                               </div>
                             </div>
                           </td>
@@ -737,7 +737,7 @@ function DashboardWrapper() {
                             ₹{payment.amount?.toLocaleString()}
                           </td>
                           <td className="px-3 py-2 text-right">
-                            <button onClick={() => openSingleFlatView(payment.uuid)} className="p-1.5 text-neutral-400 hover:text-green-600 hover:bg-green-50 rounded-md transition-all">
+                            <button onClick={() => openSingleFlatView(payment.id)} className="p-1.5 text-neutral-400 hover:text-green-600 hover:bg-green-50 rounded-md transition-all">
                               <IconEye size={16} />
                             </button>
                           </td>

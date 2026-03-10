@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,7 +12,7 @@ function Leadnotelists({ refreshKey }) {
     const user_id = employeeInfo?.id || null;
 
     const params = useParams();
-    const lead_uuid = params?.lead_uuid;
+    const leadId = params?.leadId;
 
     const [customerDetails, setCustomerDetails] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
@@ -23,7 +23,7 @@ function Leadnotelists({ refreshKey }) {
         try {
             const response = await Leadapi.get('get-lead-notes', {
                 params: {
-                    lead_uuid: lead_uuid,
+                    leadId: leadId,
                     user_id,
                 },
                 headers: {

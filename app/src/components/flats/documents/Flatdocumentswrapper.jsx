@@ -13,7 +13,7 @@ function Flatdocumentswrapper() {
   const employeeId = employeeInfo?.id || null;
   const access_token = useEmployeeDetails(state => state.access_token);
   const params = useParams();
-  const flat_uid = params.uuid;
+  const flat_uid = params.id;
   const permissions = useEmployeeDetails(state => state.permissions);
 
   const [isLoadingEffect, setIsLoadingEffect] = useState(true)
@@ -23,8 +23,8 @@ function Flatdocumentswrapper() {
   const [currentFolderUuid, setCurrentFolderUuid] = useState(null);
   const [currentFolderId, setCurrentFolderId] = useState(null)
   const [currentFolderParentId, setCurrentFolderParentId] = useState(null)
-  const folderselect = (uuid, folder_id) => {
-    setCurrentFolderUuid(uuid)
+  const folderselect = (folderUuid, folder_id) => {
+    setCurrentFolderUuid(folderUuid)
     if (folder_id) {
       setIsLoadingEffect(true)
       fetchfoldersdetails(folder_id)
@@ -54,7 +54,7 @@ function Flatdocumentswrapper() {
       params: {
         currentFolderId: currentFolderId,
         currentFolderParentId: currentFolderParentId,
-        flat_uid: flat_uid
+        flat_id: flat_uid
       },
       headers: {
         'Content-Type': 'application/json',

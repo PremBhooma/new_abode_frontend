@@ -1,4 +1,4 @@
-import React, {
+﻿import React, {
   forwardRef,
   useImperativeHandle,
   useEffect,
@@ -30,7 +30,7 @@ const Customerstepone = forwardRef((props, ref) => {
   const employeeId = employeeInfo?.id || null;
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const customerUuid = searchParams.get("uuid");
+  const customerId = searchParams.get("id");
 
   const [projects, setProjects] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState("");
@@ -593,8 +593,8 @@ const Customerstepone = forwardRef((props, ref) => {
     fetchCountryNames();
   }, []);
 
-  async function getSingleCustomerData(customerUuid) {
-    if (customerUuid === null) {
+  async function getSingleCustomerData(customerId) {
+    if (customerId === null) {
       setErrorMessage({
         message: "Customer ID is missing wowo",
         server_res: null,
@@ -606,7 +606,7 @@ const Customerstepone = forwardRef((props, ref) => {
     setIsLoadingEffect(true);
     await Customerapi.get("get-single-customer-data", {
       params: {
-        customerUuid: customerUuid,
+        customerId: customerId,
       },
       headers: {
         "Content-Type": "application/json",
@@ -714,8 +714,8 @@ const Customerstepone = forwardRef((props, ref) => {
 
   useEffect(() => {
     setIsLoadingEffect(true);
-    if (customerUuid) getSingleCustomerData(customerUuid);
-  }, [customerUuid]);
+    if (customerId) getSingleCustomerData(customerId);
+  }, [customerId]);
 
   const validateAndSubmit = async () => {
     setIsLoadingEffect(true);
@@ -836,10 +836,10 @@ const Customerstepone = forwardRef((props, ref) => {
         return `${year}-${month}-${day}`;
       };
 
-      const apiEndpoint = customerUuid ? "update-customer" : "add-customer";
+      const apiEndpoint = customerId ? "update-customer" : "add-customer";
 
       const response = await Customerapi.post(apiEndpoint, {
-        customerUuid: customerUuid,
+        customerId: customerId,
         prefixes: prefixes,
         first_name: firstName,
         last_name: lastName,
@@ -906,7 +906,7 @@ const Customerstepone = forwardRef((props, ref) => {
       }
 
       setIsLoadingEffect(false);
-      return { success: true, uuid: data?.uuid, project_id: selectedProjectId };
+      return { success: true, id: data?.id, project_id: selectedProjectId };
     } catch (error) {
       console.error("Add customer error:", error);
       let finalresponse;

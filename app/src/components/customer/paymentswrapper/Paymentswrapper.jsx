@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+﻿import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Funnel, PrinterIcon } from "lucide-react";
 import { toast } from "react-toastify";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
 import { Button, Pagination, Select } from "@nayeshdaggula/tailify";
-import { IconCirclePlus, IconDownload, IconEdit, IconEye, IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconCirclePlus, IconDownload, IconEdit, IconEye, IconSearch, IconTrash, IconSettings } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import Flatapi from "../../api/Flatapi";
 import Paymentapi from "../../api/Paymentapi";
@@ -19,7 +19,7 @@ import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 import { Link, NavLink } from "react-router";
 
-function Paymentswrapper({ customerUuid }) {
+function Paymentswrapper({ customerId }) {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const employeeId = employeeInfo?.id || null;
     const access_token = useEmployeeDetails((state) => state.access_token)
@@ -49,7 +49,7 @@ function Paymentswrapper({ customerUuid }) {
             page: newPage,
             limit: newLimit,
             searchQuery: newSearchQuery,
-            customerUuid: customerUuid,
+            customerId: customerId,
             flat_id: flat
         }
 
@@ -151,9 +151,9 @@ function Paymentswrapper({ customerUuid }) {
 
     const [EditDrawer, setEditDrawer] = useState(false);
     const [paymentUuid, setPaymentUuid] = useState(null);
-    const openEditDrawer = (uuid) => {
+    const openEditDrawer = (id) => {
         setEditDrawer(true);
-        setPaymentUuid(uuid);
+        setPaymentUuid(id);
     };
 
     const closeEditDrawer = () => {
@@ -162,9 +162,9 @@ function Paymentswrapper({ customerUuid }) {
 
     const [viewDrawer, setViewDrawer] = useState(false);
     const [singlePaymentUuid, setSinglePaymentUuid] = useState(null);
-    const openViewDrawer = (uuid) => {
+    const openViewDrawer = (id) => {
         setViewDrawer(true);
-        setSinglePaymentUuid(uuid);
+        setSinglePaymentUuid(id);
     };
 
     const closeViewDrawer = () => {
@@ -185,7 +185,7 @@ function Paymentswrapper({ customerUuid }) {
             const params = {
                 searchQuery: newSearchQuery,
                 exportAll: 'true',
-                customerUuid: customerUuid,
+                customerId: customerId,
                 flat_id: flat
             };
 
@@ -294,7 +294,7 @@ function Paymentswrapper({ customerUuid }) {
     async function fetchFlats(customeruid) {
         await Flatapi.get("/getcustomerflats", {
             params: {
-                customer_uid: customeruid,
+                id: customeruid,
             },
             headers: {
                 "Content-Type": "application/json",
@@ -333,10 +333,10 @@ function Paymentswrapper({ customerUuid }) {
     }
 
     useEffect(() => {
-        if (customerUuid) {
-            fetchFlats(customerUuid)
+        if (customerId) {
+            fetchFlats(customerId)
         }
-    }, [customerUuid])
+    }, [customerId])
 
     const clearFilters = () => {
         setSearchQuery('');
@@ -350,7 +350,7 @@ function Paymentswrapper({ customerUuid }) {
     const handlePrint = async (newSearchQuery, flatid) => {
         const params = {
             searchQuery: newSearchQuery,
-            customerUuid: customerUuid,
+            customerId: customerId,
             flat_id: flatid
         }
 
@@ -669,7 +669,7 @@ function Paymentswrapper({ customerUuid }) {
                                     onClick={() => setShowColumnToggle(!showColumnToggle)}
                                     className="cursor-pointer flex items-center gap-1 px-2 py-2 h-9 text-sm border border-[#ebecef] rounded-sm bg-white hover:bg-gray-50"
                                 >
-                                    ⚙️ Columns
+                  <IconSettings size={16} className="mr-1" /> Columns
                                 </button>
 
                                 {showColumnToggle && (
@@ -770,14 +770,14 @@ function Paymentswrapper({ customerUuid }) {
                                         <tr key={index} className="hover:bg-neutral-50 transition-colors duration-150 align-top group">
                                             {/* {visibleColumns.reference && (
                                                 <td className="px-4 py-4 whitespace-normal break-words w-[140px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border-r border-neutral-200">
-                                                    <NavLink to={`/singlepaymentview/${payment.uuid}`}>
-                                                        <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">{payment?.uuid}</p>
+                                                    <NavLink to={`/singlepaymentview/${payment.id}`}>
+                                                        <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">{payment?.id}</p>
                                                     </NavLink>
                                                 </td>
                                             )} */}
                                             {visibleColumns.transactionId && (
                                                 <td className="px-4 py-4 whitespace-normal break-words w-[160px]">
-                                                    <NavLink to={`/singlepaymentview/${payment.uuid}`}>
+                                                    <NavLink to={`/singlepaymentview/${payment.id}`}>
                                                         <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
                                                             {payment?.transaction_id}
                                                         </p>
@@ -787,7 +787,7 @@ function Paymentswrapper({ customerUuid }) {
                                             {visibleColumns.flat && (
                                                 <td className="px-4 py-4 whitespace-normal break-words w-[120px]">
                                                     <p className="text-neutral-600 text-xs font-medium leading-[18px]">
-                                                        <NavLink to={`/flats/view-flat/${payment?.flat_uuid}`} className="hover:text-[#0083bf]">
+                                                        <NavLink to={`/flats/view-flat/${payment?.flat_id}`} className="hover:text-[#0083bf]">
                                                             {payment?.flat_number || "----"}
                                                         </NavLink>
                                                     </p>
@@ -853,7 +853,7 @@ function Paymentswrapper({ customerUuid }) {
                                                 <div className="flex flex-row items-center justify-center gap-2">
                                                     {permissions?.payments_page?.includes("view_single_payment") && (
                                                         <Link
-                                                            to={`/singlepaymentview/${payment?.uuid}`}
+                                                            to={`/singlepaymentview/${payment?.id}`}
                                                             className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600"
                                                         >
                                                             <IconEye size={18} />
@@ -863,7 +863,7 @@ function Paymentswrapper({ customerUuid }) {
                                                         <div
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                openEditDrawer(payment?.uuid);
+                                                                openEditDrawer(payment?.id);
                                                             }}
                                                             className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600 cursor-pointer"
                                                         >
@@ -938,7 +938,7 @@ function Paymentswrapper({ customerUuid }) {
                 {addnewmodal && (
                     <Addpaymentincustomer
                         closeAddnewmodal={closeAddnewmodal}
-                        customerUuid={customerUuid}
+                        customerId={customerId}
                         refreshAllPayments={refreshAllPayments}
                     />
                 )}
@@ -957,7 +957,7 @@ function Paymentswrapper({ customerUuid }) {
                     <Editpaymentincustomer
                         closeEditDrawer={closeEditDrawer}
                         paymentUuid={paymentUuid}
-                        customerUuid={customerUuid}
+                        customerId={customerId}
                         refreshAllPayments={refreshAllPayments}
                     />
                 )}
@@ -976,7 +976,7 @@ function Paymentswrapper({ customerUuid }) {
                     <Viewsinglepaymentincustomer
                         closeViewDrawer={closeViewDrawer}
                         paymentUuid={singlePaymentUuid}
-                        customerUuid={customerUuid}
+                        customerId={customerId}
                     />
                 )}
             </Drawer>

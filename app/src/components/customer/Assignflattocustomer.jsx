@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IconX } from "@tabler/icons-react";
 
-function Assignflattocustomer({ closeAssignFlatToCustomer, customerUuid, refreshFlats, projectId }) {
+function Assignflattocustomer({ closeAssignFlatToCustomer, customerId, refreshFlats, projectId }) {
 
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const permissions = useEmployeeDetails((state) => state.permissions);
@@ -743,10 +743,10 @@ function Assignflattocustomer({ closeAssignFlatToCustomer, customerUuid, refresh
                 return `${year}-${month}-${day}`;
             };
 
-            const apiEndpoint = customerUuid && "add-customer-flat";
+            const apiEndpoint = customerId && "add-customer-flat";
 
             const response = await Customerapi.post(apiEndpoint, {
-                customerUuid: customerUuid,
+                customerId: customerId,
                 flat_id: selectedFlat?.value,
                 applicationdate: formatDateOnly(applicationDate),
                 saleable_area_sq_ft: Number(saleableAreaSqFt),

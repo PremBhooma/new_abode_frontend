@@ -57,12 +57,12 @@ function Uploadprofile({
       <p className="text-[#000] text-[16px] font-semibold 3xl:text-[22px]">
         Upload Profile Picture
       </p>
-      <IconX
+      {/* <IconX
         size={20}
         color="#be185d"
         className="cursor-pointer absolute top-2 right-0"
         onClick={closeUploadFileModal}
-      />
+      /> */}
       <UploadFile
         label="Upload Profile Picture"
         onFileChange={(file) => {

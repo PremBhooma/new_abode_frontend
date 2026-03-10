@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import Flatapi from "../api/Flatapi";
 import Settingsapi from "../api/Settingsapi";
 import Customerapi from "../api/Customerapi";
 import Errorpanel from "../shared/Errorpanel";
-import noImageStaticImage from "../../../public/assets/no_image.png"
+import noImageStaticImage from "@/assets/no_image.png";
 import { toast } from "react-toastify";
 import { Loadingoverlay } from "@nayeshdaggula/tailify";
 import CustomDateFilter from "../shared/CustomDateFilter";
@@ -122,15 +122,15 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                 const fetchCustomer = async () => {
                     try {
                         const response = await Customerapi.get("get-single-customer-data", {
-                            params: { customerUuid: prefilledData.customerUid },
+                            params: { customerId: prefilledData.customerUid },
                         });
                         if (response?.data?.status === "success" && response?.data?.data) {
                             const custData = response.data.data;
                             const customerObj = {
                                 ...custData,
                                 label: `${custData.first_name} ${custData.last_name} - ${custData.phone_number}`,
-                                value: custData.uuid || custData.customer_uid || prefilledData.customerUid || custData.id,
-                                uuid: custData.uuid || custData.customer_uid || prefilledData.customerUid,
+                                value: custData.id || custData.id || prefilledData.customerUid || custData.id,
+                                id: custData.id || custData.id || prefilledData.customerUid,
                             };
                             handleSelectCustomer(customerObj);
                         }
@@ -710,7 +710,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
 
 
 
-    // 2️⃣ Recalculate dependent states whenever totalCostofUnit changes
+    // 2ï¸âƒ£ Recalculate dependent states whenever totalCostofUnit changes
     useEffect(() => {
         if (totalCostofUnit) {
             const gstValue = (totalCostofUnit * (parseFloat(projectRates.gst_percentage) / 100 || 0.05)).toFixed(2);
@@ -878,7 +878,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
 
         try {
 
-            const customerIdToUse = selectedCustomer?.uuid || selectedCustomer?.value || selectedCustomer?.customer_uid;
+            const customerIdToUse = selectedCustomer?.id || selectedCustomer?.value || selectedCustomer?.id;
 
             if (!customerIdToUse) {
                 console.error("Selected Customer missing UUID/Value:", selectedCustomer);
@@ -900,7 +900,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
             const apiEndpoint = "add-customer-flat";
 
             const response = await Customerapi.post(apiEndpoint, {
-                customerUuid: customerIdToUse,
+                customerId: customerIdToUse,
                 flat_id: selectedFlat?.value,
                 applicationdate: formatDateOnly(applicationDate),
                 saleable_area_sq_ft: Number(saleableAreaSqFt),
@@ -948,8 +948,8 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
             toast.success("Flat assigned to customer successfully");
             refreshGetAllFlats();
 
-            if (prefilledData && selectedFlat?.uuid) {
-                navigate(`/payments/addnew?flat=${selectedFlat.uuid}`);
+            if (prefilledData && selectedFlat?.id) {
+                navigate(`/payments/addnew?flat=${selectedFlat.id}`);
             } else {
                 closeFlatToCustomer();
             }

@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import Customerapi from "../../api/Customerapi";
 import Errorpanel from "../../shared/Errorpanel";
-import noImageStaticImage from "../../../../public/assets/imageplaceholder.png";
+import noImageStaticImage from "@/assets/imageplaceholder.png";
 import dayjs from "dayjs";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
 import Overviewtab from "./Overviewtab";
 
-function Flatinfo({ customerUuid, refreshTrigger }) {
+function Flatinfo({ customerId, refreshTrigger }) {
     const [errorMessage, setErrorMessage] = useState("");
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
     const permissions = useEmployeeDetails((state) => state.permissions);
@@ -15,8 +15,8 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
     const [customerFlatsData, setCustomerFlatsData] = useState({});
     const [paymentSummary, setPaymentSummary] = useState({});
 
-    async function getCustomerFlatsData(customerUuid) {
-        if (customerUuid === null) {
+    async function getCustomerFlatsData(customerId) {
+        if (customerId === null) {
             setErrorMessage({
                 message: "Customer ID is missing",
                 server_res: null,
@@ -28,7 +28,7 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
         setIsLoadingEffect(true);
         await Customerapi.get("get-customers-flats", {
             params: {
-                customer_uuid: customerUuid,
+                customerId: customerId,
             },
             headers: {
                 "Content-Type": "application/json",
@@ -78,8 +78,8 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
 
     useEffect(() => {
         setIsLoadingEffect(true);
-        if (customerUuid) getCustomerFlatsData(customerUuid);
-    }, [customerUuid, refreshTrigger]);
+        if (customerId) getCustomerFlatsData(customerId);
+    }, [customerId, refreshTrigger]);
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat("en-IN", {
@@ -129,7 +129,7 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
                                 {/* Header */}
                                 <div className="flex justify-between items-center">
                                     {permissions?.flats_page?.includes("view_flat") ? (
-                                        <Link to={`/flats/view-flat/${flats?.uuid}`}>
+                                        <Link to={`/flats/view-flat/${flats?.id}`}>
                                             <h2 className="text-base font-semibold text-gray-800 hover:text-[#0083bf]">
                                                 <span className="text-indigo-600">{flats?.project_name}</span> - Flat No: {flats?.flat_no || "-"}
                                             </h2>
@@ -145,7 +145,7 @@ function Flatinfo({ customerUuid, refreshTrigger }) {
                                 {/* Flat image + details */}
                                 <div className="flex flex-col md:flex-row gap-4">
                                     {permissions?.flats_page?.includes("view_flat") ? (
-                                        <Link to={`/flats/view-flat/${flats?.uuid}`} className="md:w-1/4">
+                                        <Link to={`/flats/view-flat/${flats?.id}`} className="md:w-1/4">
                                             <img
                                                 crossOrigin="anonymous"
                                                 src={flats?.flat_img_url || noImageStaticImage}

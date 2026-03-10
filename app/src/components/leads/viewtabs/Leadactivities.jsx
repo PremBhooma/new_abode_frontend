@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Text } from "@nayeshdaggula/tailify";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
 import { format, formatDistanceToNow, differenceInDays, parseISO } from "date-fns";
 import Leadapi from "../../api/Leadapi.jsx";
-import profileStatic from "../../../../public/assets/customer_static_image.jpg";
+import profileStatic from "@/assets/customer_static_image.jpg";
 
-const Leadactivities = ({ leadUuid, refreshTrigger }) => {
+const Leadactivities = ({ currentLeadId, refreshTrigger }) => {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const access_token = useEmployeeDetails((state) => state.access_token);
-    const employee_uuid = employeeInfo?.uuid || null;
+    const employeeId = employeeInfo?.id || null;
 
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -36,8 +36,8 @@ const Leadactivities = ({ leadUuid, refreshTrigger }) => {
         try {
             const response = await Leadapi.get(`get-lead-activies`, {
                 params: {
-                    employee_uuid: employee_uuid,
-                    lead_uuid: leadUuid,
+                    employeeId: employeeId,
+                    currentLeadId: currentLeadId,
                     limit: limit,
                     offset: currentOffset,
                 },
@@ -77,7 +77,7 @@ const Leadactivities = ({ leadUuid, refreshTrigger }) => {
 
     useEffect(() => {
         getLeadActivities();
-    }, [leadUuid, refreshTrigger]);
+    }, [currentLeadId, refreshTrigger]);
 
     //     useEffect(() => {
     //     fetchActivities();

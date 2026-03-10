@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+﻿import React, { useCallback, useEffect, useState } from "react";
 import Toolbarwrapper from "./parts/Toolbarwrapper";
 import Errorpanel from "../../shared/Errorpanel";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
@@ -15,7 +15,7 @@ function Leadsdocumentswrapper() {
 
   const access_token = useEmployeeDetails((state) => state.access_token);
   const params = useParams();
-  const lead_uuid = params.lead_uuid;
+  const leadId = params.leadId;
 
   const [isLoadingEffect, setIsLoadingEffect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -24,8 +24,8 @@ function Leadsdocumentswrapper() {
   const [currentFolderUuid, setCurrentFolderUuid] = useState(null);
   const [currentFolderId, setCurrentFolderId] = useState(null);
   const [currentFolderParentId, setCurrentFolderParentId] = useState(null);
-  const folderselect = (uuid, folder_id) => {
-    setCurrentFolderUuid(uuid);
+  const folderselect = (folderUuid, folder_id) => {
+    setCurrentFolderUuid(folderUuid);
     if (folder_id) {
       setIsLoadingEffect(true);
       fetchfoldersdetails(folder_id);
@@ -58,7 +58,7 @@ function Leadsdocumentswrapper() {
       params: {
         currentFolderId: currentFolderId,
         currentFolderParentId: currentFolderParentId,
-        lead_uuid: lead_uuid,
+        leadId: leadId,
       },
       headers: {
         "Content-Type": "application/json",
@@ -121,7 +121,7 @@ function Leadsdocumentswrapper() {
     await Leaddocumentsapi.post(
       "/deletefolder",
       {
-        lead_uuid: lead_uuid,
+        leadId: leadId,
         folder_id: folderId,
       },
       {
@@ -185,7 +185,7 @@ function Leadsdocumentswrapper() {
     await Leaddocumentsapi.post(
       "/deletefile",
       {
-        lead_uuid: lead_uuid,
+        leadId: leadId,
         file_id: fileId,
         employee_id: employeeId
       },
@@ -252,7 +252,7 @@ function Leadsdocumentswrapper() {
         currentFolderUuid={currentFolderUuid}
         currentFolderId={currentFolderId}
         folderPath={folderPath}
-        lead_uuid={lead_uuid}
+        leadId={leadId}
       />
       <SearchAndPath
         folderPath={folderPath}

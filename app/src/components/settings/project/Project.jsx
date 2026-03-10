@@ -83,11 +83,11 @@ const Project = () => {
             });
     }
 
-    const handleDeleteProject = async (uuid) => {
+    const handleDeleteProject = async (id) => {
         if (!window.confirm("Are you sure you want to delete this project?")) return;
 
         setIsLoading(true);
-        Projectapi.post("delete-project", { uuid })
+        Projectapi.post("delete-project", { id})
             .then((response) => {
                 const data = response.data;
                 if (data.status === "success") {
@@ -155,7 +155,7 @@ const Project = () => {
                             ) : (
                                 projectList.length > 0 ? (
                                     projectList.map((project, index) => (
-                                        <TableRow key={project.uuid} className="hover:bg-neutral-50">
+                                        <TableRow key={project.id} className="hover:bg-neutral-50">
                                             <TableCell className="font-medium border border-neutral-200 px-3 py-2">{index + 1}</TableCell>
                                             <TableCell className="border border-neutral-200 px-3 py-2 text-nowrap">{project.project_name}</TableCell>
                                             {/* <TableCell>{project.project_address || "-"}</TableCell> */}
@@ -198,7 +198,7 @@ const Project = () => {
                                                     )}
                                                     {permissions?.settings_page?.includes("delete_project") && (
                                                         <div
-                                                            onClick={() => handleDeleteProject(project.uuid)}
+                                                            onClick={() => handleDeleteProject(project.id)}
                                                             className="p-1 hover:bg-red-50 rounded-md transition-colors text-neutral-500 hover:text-red-600 cursor-pointer"
                                                         >
                                                             <IconTrash size={18} />

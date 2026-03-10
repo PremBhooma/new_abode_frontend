@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react'
+﻿import React, { use, useEffect, useState } from 'react'
 import Errorpanel from '../../components/shared/Errorpanel';
 import { toast } from 'react-toastify';
 import { Button, Card, Group, Loadingoverlay, Select, Text } from '@nayeshdaggula/tailify';
@@ -6,7 +6,7 @@ import Generalapi from '../api/Generalapi';
 import Leadapi from '../api/Leadapi'
 import { useEmployeeDetails } from '../zustand/useEmployeeDetails';
 
-function AssignleadModal({ closeAsignLead, leadUuid, refreshLeadDetails }) {
+function AssignleadModal({ closeAsignLead, currentLeadId, refreshLeadDetails }) {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo)
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -27,7 +27,7 @@ function AssignleadModal({ closeAsignLead, leadUuid, refreshLeadDetails }) {
         }
 
         Leadapi.post('assignleadtoemployee', {
-            leadUuid: leadUuid,
+            leadId: currentLeadId,
             assignEmployee: assignEmployee,
             employee_id: employeeInfo.id,
         })
@@ -71,8 +71,8 @@ function AssignleadModal({ closeAsignLead, leadUuid, refreshLeadDetails }) {
     const [allEmployees, setAllEmployees] = useState([])
     const fetchAllEmployees = async () => {
         setIsLoadingEffect(true);
-        await Leadapi.get('/getallsubordinates',{
-            params:{
+        await Leadapi.get('/getallsubordinates', {
+            params: {
                 employee_id: employeeInfo.id || null,
             }
         })

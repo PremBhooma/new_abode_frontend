@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { Button, Card, Group, Loadingoverlay, Select, Text } from '@nayeshdaggula/tailify';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 
-function Updateleadstage({ closeUpdateLeadStageModal, refreshLead, leadStageValue, leadId, onUpdateLeadStage }) {
+function Updateleadstage({ closeUpdateLeadStageModal, refreshLead, leadStageValue, currentLeadId, onUpdateLeadStage }) {
 
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const employeeId = employeeInfo?.id || null;
@@ -73,7 +73,7 @@ function Updateleadstage({ closeUpdateLeadStageModal, refreshLead, leadStageValu
         }
 
         Leadapi.post('edit-lead-stage', {
-            leadId: leadId,
+            leadId: currentLeadId,
             leadStageId: updateLeadStage,
             employeeId: employeeId,
         })

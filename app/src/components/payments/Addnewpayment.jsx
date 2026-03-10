@@ -1,10 +1,10 @@
-
+﻿
 import React, { useEffect, useState } from 'react';
 import dayjs from "dayjs";
 import Flatapi from '../api/Flatapi';
 import Paymentapi from '../api/Paymentapi';
 import Errorpanel from '@/components/shared/Errorpanel.jsx';
-import noImageStaticImage from "../../../public/assets/no_image.png";
+import noImageStaticImage from "@/assets/no_image.png";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { IconArrowLeft } from '@tabler/icons-react';
@@ -32,7 +32,7 @@ function formatCurrency(amount) {
 function Addnewpayment() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const flatUuidParam = searchParams.get('flat');
+    const flatidParam = searchParams.get('flat');
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const employeeId = employeeInfo?.id || null;
 
@@ -213,28 +213,28 @@ function Addnewpayment() {
     };
 
     useEffect(() => {
-        if (!searchQuery && !flatUuidParam) {
+        if (!searchQuery && !flatidParam) {
             setSelectedFlat(null);
             setResults([]);
             setShowDropdown(false);
         }
-    }, [searchQuery, flatUuidParam]);
+    }, [searchQuery, flatidParam]);
 
     // Handle flat param from URL
     useEffect(() => {
-        if (flatUuidParam) {
+        if (flatidParam) {
             setSearchType('flatNo'); // Visual only, we bypass search
             setLoadingDetails(true);
 
             // First, resolve UUID to ID if it looks like a string UUID
             // Or maybe just try to get flat details by UUID first
-            Flatapi.get(`/get-flat/${flatUuidParam}`)
-                .then(uuidRes => {
-                    if (uuidRes.data?.status === 'success') {
-                        const realFlatId = uuidRes.data.flat.id;
-                        const realFlatNo = uuidRes.data.flat.flat_no;
-                        const customerDetails = uuidRes.data.getCustomerFlat?.customer;
-                        const projectId = uuidRes.data.flat.project_id;
+            Flatapi.get(`/get-flat/${flatidParam}`)
+                .then(idRes => {
+                    if (idRes.data?.status === 'success') {
+                        const realFlatId = idRes.data.flat.id;
+                        const realFlatNo = idRes.data.flat.flat_no;
+                        const customerDetails = idRes.data.getCustomerFlat?.customer;
+                        const projectId = idRes.data.flat.project_id;
 
 
                         console.log("customerDetails", customerDetails);
@@ -268,7 +268,7 @@ function Addnewpayment() {
                 })
                 .finally(() => setLoadingDetails(false));
         }
-    }, [flatUuidParam]);
+    }, [flatidParam]);
 
     async function getFlatsData(query) {
         try {
@@ -445,7 +445,7 @@ function Addnewpayment() {
                                         checked={searchType === 'flatNo'}
                                         onChange={handleSearchTypeChange}
                                         className="form-radio text-[#0083bf] focus:ring-[#0083bf]"
-                                        disabled={!!flatUuidParam}
+                                        disabled={!!flatidParam}
                                     />
                                     <span className="text-sm font-medium text-gray-600">Search by Flat No</span>
                                 </label>
@@ -456,7 +456,7 @@ function Addnewpayment() {
                                         checked={searchType === 'customer'}
                                         onChange={handleSearchTypeChange}
                                         className="form-radio text-[#0083bf] focus:ring-[#0083bf]"
-                                        disabled={!!flatUuidParam}
+                                        disabled={!!flatidParam}
                                     />
                                     <span className="text-sm font-medium text-gray-600">Search by Customer</span>
                                 </label>
@@ -472,7 +472,7 @@ function Addnewpayment() {
                                     value={searchQuery}
                                     onChange={updateSearchQuery}
                                     className="w-full border border-[#ced4da] px-3 py-2 rounded-md outline-none placeholder:text-[14px] placeholder:text-black/50 text-[14px] text-black/60"
-                                    readOnly={!!flatUuidParam}
+                                    readOnly={!!flatidParam}
                                 />
                                 {showDropdown && (
                                     <div className="absolute top-full left-0 w-full z-10 mt-1">

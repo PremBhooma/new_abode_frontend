@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 function Editflat() {
   const navigate = useNavigate();
-  const { uuid } = useParams();
+  const { id } = useParams();
 
   const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
   const employee_id = employeeInfo?.id || null;
@@ -230,10 +230,10 @@ function Editflat() {
   const [isLoadingEffect, setIsLoadingEffect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchFlat = async (uuid) => {
+  const fetchFlat = async (id) => {
     setIsLoadingEffect(true);
 
-    Flatapi.get(`get-flat/${uuid}`, {
+    Flatapi.get(`get-flat/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -377,7 +377,7 @@ function Editflat() {
           console.error("Error fetching projects:", data.message);
         } else {
           const projectOptions = (data.data || []).map(p => ({
-            value: p.uuid,
+            value: String(p.id),
             label: p.project_name
           }));
           setProjects(projectOptions);
@@ -468,8 +468,8 @@ function Editflat() {
 
     const formData = {
       employee_id: employee_id,
-      project_uuid: selectedProject,
-      uuid: uuid,
+      project_id: selectedProject,
+      id: id,
       flatNo: flatNo,
       block: block,
       floorNo: FloorNo,
@@ -534,17 +534,17 @@ function Editflat() {
   };
 
   useEffect(() => {
-    fetchFlat(uuid);
+    fetchFlat(id);
     fetchblocks();
     fetchGroupOwners();
     fetchProjects();
-  }, [uuid]);
+  }, [id]);
 
   useEffect(() => {
     if (targetProjectId && rawProjects.length > 0) {
       const matchedProject = rawProjects.find(p => String(p.id) === String(targetProjectId));
       if (matchedProject) {
-        setSelectedProject(matchedProject.uuid);
+        setSelectedProject(String(matchedProject.id));
       }
     }
   }, [targetProjectId, rawProjects]);
@@ -566,13 +566,13 @@ function Editflat() {
             <div className="grid grid-cols-3 gap-3">
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-gray-600 mb-1">Project <span className="text-red-500">*</span></label>
-                <Select value={selectedProject || undefined} onValueChange={handleProjectChange}>
+                <Select value={selectedProject ? String(selectedProject) : undefined} onValueChange={handleProjectChange}>
                   <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!selectedProject ? 'text-gray-400' : ''} ${selectedProjectError ? 'border-red-500' : 'border-gray-300'}`}>
                     <SelectValue placeholder="Select Project" />
                   </SelectTrigger>
                   <SelectContent className="border border-gray-200 max-h-[200px]">
                     {projects.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                      <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -592,7 +592,7 @@ function Editflat() {
 
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-gray-600 mb-1">Floor No <span className="text-red-500">*</span></label>
-                <Select value={String(FloorNo) || undefined} onValueChange={updateFloorNo}>
+                <Select value={FloorNo ? String(FloorNo) : undefined} onValueChange={updateFloorNo}>
                   <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!FloorNo ? 'text-gray-400' : ''} ${FloorNoError ? 'border-red-500' : 'border-gray-300'}`}>
                     <SelectValue placeholder="Select Floor No" />
                   </SelectTrigger>
@@ -601,7 +601,7 @@ function Editflat() {
                       value: String(i + 1),
                       label: ` ${i + 1}`,
                     })).map((item) => (
-                      <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                      <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -610,13 +610,13 @@ function Editflat() {
 
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-gray-600 mb-1">Block <span className="text-red-500">*</span></label>
-                <Select value={String(block) || undefined} onValueChange={updateBlock}>
+                <Select value={block ? String(block) : undefined} onValueChange={updateBlock}>
                   <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!block ? 'text-gray-400' : ''} ${blockError ? 'border-red-500' : 'border-gray-300'}`}>
                     <SelectValue placeholder="Select Block" />
                   </SelectTrigger>
                   <SelectContent className="border border-gray-200 max-h-[200px]">
                     {blocks.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                      <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -740,7 +740,7 @@ function Editflat() {
                 {cornerError && <p className="text-xs text-red-500">{cornerError}</p>}
               </div>
 
-              {rawProjects.find(p => p.uuid === selectedProject)?.project_rewards && (
+              {rawProjects.find(p => p.id === selectedProject)?.project_rewards && (
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-gray-600 mb-1">Flat Reward</label>
                   <Select value={flatReward !== undefined ? String(flatReward) : undefined} onValueChange={updateFlatReward}>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+﻿import React, { useState, useRef, useEffect } from 'react'
 import { UploadCloud, FileText, CheckCircle, X, Download, Eye, Loader2 } from 'lucide-react'
 import { toast } from "react-toastify";
 import Customerapi from '../../api/Customerapi';
@@ -61,7 +61,7 @@ const Costsheet = ({ customerFlatDetails, flatDetails, fetchFlat }) => {
 
         const formData = new FormData();
         formData.append("flat_id", flatDetails?.id);
-        formData.append("flat_uuid", flatDetails?.uuid);
+        formData.append("id", flatDetails?.id);
         formData.append("customer_flat_id", customerFlatDetails?.id);
         formData.append("employee_id", employeeId);
         formData.append("uploadfile", file);
@@ -80,7 +80,7 @@ const Costsheet = ({ customerFlatDetails, flatDetails, fetchFlat }) => {
                 toast.success("Cost Sheet uploaded successfully!");
                 setFile(null);
                 setShowUploadControl(false);
-                if (fetchFlat) fetchFlat(flatDetails?.uuid); // Refresh parent data
+                if (fetchFlat) fetchFlat(flatDetails?.id); // Refresh parent data
             }
         } catch (error) {
             console.error("Upload Error:", error);

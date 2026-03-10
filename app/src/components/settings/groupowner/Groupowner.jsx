@@ -201,7 +201,7 @@ const Groupowner = () => {
                                                 <tr key={index} className="hover:bg-neutral-50 transition-colors duration-150 align-top group">
                                                     <td className="px-4 py-4 whitespace-normal break-words w-[120px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border-r border-neutral-200">
                                                         <p className="text-neutral-600 text-xs font-medium leading-[18px]">
-                                                            {ele.uuid}
+                                                            {ele.id}
                                                         </p>
                                                     </td>
                                                     <td className="px-4 py-4 whitespace-normal break-words w-[180px]">

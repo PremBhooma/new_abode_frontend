@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+﻿import React, { useCallback, useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import EditEmployee from "./EditEmployee";
 import AddnewEmployee from "./AddnewEmployee";
@@ -10,7 +10,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
 import { Modal, Pagination, Select } from "@nayeshdaggula/tailify";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { IconEdit, IconEye, IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconEye, IconSearch, IconTrash, IconSettings } from "@tabler/icons-react";
 import Projectapi from "../../api/Projectapi";
 import AssignProject from "../../shared/AssignProject";
 import { useProjectDetails } from "../../zustand/useProjectDetails";
@@ -64,7 +64,7 @@ function Employeewrapper() {
   }, [hasFetched, projectData]);
 
   const [visibleColumns, setVisibleColumns] = useState({
-    reference: true,
+    // reference: true,
     name: true,
     email: true,
     phone: true,
@@ -299,7 +299,7 @@ function Employeewrapper() {
                   onClick={() => setShowColumnToggle(!showColumnToggle)}
                   className="cursor-pointer flex items-center gap-1 px-2 py-2 text-sm border border-[#ebecef] rounded-sm bg-white hover:bg-gray-50"
                 >
-                  ⚙️ Columns
+                  <IconSettings size={16} className="mr-1" /> Columns
                 </button>
 
                 {showColumnToggle && (
@@ -330,14 +330,14 @@ function Employeewrapper() {
               <table className="w-full table-fixed text-left border-collapse">
                 <thead className="bg-gray-50 border-b border-neutral-200">
                   <tr className="w-full">
-                    {visibleColumns.reference && (
+                    {/* {visibleColumns.reference && (
                       <th
                         scope="col"
                         className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] w-[150px] sticky left-0 z-20 bg-gray-50 border border-neutral-200"
                       >
                         Ref ID
                       </th>
-                    )}
+                    )} */}
                     {visibleColumns.name && (
                       <th
                         scope="col"
@@ -405,15 +405,15 @@ function Employeewrapper() {
                           key={index}
                           className="hover:bg-neutral-50 transition-colors duration-150 align-center group border-b border-neutral-200"
                         >
-                          {visibleColumns.reference && (
+                          {/* {visibleColumns.reference && (
                             <td className="px-3 py-2 whitespace-normal break-words w-[150px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border border-neutral-200">
                               <NavLink to={`/single-employee-view/${user.id}`}>
                                 <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
-                                  {user?.uuid}
+                                  {user?.id}
                                 </p>
                               </NavLink>
                             </td>
-                          )}
+                          )} */}
                           {visibleColumns.name && (
                             <td className="px-3 py-2 whitespace-normal break-words w-[160px] border border-neutral-200">
                               <p className="text-neutral-900 text-xs font-semibold leading-[18px]">

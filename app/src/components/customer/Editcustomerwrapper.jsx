@@ -17,7 +17,7 @@ function Editcustomerwrapper() {
   const navigate = useNavigate();
 
   const params = useParams();
-  const customerUuid = params?.single_customer_id;
+  const customerId = params?.single_customer_id;
 
   const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
   const employeeId = employeeInfo?.id || null;
@@ -592,8 +592,8 @@ function Editcustomerwrapper() {
     }
   }
 
-  async function getSingleCustomerData(customerUuid) {
-    if (customerUuid === null) {
+  async function getSingleCustomerData(customerId) {
+    if (customerId === null) {
       setErrorMessage({
         message: "Customer ID is missing wowo",
         server_res: null,
@@ -605,7 +605,7 @@ function Editcustomerwrapper() {
     setIsLoadingEffect(true);
     await Customerapi.get("get-single-customer-data", {
       params: {
-        customerUuid: customerUuid,
+        customerId: customerId,
       },
       headers: {
         "Content-Type": "application/json",
@@ -840,7 +840,7 @@ function Editcustomerwrapper() {
     };
 
     Customerapi.post("update-customer", {
-      customerUuid: customerUuid,
+      customerId: customerId,
       prefixes: prefixes,
       first_name: firstName,
       last_name: lastName,
@@ -938,8 +938,8 @@ function Editcustomerwrapper() {
 
   useEffect(() => {
     setIsLoadingEffect(true);
-    if (customerUuid) getSingleCustomerData(customerUuid);
-  }, [customerUuid]);
+    if (customerId) getSingleCustomerData(customerId);
+  }, [customerId]);
 
   const [openAddressCorrespondence, setOpenAddressCorrespondence] = useState(false);
   const [openAddressPremanent, setOpenAddressPremanent] = useState(false);

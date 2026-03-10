@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import Settingsapi from "../api/Settingsapi";
 import Projectapi from "../api/Projectapi";
 import Generalapi from "@/components/api/Generalapi";
@@ -30,7 +30,7 @@ function Editleadwrapper() {
   const navigate = useNavigate();
 
   const params = useParams();
-  const leadUuid = params?.single_lead_id;
+  const leadId = params?.single_lead_id;
 
   const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
   const employeeId = employeeInfo?.id || null;
@@ -714,8 +714,8 @@ function Editleadwrapper() {
     }
   }
 
-  async function getSingleLeadData(leadUuid) {
-    if (leadUuid === null) {
+  async function getSingleLeadData(leadId) {
+    if (leadId === null) {
       setErrorMessage({
         message: "Customer ID is missing wowo",
         server_res: null,
@@ -727,7 +727,7 @@ function Editleadwrapper() {
     setIsLoadingEffect(true);
     await Leadapi.get("get-single-lead", {
       params: {
-        leadUuid: leadUuid,
+        leadId: leadId,
       },
       headers: {
         "Content-Type": "application/json",
@@ -947,7 +947,7 @@ function Editleadwrapper() {
     // }
 
     const payload = new FormData();
-    payload.append("leadUuid", leadUuid);
+    payload.append("leadId", leadId);
     payload.append("prefixes", prefixes);
     payload.append("full_name", fullName);
     payload.append("email", email && email.trim() !== "" ? email : "");
@@ -1058,8 +1058,8 @@ function Editleadwrapper() {
 
   useEffect(() => {
     setIsLoadingEffect(true);
-    if (leadUuid) getSingleLeadData(leadUuid);
-  }, [leadUuid]);
+    if (leadId) getSingleLeadData(leadId);
+  }, [leadId]);
 
   return (
     <div className="flex flex-col gap-3 w-full">

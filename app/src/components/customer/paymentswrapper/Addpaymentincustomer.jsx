@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Textinput, Loadingoverlay, Select, Textarea, Fileinput, Button } from '@nayeshdaggula/tailify';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-function Addpaymentincustomer({ closeAddnewmodal, customerUuid, refreshAllPayments }) {
+function Addpaymentincustomer({ closeAddnewmodal, customerId, refreshAllPayments }) {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const employeeId = employeeInfo?.id || null;
     const [bankList, setBankList] = useState([]);
@@ -118,7 +118,7 @@ function Addpaymentincustomer({ closeAddnewmodal, customerUuid, refreshAllPaymen
             setIsLoadingEffect(true);
             const response = await Flatapi.get(`search-sold-flats-for-customer`, {
                 params: {
-                    customer_uuid: customerUuid
+                    customerId: customerId
                 },
                 headers: {
                     "Content-Type": "application/json",

@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Flatapi from "../../api/Flatapi";
 import Settingsapi from "../../api/Settingsapi";
 import Customerapi from "../../api/Customerapi";
 import Errorpanel from "../../shared/Errorpanel";
-import noImageStaticImage from "../../../../public/assets/no_image.png"
+import noImageStaticImage from "@/assets/no_image.png";
 import { toast } from "react-toastify";
 import { Loadingoverlay } from "@nayeshdaggula/tailify";
 import CustomDateFilter from "../../shared/CustomDateFilter";
@@ -638,7 +638,7 @@ function Assignflattocustomer({ closeFlatToCustomer, flatNo, block_id, refreshUs
     }, [discount, selectedFlat, saleableAreaSqFt, ratePerSqFt, floorRise, eastFacing, corner, amenities]);
 
 
-    // 2️⃣ Recalculate dependent states whenever totalCostofUnit changes
+    // 2ï¸âƒ£ Recalculate dependent states whenever totalCostofUnit changes
     useEffect(() => {
         if (totalCostofUnit) {
             const gstValue = (totalCostofUnit * (projectRates.gst_percentage / 100)).toFixed(2);
@@ -813,10 +813,10 @@ function Assignflattocustomer({ closeFlatToCustomer, flatNo, block_id, refreshUs
                 return `${year}-${month}-${day}`;
             };
 
-            const apiEndpoint = selectedCustomer?.uuid && "add-customer-flat";
+            const apiEndpoint = selectedCustomer?.id && "add-customer-flat";
 
             const response = await Customerapi.post(apiEndpoint, {
-                customerUuid: selectedCustomer?.uuid,
+                customerId: selectedCustomer?.id,
                 flat_id: selectedFlat?.value,
                 applicationdate: formatDateOnly(applicationDate),
                 saleable_area_sq_ft: Number(saleableAreaSqFt),

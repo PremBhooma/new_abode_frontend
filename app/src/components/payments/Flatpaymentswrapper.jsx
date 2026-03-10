@@ -308,7 +308,7 @@ function Flatpaymentswrapper() {
                                         payments.map((payment, index) => (
                                             <tr key={index} className="hover:bg-neutral-50/50 transition-colors duration-150 border-b border-neutral-200 last:border-0">
                                                 <td className="px-3 py-2 whitespace-normal break-words w-[180px] border-r border-neutral-200">
-                                                    <NavLink to={`/singlepaymentview/${payment.uuid}`}>
+                                                    <NavLink to={`/singlepaymentview/${payment.id}`}>
                                                         <p className="text-neutral-600 text-[11px] font-medium leading-[18px] hover:text-[#0083bf]">
                                                             {payment?.trasnaction_id || "----"}
                                                         </p>
@@ -338,7 +338,7 @@ function Flatpaymentswrapper() {
                                                     <div className="flex flex-row items-center justify-center gap-2">
                                                         {permissions?.payments_page?.includes("view_payment") && (
                                                             <Link
-                                                                to={`/singlepaymentview/${payment.uuid}`}
+                                                                to={`/singlepaymentview/${payment.id}`}
                                                                 className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600"
                                                             >
                                                                 <IconEye size={18} />
@@ -347,7 +347,7 @@ function Flatpaymentswrapper() {
 
                                                         {permissions?.payments_page?.includes("edit_payment") && (
                                                             <Link
-                                                                to={`/payments/edit/${payment.uuid}`}
+                                                                to={`/payments/edit/${payment.id}`}
                                                                 className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600"
                                                             >
                                                                 <IconEdit size={18} />

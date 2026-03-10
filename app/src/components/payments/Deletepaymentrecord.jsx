@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import Paymentapi from '../api/Paymentapi';
 import { IconX } from '@tabler/icons-react';
 import { Button, Loadingoverlay } from '@nayeshdaggula/tailify';
@@ -11,13 +11,13 @@ const Deletepaymentrecord = ({ deleteRowData, closeDeletePaymentRecord, refreshA
         e.preventDefault();
         setIsLoadingEffect(true);
 
-        if (!deleteRowData?.uuid) {
+        if (!deleteRowData?.id) {
             setIsLoadingEffect(false);
             setPaymentError('Payment record not found. Try refreshing the page.');
             return false;
         }
 
-        Paymentapi.post('delete-parsed-payment-record', { uuid: deleteRowData?.uuid })
+        Paymentapi.post('delete-parsed-payment-record', {  id: deleteRowData?.id })
             .then((res) => {
                 let data = res.data;
                 if (data.status === 'error') {

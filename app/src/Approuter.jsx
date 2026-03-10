@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 import { Route, Routes, Navigate, useParams } from 'react-router-dom'
 import Login from './pages/login/Login'
 import Customer from './pages/customer/Customer'
@@ -84,17 +84,17 @@ function Approuter() {
       {/* Customer Module */}
       <Route path="/customers" element={<ProtectedRoute element={<Customer />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
       <Route path="/customers/addnew" element={<ProtectedRoute element={<Addcustomer />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
-      <Route path="/customers/:customer_uuid" element={<ProtectedRoute element={<Customerview />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
+      <Route path="/customers/:customerId" element={<ProtectedRoute element={<Customerview />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
       <Route path="/customers/onboarding" element={<ProtectedRoute element={<Onboarding />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
       <Route path="/customers/editcustomer/:single_customer_id" element={<ProtectedRoute element={<Editcustomer />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
       <Route path="/assign-flat" element={<ProtectedRoute element={<Flattocustomer />} requiredPermission={(p) => p?.main_page?.includes("customers_page")} />} />
-      <Route path="/assign-flat/:customer_uuid" element={<ProtectedRoute element={<Assignflattolead />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
+      <Route path="/assign-flat/:customerId" element={<ProtectedRoute element={<Assignflattolead />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
 
       {/* Flats Module */}
       <Route path="/flats" element={<ProtectedRoute element={<Flats />} requiredPermission={(p) => p?.main_page?.includes("flats_page")} />} />
       <Route path="/flats/add-flat" element={<ProtectedRoute element={<Addflatpage />} requiredPermission={(p) => p?.main_page?.includes("flats_page")} />} />
-      <Route path="/flats/edit-flat/:uuid" element={<ProtectedRoute element={<Editflatpage />} requiredPermission={(p) => p?.main_page?.includes("flats_page")} />} />
-      <Route path="/flats/view-flat/:uuid" element={<ProtectedRoute element={<Viewflatpage />} requiredPermission={(p) => p?.main_page?.includes("flats_page")} />} />
+      <Route path="/flats/edit-flat/:id" element={<ProtectedRoute element={<Editflatpage />} requiredPermission={(p) => p?.main_page?.includes("flats_page")} />} />
+      <Route path="/flats/view-flat/:id" element={<ProtectedRoute element={<Viewflatpage />} requiredPermission={(p) => p?.main_page?.includes("flats_page")} />} />
 
       {/* Payments Module */}
       <Route path="/payments" element={<ProtectedRoute element={<Allpaymentspage />} requiredPermission={(p) => p?.main_page?.includes("payments_page")} />} />
@@ -108,8 +108,8 @@ function Approuter() {
       <Route path="/leads" element={<ProtectedRoute element={<Lead />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
       <Route path="/lead/add-lead" element={<ProtectedRoute element={<Addlead />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
       <Route path="/lead/edit-lead/:single_lead_id" element={<ProtectedRoute element={<Editlead />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
-      <Route path="/lead/:lead_uuid" element={<ProtectedRoute element={<Viewlead />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
-      <Route path="/lead/convert-lead-to-customer/:lead_uuid" element={<ProtectedRoute element={<Convertleadtocustomer />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
+      <Route path="/lead/:leadId" element={<ProtectedRoute element={<Viewlead />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
+      <Route path="/lead/convert-lead-to-customer/:leadId" element={<ProtectedRoute element={<Convertleadtocustomer />} requiredPermission={(p) => p?.main_page?.includes("leads_page")} />} />
 
       {/* Settings Module */}
       <Route path="/settings" element={<ProtectedRoute element={<Setting />} requiredPermission={(p) => p?.main_page?.includes("settings_page")} />} />

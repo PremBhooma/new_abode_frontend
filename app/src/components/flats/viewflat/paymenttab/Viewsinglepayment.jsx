@@ -1,9 +1,9 @@
-import react, { useEffect, useState } from "react";
+﻿import react, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Paymentapi from "../../../api/Paymentapi";
 import Errorpanel from "../../../shared/Errorpanel";
-import photo from '../../../../../public/assets/photo.png'
-import pdficon from '../../../../../public/assets/pdficon.png'
+import photo from "@/assets/photo.png";
+import pdficon from "@/assets/pdficon.png";
 import { Loadingoverlay } from "@nayeshdaggula/tailify";
 
 const getFileInfo = (url) => {
@@ -111,7 +111,7 @@ function Viewsinglepayment({ flatPaymentUUID, closeViewFlatPayment }) {
                     <div className="space-y-6 text-sm">
                         <div className="flex">
                             <span className="basis-[20%] text-gray-600">Payment Ref Id</span>
-                            <span className="basis-[80%] font-semibold text-gray-900">{paymentDetails?.uuid}</span>
+                            <span className="basis-[80%] font-semibold text-gray-900">{paymentDetails?.id}</span>
                         </div>
                         <div className="flex">
                             <span className="basis-[20%] text-gray-600">Transaction Id</span>

@@ -1,4 +1,4 @@
-import { Button, Textarea } from '@nayeshdaggula/tailify';
+﻿import { Button, Textarea } from '@nayeshdaggula/tailify';
 import { IconSend } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
@@ -22,7 +22,7 @@ function Customernotestab() {
     const user_id = employeeInfo?.id || null;
     const permissions = useEmployeeDetails((state) => state.permissions);
     const params = useParams();
-    const customer_uuid = params?.customer_uuid;
+    const customerId = params?.customerId;
     const employeeId = employeeInfo?.id || null;
 
     const updateNote = (e) => {
@@ -45,7 +45,7 @@ function Customernotestab() {
                 {
                     user_id,
                     note: noteMessage,
-                    customer_uuid, // Changed from flat_uuid
+                    customerId, // Changed from flat_id
                     employeeId : employeeId
                 },
                 {

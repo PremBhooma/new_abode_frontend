@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react'
+﻿import React, { use, useEffect, useState } from 'react'
 import Errorpanel from '../../components/shared/Errorpanel';
 import { toast } from 'react-toastify';
 import { Button, Card, Group, Loadingoverlay, Select, Text } from '@nayeshdaggula/tailify';
@@ -6,7 +6,7 @@ import Generalapi from '../api/Generalapi';
 import Leadapi from '../api/Leadapi'
 import { useEmployeeDetails } from '../zustand/useEmployeeDetails';
 
-function TransferleadModal({ closeTransferLead, leadUuid, refreshLeadDetails, leadData }) {
+function TransferleadModal({ closeTransferLead, currentLeadId, refreshLeadDetails, leadData }) {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo)
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -27,7 +27,7 @@ function TransferleadModal({ closeTransferLead, leadUuid, refreshLeadDetails, le
         }
 
         Leadapi.post('transferleadtoemployee', {
-            leadUuid: leadUuid,
+            leadId: currentLeadId,
             assignEmployee: assignEmployee,
             employee_id: employeeInfo.id,
         })

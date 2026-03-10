@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+﻿import React, { useEffect, useState } from 'react'
 import Groupownerapi from '../../api/Groupownerapi.jsx';
 import Errorpanel from '../../shared/Errorpanel.jsx';
 import { toast } from 'react-toastify';
@@ -32,7 +32,7 @@ function Updategroupowner({ closeUpdateGroupOwnerModal, refreshGroupOwner, singl
         Groupownerapi.post('update-group-owner', {
             group_owner: groupOwnerName,
             isDefault: isDefault,
-            uuid: singleGroupOwnerData?.uuid,
+            id: singleGroupOwnerData?.id,
         })
             .then((response) => {
                 let data = response.data;

@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { IconDownload, IconEye, IconPrinter, IconSearch } from "@tabler/icons-react";
 import Flatapi from "../api/Flatapi";
 import Projectapi from "../api/Projectapi";
-import { Funnel } from "lucide-react";
+import { Funnel, FilterX } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import Downloadtemplate from "./Downloadtemplate";
 import Uploadpaymentexcel from "./Uploadpaymentexcel";
@@ -453,11 +453,7 @@ function Allpaymentswrapper() {
                         </div>
 
                         <div className="flex items-center gap-2">
-                            {isFilterApplied && (
-                                <div onClick={clearFilters} className={`flex items-center gap-2 cursor-pointer px-2 !py-[7px] !rounded-md !border !border-[#ebecef] ${isFilterApplied ? '!bg-red-400 !text-white hover:!bg-red-500' : '!bg-white hover:!bg-gray-50'} !font-normal !text-[14px] !text-[#6b7178]`}>
-                                    <Funnel className="!w-4 !h-4" /> <p>Clear Filters</p>
-                                </div>
-                            )}
+
 
                             <div className='w-[150px]'>
                                 <Select key={filterKey} value={selectedBlock || undefined} onValueChange={handleBlockChange}>
@@ -501,6 +497,11 @@ function Allpaymentswrapper() {
                                     </SelectContent>
                                 </Select>
                             </div>
+                            {isFilterApplied && (
+                                <div onClick={clearFilters} className={`cursor-pointer transition-colors ${isFilterApplied ? '!text-[#ea2b2b] ' : '!text-[#6b7178] '}`}>
+                                    <FilterX className="!w-5 !h-5" />
+                                </div>
+                            )}
                         </div>
                     </div>
                     {/* Table Section  */}

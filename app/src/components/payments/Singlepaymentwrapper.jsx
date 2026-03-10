@@ -1,9 +1,9 @@
-import react, { useEffect, useState } from "react";
+﻿import react, { useEffect, useState } from "react";
 import { Link, NavLink, useParams } from 'react-router-dom';
 import Paymentapi from "../api/Paymentapi";
 import dayjs from "dayjs";
-import pdficon from '../../../public/assets/pdficon.png'
-import photo from '../../../public/assets/photo.png'
+import pdficon from "@/assets/pdficon.png";
+import photo from "@/assets/photo.png";
 import { IconArrowLeft } from "@tabler/icons-react";
 import Errorpanel from "../shared/Errorpanel";
 import { Loadingoverlay } from "@nayeshdaggula/tailify";
@@ -118,7 +118,7 @@ function Singlepaymentwrapper() {
                     <div className="space-y-6 text-sm">
                         <div className="flex">
                             <span className="basis-[20%] text-gray-600">Payment Ref Id</span>
-                            <span className="basis-[80%] font-semibold text-gray-900">{paymentDetails?.uuid}</span>
+                            <span className="basis-[80%] font-semibold text-gray-900">{paymentDetails?.id}</span>
                         </div>
                         <div className="flex">
                             <span className="basis-[20%] text-gray-600">Transaction Id</span>
@@ -128,7 +128,7 @@ function Singlepaymentwrapper() {
                             <span className="basis-[20%] text-gray-600">Flat Number</span>
                             <span className="basis-[80%] font-semibold text-gray-900">
                                 {permissions?.flats_page?.includes("view_flat") ? (
-                                    <NavLink to={`/flats/view-flat/${paymentDetails?.flat?.uuid}`}>
+                                    <NavLink to={`/flats/view-flat/${paymentDetails?.flat?.id}`}>
                                         {paymentDetails?.flat?.flat_no || '---'}
                                     </NavLink>
                                 ) : (
@@ -140,7 +140,7 @@ function Singlepaymentwrapper() {
                             <span className="basis-[20%] text-gray-600">Customer Name</span>
                             <span className="basis-[80%] font-semibold text-gray-900 capitalize">
                                 {permissions?.customers_page?.includes("view_single_customer") ? (
-                                    <NavLink to={`/customers/${paymentDetails?.customer?.uuid}`}>
+                                    <NavLink to={`/customers/${paymentDetails?.customer?.id}`}>
                                         {paymentDetails?.customer?.prefixes || ''} {paymentDetails?.customer?.first_name || '---'} {paymentDetails?.customer?.last_name}
                                     </NavLink>
                                 ) : (

@@ -2,7 +2,7 @@
 // import Flatapi from "../../api/Flatapi";
 
 // function Bookingstages({
-//   flat_uuid,
+//   flat_id,
   
 // }) {
 
@@ -36,13 +36,13 @@
 //   const [flatStages, setFlatStages] = useState([]);
 
 //   // Fetch flat booking stages from API
-//   const fetchFlatStages = async (flat_uuid) => {
+//   const fetchFlatStages = async (flat_id) => {
 //     setIsLoading(true);
 //     setErrorMessage(null);
 
 //     try {
 //       const response = await Flatapi.get("get-flat-stages", {
-//         params: { flat_uuid },
+//         params: { flat_id },
 //         headers: { "Content-Type": "application/json" },
 //       });
 
@@ -74,8 +74,8 @@
 //   };
 
 //   useEffect(() => {
-//     if (flat_uuid) fetchFlatStages(flat_uuid);
-//   }, [flat_uuid]);
+//     if (flat_id) fetchFlatStages(flat_id);
+//   }, [flat_id]);
 
 //   // Get the current active stage index based on API response
 //   const getCurrentStageIndex = () => {
@@ -355,7 +355,7 @@ import React, { useEffect, useId, useState } from "react";
 import Flatapi from "../../api/Flatapi";
 
 function Bookingstages({
-  flat_uuid,
+  flat_id,
 }) {
   const stages = ["Booking", "Agreement", "Loan Process", "Hand over"]
   const durationsDays = [30, 60, 30] // Days for each stage transition
@@ -387,13 +387,13 @@ function Bookingstages({
   const [flatStages, setFlatStages] = useState([]);
 
   // Fetch flat booking stages from API
-  const fetchFlatStages = async (flat_uuid) => {
+  const fetchFlatStages = async (flat_id) => {
     setIsLoading(true);
     setErrorMessage(null);
 
     try {
       const response = await Flatapi.get("get-flat-stages", {
-        params: { flat_uuid },
+        params: { flat_id },
         headers: { "Content-Type": "application/json" },
       });
 
@@ -425,8 +425,8 @@ function Bookingstages({
   };
 
   useEffect(() => {
-    if (flat_uuid) fetchFlatStages(flat_uuid);
-  }, [flat_uuid]);
+    if (flat_id) fetchFlatStages(flat_id);
+  }, [flat_id]);
 
   // Get the current active stage index based on API response
   const getCurrentStageIndex = () => {
@@ -733,7 +733,7 @@ export default Bookingstages;
 // import React, { useEffect, useId, useState } from "react";
 
 // function Bookingstages({
-//   flat_uuid,
+//   flat_id,
 //   stages = ["Booking", "Agreement", "Loan Process", "Hand over"],
 //   durationsDays = [30, 60, 30], // Days for each stage transition
 //   inactiveColor = "#d1d5db",
@@ -822,11 +822,11 @@ export default Bookingstages;
 
 //   useEffect(() => {
 //     if (testMode) {
-//       // Auto-fetch with scenario based on flat_uuid or use custom mock
-//       const scenario = mockStages.length > 0 ? 'custom' : (flat_uuid || 'scenario1');
+//       // Auto-fetch with scenario based on flat_id or use custom mock
+//       const scenario = mockStages.length > 0 ? 'custom' : (flat_id || 'scenario1');
 //       fetchFlatStages(scenario);
 //     }
-//   }, [flat_uuid, testMode, mockStages]);
+//   }, [flat_id, testMode, mockStages]);
 
 //   // Get the current active stage index based on API response
 //   const getCurrentStageIndex = () => {

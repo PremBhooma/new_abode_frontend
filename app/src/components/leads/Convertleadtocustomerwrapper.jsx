@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import Generalapi from "../api/Generalapi.jsx";
 import Leadapi from "../api/Leadapi.jsx";
 import Settingsapi from "../api/Settingsapi.jsx";
@@ -16,7 +16,7 @@ function Convertleadtocustomerwrapper() {
     const navigate = useNavigate();
 
     const params = useParams();
-    const leadUuid = params?.lead_uuid;
+    const leadId = params?.leadId;
 
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const employeeId = employeeInfo?.id || null;
@@ -561,8 +561,8 @@ function Convertleadtocustomerwrapper() {
         }
     }
 
-    async function getSingleCustomerData(leadUuid) {
-        if (leadUuid === null) {
+    async function getSingleCustomerData(leadId) {
+        if (leadId === null) {
             setErrorMessage({
                 message: "Lead ID is missing wowo",
                 server_res: null,
@@ -574,7 +574,7 @@ function Convertleadtocustomerwrapper() {
         setIsLoadingEffect(true);
         await Leadapi.get("get-single-lead", {
             params: {
-                leadUuid: leadUuid,
+                leadId: leadId,
             },
             headers: {
                 "Content-Type": "application/json",
@@ -765,7 +765,7 @@ function Convertleadtocustomerwrapper() {
         };
 
         Leadapi.post("convert-lead-to-customer", {
-            leadUuid: leadUuid,
+            leadId: leadId,
             prefixes: prefixes,
             first_name: firstName,
             last_name: lastName,
@@ -829,7 +829,7 @@ function Convertleadtocustomerwrapper() {
                     return false;
                 }
                 toast.success("Convert lead to customer successfully");
-                navigate("/assign-flat/" + data.customerUuid);
+                navigate("/assign-flat/" + data.customerId);
 
                 setIsLoadingEffect(false);
                 return false;
@@ -861,8 +861,8 @@ function Convertleadtocustomerwrapper() {
 
     useEffect(() => {
         setIsLoadingEffect(true);
-        if (leadUuid) getSingleCustomerData(leadUuid);
-    }, [leadUuid]);
+        if (leadId) getSingleCustomerData(leadId);
+    }, [leadId]);
 
     return (
         <div className="flex flex-col gap-3 w-full">

@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-function Customertolead({ closeConvertModal, customerUuid, customerName, refreshCustomerList, open }) {
+function Customertolead({ closeConvertModal, customerId, customerName, refreshCustomerList, open }) {
     const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -23,7 +23,7 @@ function Customertolead({ closeConvertModal, customerUuid, customerName, refresh
         setIsLoadingEffect(true);
 
         Customerapi.post('convert-customer-to-lead', {
-            customerUuid: customerUuid,
+            customerId: customerId,
             employee_id: employeeInfo.id,
         })
             .then((response) => {

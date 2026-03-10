@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+﻿import React, { useCallback, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import ExcelJS from "exceljs";
 import Customerapi from "../api/Customerapi";
@@ -30,6 +30,7 @@ import {
   IconTrash,
   IconPlus,
   IconUserPlus,
+  IconSettings
 } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import { useColumnStore } from "../zustand/useColumnStore";
@@ -135,11 +136,11 @@ function Customerwrapper() {
   const closeDeleteModal = () => setDeleteModal(false);
 
   const [convertModal, setConvertModal] = useState(false);
-  const [selectedCustomerUuid, setSelectedCustomerUuid] = useState(null);
+  const [selectedcustomerId, setSelectedcustomerId] = useState(null);
   const [selectedCustomerName, setSelectedCustomerName] = useState("");
 
-  const openConvertModal = (uuid, name) => {
-    setSelectedCustomerUuid(uuid);
+  const openConvertModal = (customerId, name) => {
+    setSelectedcustomerId(customerId);
     setSelectedCustomerName(name);
     setConvertModal(true);
   };
@@ -491,7 +492,7 @@ function Customerwrapper() {
                   onClick={() => setShowColumnToggle(!showColumnToggle)}
                   className="cursor-pointer flex items-center gap-1 px-2 py-2 text-sm border border-[#ebecef] rounded-sm bg-white hover:bg-gray-50"
                 >
-                  ⚙️ Columns
+                  <IconSettings size={16} className="mr-1" /> Columns
                 </button>
 
                 {showColumnToggle && (
@@ -612,10 +613,10 @@ function Customerwrapper() {
                         {visibleColumns.reference && (
                           <td className="px-3 py-2 whitespace-normal break-words w-[140px] sticky left-0 z-10 bg-white group-hover:bg-neutral-50 border-r border-neutral-200">
                             <NavLink
-                              to={`/customers/${customer?.customer_uid}`}
+                              to={`/customers/${customer?.id}`}
                             >
                               <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
-                                {customer?.customer_uid}
+                                {customer?.id}
                               </p>
                             </NavLink>
                           </td>
@@ -666,10 +667,10 @@ function Customerwrapper() {
                                 <div className="flex flex-row flex-wrap gap-x-2 gap-y-2">
                                   {customer.flat_details.map(
                                     (flat, flatIndex) => (
-                                      <div key={flat.uuid || flatIndex} className="group/flat relative inline-block">
+                                      <div key={flat.id || flatIndex} className="group/flat relative inline-block">
                                         {pageCustomerCount < 5 ? (
                                           permissions?.flats_page?.includes("view_flat") ? (
-                                            <Link to={`/flats/view-flat/${flat?.uuid}`}>
+                                            <Link to={`/flats/view-flat/${flat?.id}`}>
                                               <p
                                                 className={`text-neutral-600 text-xs font-medium leading-[18px] capitalize break-words whitespace-normal cursor-pointer pr-2 hover:text-[#0083bf] ${customer.flat_details.length > 1 && flatIndex !== customer.flat_details.length - 1
                                                   ? "border-r border-neutral-300"
@@ -755,7 +756,7 @@ function Customerwrapper() {
                                                 <div className="w-full">
                                                   {permissions?.flats_page?.includes("view_flat") && (
                                                     <Link
-                                                      to={`/flats/view-flat/${flat?.uuid}`}
+                                                      to={`/flats/view-flat/${flat?.id}`}
                                                       className="cursor-pointer text-xs text-[#0083bf] hover:text-white flex justify-center items-center relative px-4 py-1 rounded border border-[#0083bf] hover:bg-[#0083bf]"
                                                     >
                                                       View Flat
@@ -773,7 +774,7 @@ function Customerwrapper() {
                               ) : (
                                 permissions?.flats_page?.includes("add_flat") && (
                                   <Link
-                                    to={`/assign-flat?customer=${customer.uuid || customer.customer_uid}`}
+                                    to={`/assign-flat?customer=${customer.id || customer.id}`}
                                     className="flex items-center gap-1 text-[10px] text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-2 py-1 rounded w-fit mt-1"
                                   >
                                     <IconPlus size={12} />
@@ -856,7 +857,7 @@ function Customerwrapper() {
                           <div className="flex flex-row items-center justify-center gap-2">
                             {permissions?.customers_page?.includes("view_single_customer") && (
                               <Link
-                                to={`/customers/${customer?.customer_uid}`}
+                                to={`/customers/${customer?.id}`}
                                 className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600"
                               >
                                 <IconEye size={18} />
@@ -864,7 +865,7 @@ function Customerwrapper() {
                             )}
                             {permissions?.customers_page?.includes("edit_customer") && (
                               <Link
-                                to={`/customers/editcustomer/${customer.customer_uid}`}
+                                to={`/customers/editcustomer/${customer.id}`}
                                 className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600"
                               >
                                 <IconEdit size={18} />
@@ -880,7 +881,7 @@ function Customerwrapper() {
                             )}
                             {customer?.flat_details?.length === 0 && (
                               <div
-                                onClick={() => openConvertModal(customer?.customer_uid, `${customer?.first_name} ${customer?.last_name}`)}
+                                onClick={() => openConvertModal(customer?.id, `${customer?.first_name} ${customer?.last_name}`)}
                                 className="p-1 hover:bg-orange-50 rounded-md transition-colors text-neutral-500 hover:text-orange-600 cursor-pointer"
                                 title="Convert to Lead"
                               >
@@ -1045,7 +1046,7 @@ function Customerwrapper() {
         <Customertolead
           open={convertModal}
           closeConvertModal={closeConvertModal}
-          customerUuid={selectedCustomerUuid}
+          customerId={selectedcustomerId}
           customerName={selectedCustomerName}
           refreshCustomerList={refreshCustomerData}
         />

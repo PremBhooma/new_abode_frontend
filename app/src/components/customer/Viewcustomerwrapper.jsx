@@ -1,7 +1,7 @@
-import react, { useEffect, useState } from "react";
+﻿import react, { useEffect, useState } from "react";
 import Otherinfo from "./tabswrapper/Otherinfo";
 import Customerapi from "../api/Customerapi";
-import profileStatic from "../../../public/assets/customer_static_image.jpg";
+import profileStatic from "@/assets/customer_static_image.jpg";
 import Errorpanel from "../shared/Errorpanel";
 import { IconArrowLeft, IconEdit } from "@tabler/icons-react";
 import { Link, useParams, useNavigate, NavLink } from "react-router-dom";
@@ -20,7 +20,7 @@ import 'react-modern-drawer/dist/index.css'
 
 function Viewcustomerwrapper() {
   const params = useParams();
-  const customerUuid = params?.customer_uuid;
+  const customerId = params?.customerId;
 
   const permissions = useEmployeeDetails((state) => state.permissions);
   const [errorMessage, setErrorMessage] = useState("");
@@ -37,8 +37,8 @@ function Viewcustomerwrapper() {
 
   const [customerData, setCustomerData] = useState({});
   const [totalCustomerFlat, setTotalCustomerFlat] = useState(0);
-  async function getSingleCustomerData(customerUuid) {
-    if (customerUuid === null) {
+  async function getSingleCustomerData(customerId) {
+    if (customerId === null) {
       setErrorMessage({
         message: "Customer ID is missing wowo",
         server_res: null,
@@ -50,7 +50,7 @@ function Viewcustomerwrapper() {
     setIsLoadingEffect(true);
     await Customerapi.get("get-single-customer-data", {
       params: {
-        customerUuid: customerUuid,
+        customerId: customerId,
       },
       headers: {
         "Content-Type": "application/json",
@@ -95,7 +95,7 @@ function Viewcustomerwrapper() {
   }
 
   const refreshUserDetails = () => {
-    getSingleCustomerData(customerUuid); // This will re-fetch the details including the new image
+    getSingleCustomerData(customerId); // This will re-fetch the details including the new image
   };
 
   const [assignFlatToCustomer, setAssignFlatToCustomer] = useState(false);
@@ -114,8 +114,8 @@ function Viewcustomerwrapper() {
 
   useEffect(() => {
     setIsLoadingEffect(true);
-    if (customerUuid) getSingleCustomerData(customerUuid);
-  }, [customerUuid]);
+    if (customerId) getSingleCustomerData(customerId);
+  }, [customerId]);
 
   console.log("customerData", customerData);
 
@@ -141,7 +141,7 @@ function Viewcustomerwrapper() {
             </div>
             {permissions?.customers_page?.includes("edit_customer") && (
               <Link
-                to={`/customers/editcustomer/${customerUuid}`}
+                to={`/customers/editcustomer/${customerId}`}
                 className="text-sm text-white px-4 py-2 border border-[#0083bf] !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90"
               >
                 Edit
@@ -298,7 +298,7 @@ function Viewcustomerwrapper() {
                     ) && (
                         <Flatinfo
                           customerData={customerData}
-                          customerUuid={customerUuid}
+                          customerId={customerId}
                           refreshTrigger={refreshKey}
                         />
                       )}
@@ -314,7 +314,7 @@ function Viewcustomerwrapper() {
                       (totalCustomerFlat === 0 ? (
                         <p>No Payments are availble for this customer.</p>
                       ) : (
-                        <Paymentswrapper customerUuid={customerUuid} />
+                        <Paymentswrapper customerId={customerId} />
                       ))}
                   </div>
                 )}
@@ -337,12 +337,12 @@ function Viewcustomerwrapper() {
                   <div className="text-center text-gray-500">
                     {/* {permissions?.customers_page?.includes("activity_single_customer") && (
                       // <p>Activity content goes here</p>
-                      // <Customeractivitiestab customerUuid={customerUuid}/>
+                      // <Customeractivitiestab customerId={customerId}/>
                       // <Customernotestab />
                       <h1>Rahul</h1>
 
                     )} */}
-                    <Customeractivitiestab customerUuid={customerUuid} />
+                    <Customeractivitiestab customerId={customerId} />
                   </div>
                 )}
               </div>
@@ -387,7 +387,7 @@ function Viewcustomerwrapper() {
         {assignFlatToCustomer && (
           <Assignflattocustomer
             closeAssignFlatToCustomer={closeAssignFlatToCustomer}
-            customerUuid={customerUuid}
+            customerId={customerId}
             projectId={customerData?.project_id}
             refreshFlats={refreshFlats}
           />

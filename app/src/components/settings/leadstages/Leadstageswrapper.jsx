@@ -262,7 +262,7 @@
 //                                     </thead>
 //                                     <tbody>
 //                                         {leadStages.map((stage) => (
-//                                             <tr key={stage.uuid} className="border-b">
+//                                             <tr key={stage.id} className="border-b">
 //                                                 {/* Editable Order */}
 //                                                 <td className="px-4 py-2">
 //                                                     <input
@@ -514,7 +514,7 @@ const Leadstageswrapper = () => {
                                         </tr>
                                     ) : (
                                         leadStages.map((stage) => (
-                                            <tr key={stage.uuid} className="border-b border-[#ebecef]">
+                                            <tr key={stage.id} className="border-b border-[#ebecef]">
                                                 <td className="px-4 py-2">
                                                     <input
                                                         type="number"

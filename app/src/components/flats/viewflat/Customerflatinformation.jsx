@@ -1,8 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { Link } from "react-router-dom"; // If Next.js, use next/link
 import dayjs from "dayjs";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
-import noImageStaticImage from "../../../../public/assets/no_image.png";
+import noImageStaticImage from "@/assets/no_image.png";
 
 function capitalize(str) {
   if (!str) return "";
@@ -72,7 +72,7 @@ function Customerflatinformation({ customerFlatDetails }) {
               if (permissions?.customers_page?.includes("view_single_customer")) {
                 content = (
                   <Link
-                    to={`/customers/${customer?.uuid}`}
+                    to={`/customers/${customer?.id}`}
                     className="text-blue-500 hover:underline"
                   >
                     {value}

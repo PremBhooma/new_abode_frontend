@@ -171,7 +171,7 @@ const Backup = () => {
                                         <tr key={index} className="border-b-[0.6px] border-b-[#ebecef] align-top">
                                             <td className="px-4 py-3 whitespace-normal break-words w-[120px] sticky left-0 z-10 bg-white border-r border-[#ebecef]">
                                                 <p className="text-[#4b5563] text-[13px] font-normal leading-[18px]">
-                                                    {ele.uuid}
+                                                    {ele.id}
                                                 </p>
                                             </td>
                                             <td className="px-4 py-3 whitespace-normal break-words w-[180px]">

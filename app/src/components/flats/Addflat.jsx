@@ -359,7 +359,7 @@ function Addflat() {
 
     const formData = {
       employee_id: employee_id,
-      project_uuid: selectedProject,
+      project_id: selectedProject,
       flatNo: flatNo,
       block: block,
       floorNo: FloorNo,
@@ -448,7 +448,7 @@ function Addflat() {
           console.error("Error fetching projects:", data.message);
         } else {
           const projectOptions = (data.data || []).map(p => ({
-            value: p.uuid,
+            value: String(p.id),
             label: p.project_name
           }));
           setProjects(projectOptions);
@@ -495,13 +495,13 @@ function Addflat() {
           <div className="grid grid-cols-3 gap-3">
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-600 mb-1">Project <span className="text-red-500">*</span></label>
-              <Select value={selectedProject || undefined} onValueChange={handleProjectChange}>
+              <Select value={selectedProject ? String(selectedProject) : undefined} onValueChange={handleProjectChange}>
                 <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!selectedProject ? 'text-gray-400' : ''} ${selectedProjectError ? 'border-red-500' : 'border-gray-300'}`}>
                   <SelectValue placeholder="Select Project" />
                 </SelectTrigger>
                 <SelectContent className="border border-gray-200 max-h-[200px]">
                   {projects.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                    <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -521,7 +521,7 @@ function Addflat() {
 
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-600 mb-1">Floor No <span className="text-red-500">*</span></label>
-              <Select value={FloorNo || undefined} onValueChange={updateFloorNo}>
+              <Select value={FloorNo ? String(FloorNo) : undefined} onValueChange={updateFloorNo}>
                 <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!FloorNo ? 'text-gray-400' : ''} ${FloorNoError ? 'border-red-500' : 'border-gray-300'}`}>
                   <SelectValue placeholder="Select Floor No" />
                 </SelectTrigger>
@@ -530,7 +530,7 @@ function Addflat() {
                     value: String(i + 1),
                     label: ` ${i + 1}`,
                   })).map((item) => (
-                    <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                    <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -539,13 +539,13 @@ function Addflat() {
 
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-600 mb-1">Block <span className="text-red-500">*</span></label>
-              <Select value={block || undefined} onValueChange={updateBlock}>
+              <Select value={block ? String(block) : undefined} onValueChange={updateBlock}>
                 <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!block ? 'text-gray-400' : ''} ${blockError ? 'border-red-500' : 'border-gray-300'}`}>
                   <SelectValue placeholder="Select Block" />
                 </SelectTrigger>
                 <SelectContent className="border border-gray-200 max-h-[200px]">
                   {blocks.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>
+                    <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -669,7 +669,7 @@ function Addflat() {
               {cornerError && <p className="text-xs text-red-500">{cornerError}</p>}
             </div>
 
-            {rawProjects.find(p => p.uuid === selectedProject)?.project_rewards && (
+            {rawProjects.find(p => p.id === selectedProject)?.project_rewards && (
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-gray-600 mb-1">Flat Reward</label>
                 <Select value={flatReward !== undefined ? String(flatReward) : undefined} onValueChange={(val) => updateFlatReward(val)}>

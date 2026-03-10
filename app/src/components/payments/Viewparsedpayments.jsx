@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CustomDateFilter from '../shared/CustomDateFilter';
-import noImageStaticImage from "../../../public/assets/no_image.png";
+import noImageStaticImage from "@/assets/no_image.png";
 
 
 function Viewparsedpayments() {

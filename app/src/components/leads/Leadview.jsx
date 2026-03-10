@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "../ui/dialog.jsx";
 import { Link, useParams, NavLink, useNavigate } from "react-router-dom";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails.jsx";
@@ -15,13 +15,13 @@ import Updateleadstage from "./leadstages/Updateleadstage.jsx";
 import CostSheetDrawer from "./costSheetDrawer.jsx";
 import Uploadleadprofile from "../shared/Uploadleadprofile.jsx";
 import Leadsdocumentswrapper from "./documents/Leadsdocumentswrapper.jsx";
-import profileStatic from "../../../public/assets/customer_static_image.jpg";
+import profileStatic from "@/assets/customer_static_image.jpg";
 import "react-modern-drawer/dist/index.css";
 
 function Leadview() {
   const params = useParams();
   const navigate = useNavigate();
-  const leadUuid = params?.lead_uuid;
+  const currentLeadId = params?.leadId;
 
   const permissions = useEmployeeDetails((state) => state.permissions);
   const [errorMessage, setErrorMessage] = useState("");
@@ -48,8 +48,8 @@ function Leadview() {
 
   const [leadData, setLeadData] = useState({});
 
-  async function getSingleLeadData(leadUuid) {
-    if (leadUuid === null) {
+  async function getSingleLeadData(id) {
+    if (id === null) {
       setErrorMessage({
         message: "Lead ID is missing",
         server_res: null,
@@ -61,7 +61,7 @@ function Leadview() {
     setIsLoadingEffect(true);
     await Leadapi.get("get-single-lead", {
       params: {
-        leadUuid: leadUuid,
+        currentLeadId: currentLeadId,
       },
       headers: {
         "Content-Type": "application/json",
@@ -109,13 +109,13 @@ function Leadview() {
   }
 
   const refreshLeadDetails = () => {
-    getSingleLeadData(leadUuid);
+    getSingleLeadData(currentLeadId);
   };
 
   useEffect(() => {
     setIsLoadingEffect(true);
-    if (leadUuid) getSingleLeadData(leadUuid);
-  }, [leadUuid]);
+    if (currentLeadId) getSingleLeadData(currentLeadId);
+  }, [currentLeadId]);
 
   const [assignLead, setAssignLead] = useState(false);
   const openAsignLead = () => {
@@ -134,15 +134,15 @@ function Leadview() {
   }
 
   const [leadStageValue, setLeadStageValue] = useState(null)
-  const [leadId, setLeadId] = useState(null)
+  const [selectedLeadId, setSelectedLeadId] = useState(null)
   const [updateLeadStageModal, setUpdateLeadStageModal] = useState(false);
   const closeUpdateLeadStageModal = () => {
     setUpdateLeadStageModal(false);
   };
-  const openUpdateLeadStageModal = (leadStageValue, leadId) => {
+  const openUpdateLeadStageModal = (leadStageValue, idToUpdate) => {
     setUpdateLeadStageModal(true);
     setLeadStageValue(leadStageValue)
-    setLeadId(leadId)
+    setSelectedLeadId(idToUpdate)
   };
 
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -193,12 +193,12 @@ function Leadview() {
               </div>
             )}
             {permissions?.leads_page?.includes("convert_lead_to_customer") && (
-              <Link to={`/lead/convert-lead-to-customer/${leadUuid}`} className="text-sm text-white px-3 py-2 border border-emerald-500 !rounded-sm !bg-emerald-500 hover:!bg-emerald-500/90 cursor-pointer">
+              <Link to={`/lead/convert-lead-to-customer/${currentLeadId}`} className="text-sm text-white px-3 py-2 border border-emerald-500 !rounded-sm !bg-emerald-500 hover:!bg-emerald-500/90 cursor-pointer">
                 Convert Lead to Customer
               </Link>
             )}
             {permissions?.leads_page?.includes("edit_lead") && (
-              <Link to={`/lead/edit-lead/${leadUuid}`} className="text-sm text-white px-3 py-2 border border-[#0083bf] !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">
+              <Link to={`/lead/edit-lead/${currentLeadId}`} className="text-sm text-white px-3 py-2 border border-[#0083bf] !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">
                 Edit
               </Link>
             )}
@@ -265,13 +265,13 @@ function Leadview() {
             )}
 
             {permissions?.leads_page?.includes("convert_lead_to_customer") && (
-              <Link to={`/lead/convert-lead-to-customer/${leadUuid}`} className="px-3 py-2 text-sm font-medium text-white bg-emerald-600 border border-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm cursor-pointer">
+              <Link to={`/lead/convert-lead-to-customer/${currentLeadId}`} className="px-3 py-2 text-sm font-medium text-white bg-emerald-600 border border-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm cursor-pointer">
                 Convert to Customer
               </Link>
             )}
 
             {permissions?.leads_page?.includes("edit_lead") && (
-              <Link to={`/lead/edit-lead/${leadUuid}`} className="px-3 py-2 text-sm font-medium text-white bg-[#0083bf] border border-[#0083bf] rounded-lg hover:bg-[#0072a6] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
+              <Link to={`/lead/edit-lead/${currentLeadId}`} className="px-3 py-2 text-sm font-medium text-white bg-[#0083bf] border border-[#0083bf] rounded-lg hover:bg-[#0072a6] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
                 <IconEdit size={16} />
                 Edit
               </Link>
@@ -396,7 +396,7 @@ function Leadview() {
 
                 {activeTab === "activity" && (
                   <div className="text-center text-gray-500">
-                    <Leadactivities leadUuid={leadUuid} refreshTrigger={refreshTrigger} />
+                    <Leadactivities currentLeadId={currentLeadId} refreshTrigger={refreshTrigger} />
                   </div>
                 )}
               </div>
@@ -424,7 +424,7 @@ function Leadview() {
           {assignLead && (
             <AssignleadModal
               closeAsignLead={closeAsignLead}
-              leadUuid={leadUuid}
+              currentLeadId={currentLeadId}
               refreshLeadDetails={refreshLeadDetails}
             />
           )}
@@ -436,7 +436,7 @@ function Leadview() {
           {transferLead && (
             <TransferleadModal
               closeTransferLead={closeTransferLead}
-              leadUuid={leadUuid}
+              currentLeadId={currentLeadId}
               refreshLeadDetails={refreshLeadDetails}
               leadData={leadData}
             />
@@ -450,7 +450,7 @@ function Leadview() {
             <Updateleadstage
               closeUpdateLeadStageModal={closeUpdateLeadStageModal}
               leadStageValue={leadStageValue}
-              leadId={leadId}
+              currentLeadId={selectedLeadId}
               refreshLead={refreshLeadDetails}
               onUpdateLeadStage={handleUpdateSuccess}
             />

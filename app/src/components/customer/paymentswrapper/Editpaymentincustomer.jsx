@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import Flatapi from "../../api/Flatapi";
 import Paymentapi from "../../api/Paymentapi";
 import Generalapi from "../../api/Generalapi";
 import ReactSelect from 'react-select';
 import Errorpanel from "../../shared/Errorpanel";
-import photo from "../../../../public/assets/photo.png";
-import pdficon from "../../../../public/assets/pdficon.png";
+import photo from "@/assets/photo.png";
+import pdficon from "@/assets/pdficon.png";
 import { IconX } from "@tabler/icons-react";
 import { toast, ToastContainer } from "react-toastify";
 import {
@@ -35,7 +35,7 @@ const getFileInfo = (url) => {
 function Editpaymentincustomer({
   closeEditDrawer,
   paymentUuid,
-  customerUuid,
+  customerId,
   refreshAllPayments,
 }) {
   const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
@@ -146,7 +146,7 @@ function Editpaymentincustomer({
       setIsLoadingEffect(true);
       const response = await Flatapi.get(`search-sold-flats-for-customer`, {
         params: {
-          customer_uuid: customerUuid,
+          customerId: customerId,
         },
         headers: { "Content-Type": "application/json" },
       });
@@ -217,7 +217,7 @@ function Editpaymentincustomer({
             balconies: payment.flat.balconies,
             parking: payment.flat.parking,
             furnished_status: payment.flat.furnished_status,
-            uuid: payment.flat.uuid,
+            id: payment.flat.id,
             customer: {
               id: payment.customer.id,
               first_name: payment.customer.first_name,
@@ -226,7 +226,7 @@ function Editpaymentincustomer({
               phone_code: payment.customer.phone_code,
               phone_number: payment.customer.phone_number,
               profile_pic_url: payment.customer.profile_pic_url,
-              uuid: payment.customer.uuid,
+              id: payment.customer.id,
             },
           });
         }

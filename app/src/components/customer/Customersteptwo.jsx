@@ -21,7 +21,7 @@ const Customersteptwo = forwardRef((props, ref) => {
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const customerUuid = searchParams.get("uuid")
+    const customerId = searchParams.get("id")
     const projectIdParam = searchParams.get("project_id")
 
     const [selectedFlat, setSelectedFlat] = useState(null);
@@ -762,10 +762,10 @@ const Customersteptwo = forwardRef((props, ref) => {
                 return `${year}-${month}-${day}`;
             };
 
-            const apiEndpoint = customerUuid && "add-customer-flat";
+            const apiEndpoint = customerId && "add-customer-flat";
 
             const response = await Customerapi.post(apiEndpoint, {
-                customerUuid: customerUuid,
+                customerId: customerId,
                 flat_id: selectedFlat?.value,
                 applicationdate: formatDateOnly(applicationDate),
                 saleable_area_sq_ft: Number(saleableAreaSqFt),

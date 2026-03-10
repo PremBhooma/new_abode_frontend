@@ -1,17 +1,17 @@
-'use client'
+﻿'use client'
 import React, { useState, useEffect } from 'react'
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 import { Text } from '@nayeshdaggula/tailify';
 import Flatapi from '../../api/Flatapi';
 import { format, formatDistanceToNow, differenceInDays, parseISO } from 'date-fns';
-import profileStatic from "../../../../public/assets/customer_static_image.jpg";
+import profileStatic from "@/assets/customer_static_image.jpg";
 import { NavLink } from 'react-router';
 
 function Updateactivities({ customerflat_id }) {
     const employeeInfo = useEmployeeDetails(state => state.employeeInfo);
     const access_token = useEmployeeDetails(state => state.access_token);
     const permissions = useEmployeeDetails(state => state.permissions);
-    const employee_uuid = employeeInfo?.uuid || null;
+    const employeeId = employeeInfo?.id || null;
 
     const [isLoadingEffect, setIsLoadingEffect] = useState(false);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -38,7 +38,7 @@ function Updateactivities({ customerflat_id }) {
         try {
             const response = await Flatapi.get(`updateactivities`, {
                 params: {
-                    employee_uuid: employee_uuid,
+                    employeeId: employeeId,
                     customerflat_id: customerflat_id,
                     limit: limit,
                     offset: currentOffset
@@ -140,11 +140,11 @@ function Updateactivities({ customerflat_id }) {
                                 <div className="flex flex-col justify-start relative gap-1">
                                     <p className="text-xs text-left text-[#2b2b2b] flex flex-col gap-2">
                                         {taskActivity?.message
-                                            ?.split("•")
+                                            ?.split("â€¢")
                                             .filter(Boolean) // remove empty strings
                                             .map((line, idx) => (
                                                 <p key={idx} className="flex items-center gap-2">
-                                                    • {line.trim()}
+                                                    â€¢ {line.trim()}
                                                 </p>
                                             ))}
                                     </p>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -11,7 +11,7 @@ function Customernotelists({ refreshKey }) {
     const user_id = employeeInfo?.id || null;
 
     const params = useParams();
-    const customer_uuid = params?.customer_uuid;
+    const customerId = params?.customerId;
 
     const [customerDetails, setCustomerDetails] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
@@ -22,7 +22,7 @@ function Customernotelists({ refreshKey }) {
         try {
             const response = await Customerapi.get('get-customer-notes', {
                 params: {
-                    customer_uuid: customer_uuid,
+                    customerId: customerId,
                     user_id,
                 },
                 headers: {

@@ -30,7 +30,7 @@ function UploadfileModal({
   const user_id = userInfo?.id;
   const access_token = useEmployeeDetails((state) => state.access_token);
   const params = useParams();
-  const flat_uid = params.uuid;
+  const flat_uid = params.id;
 
   const [isLoadingEffect, setIsLoadingEffect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");

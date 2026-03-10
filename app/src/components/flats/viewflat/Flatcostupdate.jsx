@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+﻿import { useEffect, useState, useRef } from "react";
 import dayjs from "dayjs";
 import Flatapi from "../../api/Flatapi";
 import Customerapi from "../../api/Customerapi";
 import Errorpanel from "../../shared/Errorpanel";
 import Updateactivities from "./Updateactivities";
-import noImageStaticImage from "../../../../public/assets/no_image.png"
+import noImageStaticImage from "@/assets/no_image.png";
 import { toast } from "react-toastify";
 import { Loadingoverlay } from "@nayeshdaggula/tailify";
 import CustomDateFilter from "../../shared/CustomDateFilter";
@@ -294,7 +294,7 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
 
 
 
-    // 1️⃣ Load API data ONLY - no calculations
+    // 1ï¸âƒ£ Load API data ONLY - no calculations
 
     const calculateAllValues = (
         newSaleableArea,
@@ -515,7 +515,7 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
 
     useEffect(() => {
         if (customerFlatDetails) {
-            setSelectedCustomer(customerFlatDetails?.customer?.uuid || null);
+            setSelectedCustomer(customerFlatDetails?.customer?.id || null);
             setSelectedFlat(customerFlatDetails?.flat_id || null);
             setApplicationDate(new Date(customerFlatDetails?.application_date) || '');
             setSaleableAreaSqFt(customerFlatDetails?.saleable_area_sq_ft || "");
@@ -712,7 +712,7 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
 
             const response = await Customerapi.post(apiEndpoint, {
                 customerFlatId: customerFlatDetails?.id,
-                customerUuid: selectedCustomer,
+                customerId: selectedCustomer,
                 flat_id: selectedFlat,
                 applicationdate: formatDateOnly(applicationDate),
                 saleable_area_sq_ft: Number(saleableAreaSqFt),

@@ -31,7 +31,7 @@ const Addnewlead = () => {
   const employeeId = employeeInfo?.id || null;
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const customerUuid = searchParams.get("uuid");
+  const customerId = searchParams.get("id");
 
   const [fullName, setFullName] = useState("");
   const [fullNameError, setFullNameError] = useState("");

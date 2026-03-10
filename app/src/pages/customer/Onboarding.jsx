@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+﻿import React, { useRef, useEffect, useState } from "react";
 import Navbar from "../../components/header/Navbar.jsx";
 import Customernavbar from "../../components/header/Customernavbar.jsx";
 import Customersteptwo from "../../components/customer/Customersteptwo.jsx";
@@ -14,14 +14,14 @@ function Onboarding() {
   const [currentStep, setCurrentStep] = useState(1);
 
   const customerStepOneRef = useRef();
-  const [customerUuid, setCustomerUuid] = useState(null);
+  const [customerId, setcustomerId] = useState(null);
   const [projectId, setProjectId] = useState(null);
 
   const totalSteps = 2;
 
   useEffect(() => {
     const stepParam = parseInt(searchParams.get("step"));
-    const uuidParam = searchParams.get("uuid");
+    const idParam = searchParams.get("id");
 
     if (stepParam && stepParam >= 1 && stepParam <= totalSteps) {
       setCurrentStep(stepParam);
@@ -29,8 +29,8 @@ function Onboarding() {
       setCurrentStep(1); // fallback to default
     }
 
-    if (uuidParam) {
-      setCustomerUuid(uuidParam);
+    if (idParam) {
+      setcustomerId(idParam);
     }
     const projectIdParam = searchParams.get("project_id");
     if (projectIdParam) {
@@ -44,14 +44,14 @@ function Onboarding() {
 
       if (!result?.success) return;
 
-      setCustomerUuid(result.uuid);
+      setcustomerId(result.id);
       if (result.project_id) setProjectId(result.project_id);
 
       setCurrentStep(currentStep + 1);
-      navigate(`/customers/onboarding?step=2&uuid=${result.uuid}&project_id=${result.project_id || ''}`, { replace: true });
+      navigate(`/customers/onboarding?step=2&id=${result.id}&project_id=${result.project_id || ''}`, { replace: true });
     } else if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
-      navigate(`/customers/onboarding?step=${currentStep + 1}&uuid=${customerUuid}&project_id=${projectId || ''}`, { replace: true });
+      navigate(`/customers/onboarding?step=${currentStep + 1}&id=${customerId}&project_id=${projectId || ''}`, { replace: true });
     }
   };
 
@@ -67,7 +67,7 @@ function Onboarding() {
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      navigate(`/customers/onboarding?step=${currentStep - 1}&uuid=${customerUuid}&project_id=${projectId || ''}`, {
+      navigate(`/customers/onboarding?step=${currentStep - 1}&id=${customerId}&project_id=${projectId || ''}`, {
         replace: true,
       });
     }

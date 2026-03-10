@@ -14,7 +14,7 @@ function Searchresults() {
       // page: 1,
       // limit: '10',
       // totalPages: 0,
-      visibleColumns: { uuid: true, name: true, email: true, role_name: true },
+      visibleColumns: {  id: true, name: true, email: true, role_name: true },
       showColumnToggle: false,
     },
     customers: {
@@ -22,7 +22,7 @@ function Searchresults() {
       // page: 1,
       // limit: '10',
       // totalPages: 0,
-      visibleColumns: { uuid: true, first_name: true, last_name: true, email: true },
+      visibleColumns: {  id: true, first_name: true, last_name: true, email: true },
       showColumnToggle: false,
     },
     flats: {
@@ -30,7 +30,7 @@ function Searchresults() {
       // page: 1,
       // limit: '10',
       // totalPages: 0,
-      visibleColumns: { uuid: true, flat_no: true, description: true, block_name: true, first_name: true, last_name: true },
+      visibleColumns: {  id: true, flat_no: true, description: true, block_name: true, first_name: true, last_name: true },
       showColumnToggle: false,
     },
     payments: {
@@ -38,7 +38,7 @@ function Searchresults() {
       // page: 1,
       // limit: '10',
       // totalPages: 0,
-      visibleColumns: { uuid: true, amount: true, paymentMethod: true, flat_no: true, block_name: true, customer_name: true, transaction_id: true },
+      visibleColumns: {  id: true, amount: true, paymentMethod: true, flat_no: true, block_name: true, customer_name: true, transaction_id: true },
       showColumnToggle: false,
     },
   });
@@ -228,7 +228,7 @@ function Searchresults() {
         <table className="w-full table-fixed text-left border-collapse">
           <thead className="border-b-[0.6px] border-b-[#ebecef] bg-white">
             <tr className="w-full">
-              {columns.uuid && (
+              {columns.id && (
                 <th className="px-4 py-3 text-[#2B2B2B] text-[14px] font-[500] leading-[18px] w-[150px] sticky left-0 z-20 bg-white border-r border-[#ebecef]">
                   Ref ID
                 </th>
@@ -304,9 +304,9 @@ function Searchresults() {
             ) : sections[section].data.length > 0 ? (
               sections[section].data.map((item, index) => (
                 <tr key={index} className="border-b-[0.6px] border-b-[#ebecef] align-top bg-white">
-                  {columns.uuid && (
+                  {columns.id && (
                     <td className="px-4 py-3 whitespace-normal break-words w-[150px] sticky left-0 z-10 bg-white border-r border-[#ebecef]">
-                      <p className="text-[#4b5563] text-[13px] font-normal leading-[18px]">{item.uuid}</p>
+                      <p className="text-[#4b5563] text-[13px] font-normal leading-[18px]">{item.id}</p>
                     </td>
                   )}
                   {columns.name && (
@@ -377,10 +377,10 @@ function Searchresults() {
                             section === 'employees'
                               ? `/single-employee-view/${item.id}`
                               : section === 'customers'
-                                ? `/customers/${item.uuid}`
+                                ? `/customers/${item.id}`
                                 : section === 'flats'
-                                  ? `/flats/view-flat/${item.uuid}`
-                                  : `/singlepaymentview/${item.uuid}`;
+                                  ? `/flats/view-flat/${item.id}`
+                                  : `/singlepaymentview/${item.id}`;
                           // window.location.href = route;
                           navigate(route);
                         }}

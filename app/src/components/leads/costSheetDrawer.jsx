@@ -233,6 +233,7 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
                 params: {
                     flat_no: flatQuery,
                     employeeId: employeeId,
+                    project_id: leadData?.project_id,
                 },
             });
             const data = response?.data;

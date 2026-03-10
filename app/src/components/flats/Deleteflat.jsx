@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import Flatapi from "../api/Flatapi.jsx";
 import { toast } from "react-toastify";
 import { Loadingoverlay } from "@nayeshdaggula/tailify";
 
-function Deleteflat({ refreshGetAllFlats, closeDeleteModal, singleFlatUuid, employeeId }) {
+function Deleteflat({ refreshGetAllFlats, closeDeleteModal, singleflatid, employeeId }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoadingEffect, setIsLoadingEffect] = useState(false);
 
-  console.log("uuid:", singleFlatUuid)
+  console.log("uuid:", singleflatid)
 
   const handleDelete = () => {
     setIsLoadingEffect(true);
 
-    Flatapi.post("delete-flat", {
-      uuid: singleFlatUuid,
+    Flatapi.post("delete-flat", { 
+      id: singleflatid,
       employeeId: employeeId,
     },
       {
@@ -68,11 +68,11 @@ function Deleteflat({ refreshGetAllFlats, closeDeleteModal, singleFlatUuid, empl
           className="absolute top-6 right-8 text-red-600 hover:text-red-800 cursor-pointer"
           onClick={closeDeleteModal}
         >
-          ✕
+          âœ•
         </button>
 
         <h2 className="text-lg text-[#2b2b2b] font-semibold mb-4">
-          ⚠️ Delete Flat
+          âš ï¸ Delete Flat
         </h2>
 
         <div className="text-[#2b2b2b] text-[15px] mb-6 space-y-2">

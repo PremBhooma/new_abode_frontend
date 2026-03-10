@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+﻿import React, { useCallback, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import ExcelJS from "exceljs";
 import Customerapi from "../api/Customerapi.jsx";
@@ -25,7 +25,7 @@ import {
 import { useProjectDetails } from "../zustand/useProjectDetails.jsx";
 import { useAllocatedProjectDetails } from "../zustand/useAllocatedProjectDetails.jsx";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails.jsx";
-import { IconDownload, IconEdit, IconEye, IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconDownload, IconEdit, IconEye, IconSearch, IconTrash, IconSettings } from "@tabler/icons-react";
 import MultipleleadassignModal from "./MultipleleadassignModal.jsx";
 import { FilterX } from "lucide-react";
 
@@ -639,7 +639,7 @@ function Leadwrapper() {
                   onClick={() => setShowColumnToggle(!showColumnToggle)}
                   className="cursor-pointer flex items-center gap-1 px-2 py-2 text-sm border border-[#ebecef] rounded-sm bg-white hover:bg-gray-50"
                 >
-                  ⚙️ Columns
+                  <IconSettings size={16} className="mr-1" /> Columns
                 </button>
 
                 {showColumnToggle && (
@@ -760,14 +760,14 @@ function Leadwrapper() {
                         {/* {visibleColumns.reference && (
                           <td className="px-3 py-2 whitespace-normal break-words w-[140px] sticky left-[50px] z-10 bg-white group-hover:bg-neutral-50 border-r border-neutral-200 text-xs font-medium leading-[18px]">
                             {permissions?.leads_page?.includes("view_lead") ? (
-                              <NavLink to={`/lead/${ele?.lead_uid}`}>
+                              <NavLink to={`/lead/${ele?.id}`}>
                                 <p className="text-neutral-600 hover:text-[#0083bf]">
-                                  {ele?.lead_uid}
+                                  {ele?.id}
                                 </p>
                               </NavLink>
                             ) : (
                               <p className="text-neutral-600">
-                                {ele?.lead_uid}
+                                {ele?.id}
                               </p>
                             )}
                           </td>
@@ -896,7 +896,7 @@ function Leadwrapper() {
                           <div className="flex flex-row items-center justify-center gap-2">
                             {permissions?.leads_page?.includes("view_lead") && (
                               <Link
-                                to={`/lead/${ele?.lead_uid}`}
+                                to={`/lead/${ele?.id}`}
                                 className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600"
                               >
                                 <IconEye size={18} />
@@ -904,7 +904,7 @@ function Leadwrapper() {
                             )}
                             {permissions?.leads_page?.includes("edit_lead") && (
                               <Link
-                                to={`/lead/edit-lead/${ele.lead_uid}`}
+                                to={`/lead/edit-lead/${ele.id}`}
                                 className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600"
                               >
                                 <IconEdit size={18} />

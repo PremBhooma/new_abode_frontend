@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+﻿import React, { useEffect, useState } from 'react'
 import Projectapi from '../../api/Projectapi.jsx';
 import Errorpanel from '../../shared/Errorpanel.jsx';
 import { toast } from 'react-toastify';
@@ -26,7 +26,7 @@ function Updateblocksmodal({ closeUpdateBlocksModal, singleBlockData, refreshBlo
 
         Projectapi.post('update-block', {
             block_name: blockName,
-            uuid: singleBlockData?.uuid,
+            id: singleBlockData?.id,
         })
             .then((response) => {
                 let data = response.data;

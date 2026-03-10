@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import Errorpanel from "../../../shared/Errorpanel.jsx";
 import {
   Button,
@@ -26,7 +26,7 @@ function Addfoldermodal({
   const access_token = useEmployeeDetails((state) => state.access_token);
 
   const params = useParams();
-  const lead_uuid = params.lead_uuid;
+  const leadId = params.leadId;
 
   const [isLoadingEffect, setIsLoadingEffect] = useState(false);
   const [folderName, setFolderName] = useState("");
@@ -54,7 +54,7 @@ function Addfoldermodal({
         user_id,
         currentFolderId,
         currentFolderUuid,
-        lead_uuid,
+        leadId,
         employee_id: employeeId,
       },
       {

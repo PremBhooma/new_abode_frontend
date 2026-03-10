@@ -1,4 +1,4 @@
-import ExcelJS from "exceljs";
+﻿import ExcelJS from "exceljs";
 import Flatapi from "../api/Flatapi.jsx";
 import Flattocustomer from "./Flattocustomer";
 import Datefilter from "../shared/Datefilter";
@@ -8,7 +8,7 @@ import AssignProject from "../shared/AssignProject";
 import Groupownerapi from "../api/Groupownerapi.jsx";
 import Uploadflatexcel from "./excelflatwrapper/Uploadflatexcel.jsx";
 import Excelflattemplate from "./excelflatwrapper/Excelflattemplate.jsx";
-import { Funnel } from "lucide-react";
+import { Funnel, FilterX } from "lucide-react";
 import { toast } from "react-toastify";
 import { useColumnStore } from "../zustand/useColumnStore";
 import { useNavigate, Link, NavLink, useSearchParams } from "react-router-dom";
@@ -16,7 +16,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useProjectDetails } from "../zustand/useProjectDetails";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
 import { Modal, Pagination, Select } from "@nayeshdaggula/tailify";
-import { IconEdit, IconEye, IconSearch, IconTrash, IconDownload } from "@tabler/icons-react";
+import { IconEdit, IconEye, IconSearch, IconTrash, IconDownload, IconSettings } from "@tabler/icons-react";
 
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
@@ -262,7 +262,7 @@ function Flatswrapper() {
     setPage(1);
   };
 
-  const openFlatToCustomer = (uuid) => {
+  const openFlatToCustomer = (id) => {
     setFlatToCustomer(true);
   };
   const closeFlatToCustomer = () => {
@@ -291,12 +291,12 @@ function Flatswrapper() {
     navigate("/flats/add-flat");
   };
 
-  const openSingleFlatView = (uuid) => {
-    navigate(`/flats/view-flat/${uuid}`);
+  const openSingleFlatView = (id) => {
+    navigate(`/flats/view-flat/${id}`);
   };
 
-  const openDeleteModal = (uuid) => {
-    setSingleFlatId(uuid);
+  const openDeleteModal = (id) => {
+    setSingleFlatId(id);
     setDeleteModal(true);
   };
 
@@ -305,8 +305,8 @@ function Flatswrapper() {
     setSingleFlatId(null);
   };
 
-  const openEditPage = (uuid) => {
-    navigate(`/flats/edit-flat/${uuid}`);
+  const openEditPage = (id) => {
+    navigate(`/flats/edit-flat/${id}`);
   };
 
   const getAllFlats = (page, limit, searchQuery, dateRange, statusFilter, customerId, selectedGroupOwner, selectedMortgage) => {
@@ -570,11 +570,7 @@ function Flatswrapper() {
               </div>
             </div>
             <div className="w-[80%] flex justify-end items-center gap-2">
-              {isFilterApplied && (
-                <div onClick={clearFilters} className={`flex items-center gap-2 cursor-pointer px-2 !py-[7px] !rounded-sm !border !border-[#ebecef] ${isFilterApplied ? '!bg-red-400 !text-white hover:!bg-red-500' : '!bg-white hover:!bg-gray-50'} !font-normal !text-[14px] !text-[#6b7178]`}>
-                  <Funnel className="!w-4 !h-4" /> <p>Clear Filters</p>
-                </div>
-              )}
+
 
               {/* <Select
                 data={groupOwners}
@@ -662,7 +658,7 @@ function Flatswrapper() {
                   onClick={() => setShowColumnToggle(!showColumnToggle)}
                   className="cursor-pointer flex items-center gap-1 px-2 py-[7px] text-sm border border-[#ebecef] rounded-md bg-white hover:bg-gray-50"
                 >
-                  ⚙️ Columns
+                  <IconSettings size={16} className="mr-1" /> Columns
                 </button>
 
                 {showColumnToggle && (
@@ -685,6 +681,11 @@ function Flatswrapper() {
                   </div>
                 )}
               </div>
+              {isFilterApplied && (
+                <div onClick={clearFilters} className={`cursor-pointer transition-colors ${isFilterApplied ? '!text-[#ea2b2b] ' : '!text-[#6b7178] '}`}>
+                  <FilterX className="!w-5 !h-5" />
+                </div>
+              )}
             </div>
           </div>
           <div className="w-full relative overflow-x-auto border border-neutral-200 rounded-lg z-0">
@@ -751,7 +752,7 @@ function Flatswrapper() {
                 ) : (
                   flats.map((flat, index) => (
                     <tr
-                      key={flat?.uuid}
+                      key={flat?.id}
                       className="border-b border-neutral-200 hover:bg-neutral-50 transition-colors duration-150 align-center group"
                     >
                       {visibleColumns.project && (
@@ -778,7 +779,7 @@ function Flatswrapper() {
                       {visibleColumns.flatNo && (
                         <td className="px-3 py-2 whitespace-normal break-words !text-[11px] border-r border-neutral-200">
                           <p className="text-neutral-600 text-xs font-medium leading-[18px]">
-                            <NavLink to={`/flats/view-flat/${flat?.uuid}`} className="hover:text-[#0083bf] hover:underline">
+                            <NavLink to={`/flats/view-flat/${flat?.id}`} className="hover:text-[#0083bf] hover:underline">
                               {flat?.flat_no || "---"}
                             </NavLink>
                           </p>
@@ -790,7 +791,7 @@ function Flatswrapper() {
                             <div className="group/customer relative w-full">
                               {flat?.customer && flat?.customer !== "N/A" ? (
                                 <Link
-                                  to={`/customers/${flat?.customer_details?.uuid}`}
+                                  to={`/customers/${flat?.customer_details?.id}`}
                                   className="text-neutral-600 text-xs font-medium leading-[18px] capitalize break-words whitespace-normal cursor-pointer hover:text-[#0083bf] hover:underline"
                                 >
                                   {flat?.customer}
@@ -823,7 +824,7 @@ function Flatswrapper() {
                         <div className="flex flex-row gap-2 justify-center">
                           {permissions?.flats_page?.includes("view_flat") && (
                             <div
-                              onClick={() => openSingleFlatView(flat.uuid)}
+                              onClick={() => openSingleFlatView(flat.id)}
                               className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600 cursor-pointer"
                             >
                               <IconEye size={18} />
@@ -831,7 +832,7 @@ function Flatswrapper() {
                           )}
                           {permissions?.flats_page?.includes("edit_flat") && (
                             <div
-                              onClick={() => openEditPage(flat.uuid)}
+                              onClick={() => openEditPage(flat.id)}
                               className="p-1 hover:bg-blue-50 rounded-md transition-colors text-neutral-500 hover:text-blue-600 cursor-pointer"
                             >
                               <IconEdit size={18} />
@@ -839,7 +840,7 @@ function Flatswrapper() {
                           )}
                           {permissions?.flats_page?.includes("delete_flat") && (
                             <div
-                              onClick={() => openDeleteModal(flat.uuid)}
+                              onClick={() => openDeleteModal(flat.id)}
                               className="p-1 hover:bg-red-50 rounded-md transition-colors text-neutral-500 hover:text-red-600 cursor-pointer"
                             >
                               <IconTrash size={18} />
@@ -890,7 +891,7 @@ function Flatswrapper() {
           <Deleteflat
             refreshGetAllFlats={refreshGetAllFlats}
             closeDeleteModal={closeDeleteModal}
-            singleFlatUuid={singleFlatId}
+            singleflatid={singleFlatId}
             employeeId={employeeInfo?.id}
           />
         )}

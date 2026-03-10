@@ -1,4 +1,4 @@
-import { IconFile, IconPaperclip } from "@tabler/icons-react";
+﻿import { IconFile, IconPaperclip } from "@tabler/icons-react";
 import React, { useState } from "react";
 import { useEmployeeDetails } from "../../../zustand/useEmployeeDetails";
 import { useParams } from "react-router";
@@ -30,7 +30,7 @@ function UploadfileModal({
   const user_id = userInfo?.id;
   const access_token = useEmployeeDetails((state) => state.access_token);
   const params = useParams();
-  const customer_uid = params.customer_uuid;
+  const id = params.customerId;
 
   const [isLoadingEffect, setIsLoadingEffect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -69,7 +69,7 @@ function UploadfileModal({
     const formData = new FormData();
     formData.append("uploadfile", file);
     formData.append("folderPath", folderPath);
-    formData.append("customer_uid", customer_uid);
+    formData.append("id", id);
     formData.append("currentFolderId", currentFolderId);
     formData.append("file_type", filetype);
     formData.append("user_id", user_id);
