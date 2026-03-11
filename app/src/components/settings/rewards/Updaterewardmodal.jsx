@@ -9,8 +9,11 @@ import config from '../../../config.jsx';
 
 const Updaterewardmodal = ({ closeUpdateRewardModal, rewardData, refreshRewards, projects, isDesktop }) => {
     const [name, setName] = useState(rewardData?.name || "");
+    const [nameError, setNameError] = useState("");
     const [couponGiftId, setCouponGiftId] = useState(rewardData?.coupon_gift_id || "");
+    const [couponGiftIdError, setCouponGiftIdError] = useState("");
     const [selectedProject, setSelectedProject] = useState(String(rewardData?.project_id) || "");
+    const [selectedProjectError, setSelectedProjectError] = useState("");
     const [status, setStatus] = useState(rewardData?.coupon_gift_status || "Active");
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(rewardData?.coupon_gift_pic_url ? `${rewardData.coupon_gift_pic_url}` : "");
@@ -26,9 +29,23 @@ const Updaterewardmodal = ({ closeUpdateRewardModal, rewardData, refreshRewards,
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!name.trim()) return toast.error("Reward name is required");
-        if (!couponGiftId.trim()) return toast.error("Coupon Gift ID is required");
-        if (!selectedProject) return toast.error("Project is required");
+
+        let hasError = false;
+
+        if (!selectedProject) {
+            setSelectedProjectError("Project is required");
+            hasError = true;
+        }
+        if (!couponGiftId.trim()) {
+            setCouponGiftIdError("Reward ID is required");
+            hasError = true;
+        }
+        if (!name.trim()) {
+            setNameError("Reward name is required");
+            hasError = true;
+        }
+
+        if (hasError) return;
 
         const formData = new FormData();
         formData.append("id", rewardData.id);
@@ -95,7 +112,10 @@ const Updaterewardmodal = ({ closeUpdateRewardModal, rewardData, refreshRewards,
                     <div className="grid grid-cols-1 gap-4">
                         <div className="flex flex-col gap-1.5">
                             <label className="text-sm font-medium text-gray-700">Project <span className="text-red-500">*</span></label>
-                            <Select value={selectedProject} onValueChange={setSelectedProject}>
+                            <Select value={selectedProject} onValueChange={(val) => {
+                                setSelectedProject(val);
+                                setSelectedProjectError('');
+                            }}>
                                 <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:border-black">
                                     <SelectValue placeholder="Select Project" />
                                 </SelectTrigger>
@@ -113,26 +133,35 @@ const Updaterewardmodal = ({ closeUpdateRewardModal, rewardData, refreshRewards,
                                         ))}
                                 </SelectContent>
                             </Select>
+                            {selectedProjectError && <p className="text-xs text-red-500">{selectedProjectError}</p>}
                         </div>
 
                         <div className="flex flex-col gap-1.5">
                             <label className="text-sm font-medium text-gray-700">Reward ID <span className="text-red-500">*</span></label>
                             <Input
                                 value={couponGiftId}
-                                onChange={(e) => setCouponGiftId(e.target.value)}
+                                onChange={(e) => {
+                                    setCouponGiftId(e.target.value);
+                                    setCouponGiftIdError('');
+                                }}
                                 placeholder="Ex: REWARD001"
-                                className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-black"
+                                className={`focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-black ${couponGiftIdError ? 'border-red-500' : ''}`}
                             />
+                            {couponGiftIdError && <p className="text-xs text-red-500">{couponGiftIdError}</p>}
                         </div>
 
                         <div className="flex flex-col gap-1.5">
                             <label className="text-sm font-medium text-gray-700">Reward Name <span className="text-red-500">*</span></label>
                             <Input
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={(e) => {
+                                    setName(e.target.value);
+                                    setNameError('');
+                                }}
                                 placeholder="Enter reward name"
-                                className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-black"
+                                className={`focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-black ${nameError ? 'border-red-500' : ''}`}
                             />
+                            {nameError && <p className="text-xs text-red-500">{nameError}</p>}
                         </div>
 
                         <div className="flex flex-col gap-1.5">
