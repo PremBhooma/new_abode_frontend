@@ -127,8 +127,23 @@ function RewardRecords() {
   };
 
   const handleDownloadExcel = async () => {
-    // Note: Backend endpoint 'get-reward-records-excel' needs to be implemented
-    toast.info("Excel export for Reward Records is coming soon!");
+    try {
+      const response = await Generalapi.get('get-reward-records-excel', {
+        params: { searchQuery },
+        responseType: 'blob',
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'RewardRecords.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading excel:", error);
+      setErrorMessage({ message: "Failed to download Excel file" });
+    }
   };
 
   return (
