@@ -6,7 +6,7 @@ import Projectapi from "../api/Projectapi";
 import Employeeapi from "../api/Employeeapi";
 import Errorpanel from "../../components/shared/Errorpanel.jsx";
 import { toast } from "react-toastify";
-import { IconArrowLeft } from "@tabler/icons-react";
+import { IconArrowLeft, IconLoader2 } from "@tabler/icons-react";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Textinput, Loadingoverlay, Datepicker, Button as TailifyButton } from "@nayeshdaggula/tailify";
@@ -1969,9 +1969,20 @@ const Addnewlead = () => {
         */}
 
       <div className="flex justify-end gap-2">
-        <button onClick={handleSubmit} className="px-4 py-2 text-[14px] font-semibold text-white bg-[#0083bf] rounded cursor-pointer">
-          Submit
-        </button>
+        <Button
+          onClick={handleSubmit}
+          disabled={isLoadingEffect}
+          className="bg-[#0083bf] hover:bg-[#0090bf] text-white px-8 cursor-pointer"
+        >
+          {isLoadingEffect ? (
+            <>
+              <IconLoader2 className="mr-2 h-4 w-4 animate-spin" />
+              Submitting...
+            </>
+          ) : (
+            "Submit"
+          )}
+        </Button>
       </div>
       {errorMessage && <Errorpanel errorMessages={errorMessage} setErrorMessages={setErrorMessage} />}
     </div >
