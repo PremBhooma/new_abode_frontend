@@ -52,15 +52,9 @@ function Uploadcustomerprofile({
 
   return (
     <div className="flex flex-col gap-3 px-5 py-5 3xl:px-10 3xl:py-10 relative">
-      <p className="text-[#000] text-[16px] font-semibold 3xl:text-[22px]">
+      <p className="text-[#000] text-[16px] font-semibold 3xl:text-[22px] mb-2">
         Upload Profile Picture
       </p>
-      <IconX
-        size={20}
-        color="#be185d"
-        className="cursor-pointer absolute top-2 right-0"
-        onClick={closeUploadFileModal}
-      />
       <UploadFile
         label="Upload Profile Picture"
         onFileChange={(file) => {

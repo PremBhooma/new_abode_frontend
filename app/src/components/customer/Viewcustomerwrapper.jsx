@@ -5,7 +5,7 @@ import profileStatic from "@/assets/customer_static_image.jpg";
 import Errorpanel from "../shared/Errorpanel";
 import { IconArrowLeft, IconEdit } from "@tabler/icons-react";
 import { Link, useParams, useNavigate, NavLink } from "react-router-dom";
-import { Modal } from "@nayeshdaggula/tailify";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Uploadcustomerprofile from "../shared/Uploadcustomerprofile";
 import Customernotestab from "./tabswrapper/Customernotestab";
 import Flatinfo from "./tabswrapper/Flatinfo";
@@ -357,22 +357,18 @@ function Viewcustomerwrapper() {
         />
       )}
 
-      <Modal
-        open={uploadFileModal}
-        close={closeUploadFileModal}
-        padding="px-5"
-        withCloseButton={false}
-        containerClassName="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px]"
-      >
-        {uploadFileModal && (
-          <Uploadcustomerprofile
-            closeUploadFileModal={closeUploadFileModal}
-            setIsLoadingEffect={setIsLoadingEffect}
-            customer_id={customerData?.id}
-            refreshUserDetails={refreshUserDetails}
-          />
-        )}
-      </Modal>
+      <Dialog open={uploadFileModal} onOpenChange={(val) => !val && closeUploadFileModal()}>
+        <DialogContent className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] p-0 overflow-hidden">
+          {uploadFileModal && (
+            <Uploadcustomerprofile
+              closeUploadFileModal={closeUploadFileModal}
+              setIsLoadingEffect={setIsLoadingEffect}
+              customer_id={customerData?.id}
+              refreshUserDetails={refreshUserDetails}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
 
 
       <Drawer
