@@ -295,6 +295,9 @@ function Flatpaymentswrapper() {
                                         Payment Type
                                     </th>
                                     <th className="px-3 py-2 text-neutral-800 uppercase tracking-widest text-[12px] font-bold leading-tight border-r border-neutral-200">
+                                        Payment Towards
+                                    </th>
+                                    <th className="px-3 py-2 text-neutral-800 uppercase tracking-widest text-[12px] font-bold leading-tight border-r border-neutral-200">
                                         Payment Method
                                     </th>
                                     <th className="px-3 py-2 text-neutral-800 uppercase tracking-widest text-[12px] font-bold leading-tight text-center">
@@ -327,6 +330,11 @@ function Flatpaymentswrapper() {
                                                 <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
                                                     <p className="text-neutral-600 text-[12px] font-medium leading-[18px]">
                                                         {payment?.payment_type || "----"}
+                                                    </p>
+                                                </td>
+                                                <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
+                                                    <p className="text-neutral-600 text-[12px] font-medium leading-[18px]">
+                                                        {payment?.payment_towards || "----"}
                                                     </p>
                                                 </td>
                                                 <td className="px-3 py-2 whitespace-normal break-words w-[140px] border-r border-neutral-200">
@@ -372,7 +380,7 @@ function Flatpaymentswrapper() {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan={6} className="text-center py-8">
+                                            <td colSpan={7} className="text-center py-8">
                                                 <p className="text-neutral-500 text-[11px]">
                                                     No payments found for this flat
                                                 </p>
@@ -385,6 +393,9 @@ function Flatpaymentswrapper() {
                                             <tr key={i} className="border-b border-neutral-200 last:border-0">
                                                 <td className="px-3 py-2 border-r border-neutral-200">
                                                     <Skeleton className="h-3 w-[140px]" />
+                                                </td>
+                                                <td className="px-3 py-2 border-r border-neutral-200">
+                                                    <Skeleton className="h-3 w-[100px]" />
                                                 </td>
                                                 <td className="px-3 py-2 border-r border-neutral-200">
                                                     <Skeleton className="h-3 w-[100px]" />
