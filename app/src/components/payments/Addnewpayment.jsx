@@ -474,17 +474,18 @@ function Addnewpayment() {
                                     className="w-full border border-[#ced4da] px-3 py-2 rounded-md outline-none placeholder:text-[14px] placeholder:text-black/50 text-[14px] text-black/60"
                                     readOnly={!!flatidParam}
                                 />
+
                                 {showDropdown && (
-                                    <div className="absolute top-full left-0 w-full z-10 mt-1">
-                                        <div className="bg-white border border-[#ced4da] rounded-md max-h-48 overflow-y-auto">
+                                    <div className="absolute top-[calc(100%+0.5rem)] left-0 w-full z-20">
+                                        <div className="bg-white border border-[#ced4da] rounded-md shadow-lg max-h-48 overflow-y-auto">
                                             {loading ? (
                                                 <div className="p-3 text-sm text-gray-500">Loading...</div>
                                             ) : results.length > 0 ? (
-                                                <ul>
+                                                <ul className="py-1">
                                                     {results.map((item) => (
                                                         <li
                                                             key={item.value}
-                                                            className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-[14px] text-black/60"
+                                                            className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm font-medium text-gray-700 transition-colors"
                                                             onClick={() => handleSelectFlat(item)}
                                                         >
                                                             {item.label}
@@ -492,21 +493,25 @@ function Addnewpayment() {
                                                     ))}
                                                 </ul>
                                             ) : (
-                                                <div className="px-3 py-2 text-sm text-gray-500">No Result</div>
+                                                <div className="px-3 py-3 text-sm text-gray-500 text-center font-medium bg-gray-50/50">
+                                                    No Result Found
+                                                </div>
                                             )}
                                         </div>
                                     </div>
                                 )}
                                 {selectedFlatError && (
-                                    <p className="text-xs text-red-600 font-medium">{selectedFlatError}</p>
-                                )}
-                                {searchError && (
-                                    <div className="absolute top-12 left-0 w-full z-0 p-2 bg-red-50 border border-red-200 rounded text-xs text-red-600">
-                                        {searchError}
-                                    </div>
+                                    <p className="text-xs text-red-600 font-medium mt-1">{selectedFlatError}</p>
                                 )}
                             </div>
                         </div>
+                        {searchError && (
+                            <div className="p-2 mb-1 bg-red-50 border border-red-200 rounded-md">
+                                <p className="text-xs text-red-600 font-medium">
+                                    {searchError}
+                                </p>
+                            </div>
+                        )}
                         {/* Selected Flat/Customer Details & Payment Info */}
                         {(selectedFlat || paymentDetails) && (
                             <div className="flex flex-col gap-4 w-full animate-in fade-in duration-500">
