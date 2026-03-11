@@ -774,10 +774,10 @@ const Addnewlead = () => {
       isValid = false;
     }
 
-    if (employee === "") {
-      setEmployeeError("Employee is required");
-      isValid = false;
-    }
+    // if (employee === "") {
+    //   setEmployeeError("Employee is required");
+    //   isValid = false;
+    // }
 
     if (leadStageId === "") {
       setLeadStageError("Lead Stage is required");
@@ -1112,7 +1112,7 @@ const Addnewlead = () => {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <Label className="text-neutral-700 font-medium">Assign to Employee <span className="text-red-500">*</span></Label>
+                  <Label className="text-neutral-700 font-medium">Assign to Employee</Label>
                   <Select value={employee} onValueChange={updateEmployee} disabled={!selectedProjectId}>
                     <SelectTrigger className={employeeError ? "border-red-500" : ""}>
                       <SelectValue placeholder="Select Employee" />
@@ -1967,20 +1967,12 @@ const Addnewlead = () => {
                 )}
               </div>
         */}
-      {isLoadingEffect ? (
-        isLoadingEffect && (
-          <div className="absolute inset-0 bg-[#2b2b2bcc] flex flex-row justify-center items-center  rounded">
-            <Loadingoverlay visible={isLoadingEffect} overlayBg="" />
-          </div>
-        )
-      ) : (
-        <div className="flex justify-end gap-2">
-          <button onClick={handleSubmit} className="px-4 py-2 text-[14px] font-semibold text-white bg-[#0083bf] rounded cursor-pointer">
-            Submit
-          </button>
-        </div>
-      )
-      }
+
+      <div className="flex justify-end gap-2">
+        <button onClick={handleSubmit} className="px-4 py-2 text-[14px] font-semibold text-white bg-[#0083bf] rounded cursor-pointer">
+          Submit
+        </button>
+      </div>
       {errorMessage && <Errorpanel errorMessages={errorMessage} setErrorMessages={setErrorMessage} />}
     </div >
   );
