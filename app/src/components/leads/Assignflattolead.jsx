@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import Flatapi from "../api/Flatapi";
@@ -59,7 +59,19 @@ function Assignflattolead() {
     const [projectRates, setProjectRates] = useState({
         floor_rise: 0,
         east_facing: 0,
-        corner: 0
+        corner: 0,
+        gst_percentage: 0,
+        manjeera_connection_charges: 0,
+        manjeera_meter_charges: 0,
+        documentation_fee: 0,
+        registration_percentage: 0,
+        registration_base_charge: 0,
+        maintenance_rate_per_sqft: 0,
+        maintenance_duration_months: 0,
+        corpus_fund: 0,
+        car_parking: 0,
+        club_house: 0,
+        legal_charges: 0
     });
 
     const getProjectCharges = async (projectId) => {
@@ -188,12 +200,27 @@ function Assignflattolead() {
                         setProjectRates({
                             floor_rise: charges.floor_rise_price || 0,
                             east_facing: charges.east_price || 0,
-                            corner: charges.corner_price || 0
+                            corner: charges.corner_price || 0,
+                            gst_percentage: charges.gst_percentage || 5, // Defaulting to 5% if missing
+                            manjeera_connection_charges: charges.manjeera_connection_charges || 0,
+                            manjeera_meter_charges: charges.manjeera_meter_charges || 0,
+                            documentation_fee: charges.documentation_fee || 0,
+                            registration_percentage: charges.registration_percentage || 0,
+                            registration_base_charge: charges.registration_base_charge || 0,
+                            maintenance_rate_per_sqft: charges.maintenance_rate_per_sqft || 0,
+                            maintenance_duration_months: charges.maintenance_duration_months || 0,
+                            corpus_fund: charges.corpus_fund || 0,
+                            car_parking: charges.car_parking || 0,
+                            club_house: charges.club_house || 0,
+                            legal_charges: charges.legal_charges || 0
                         });
 
                         // Set Static Charges directly from project
                         setEastFacing(charges.east_price?.toString() || '0');
                         setCorner(charges.corner_price?.toString() || '0');
+                        setManjeeraConnectionCharge(charges.manjeera_connection_charges?.toString() || '0');
+                        setManjeeraMeterCharge(charges.manjeera_meter_charges?.toString() || '0');
+                        setDocumentationFee(charges.documentation_fee?.toString() || '0');
 
                         // Calculate Floor Rise based on new rates
                         if (selectedFlat?.floor_no && selectedFlat?.floor_no >= 6) {
@@ -513,14 +540,7 @@ function Assignflattolead() {
 
     const [grandTotal, setGrandTotal] = useState('')
     const [grandTotalError, setGrandTotalError] = useState('')
-    const updateGrandTotal = (e) => {
-        let value = e.target.value;
-        if (isNaN(value)) {
-            return false
-        }
-        setGrandTotal(value)
-        setGrandTotalError('')
-    }
+
 
     const [customNote, setCustomNote] = useState('')
     const updateCustomNote = (e) => {
@@ -643,24 +663,31 @@ function Assignflattolead() {
 
 
 
-    // 2ï¸âƒ£ Recalculate dependent states whenever totalCostofUnit changes
+    // 2ï¸ âƒ£ Recalculate dependent states whenever totalCostofUnit changes
     useEffect(() => {
         if (totalCostofUnit) {
-            const gstValue = (totalCostofUnit * 0.05).toFixed(2);
+            const gstPerc = projectRates.gst_percentage || 5;
+            const gstValue = (totalCostofUnit * (gstPerc / 100)).toFixed(2);
             setGst(gstValue);
 
             setCostofUnitWithTax(parseFloat(totalCostofUnit) + parseFloat(gstValue));
 
-            let registerCharge = ((parseFloat(totalCostofUnit) * 0.076) + 1050).toFixed(2);
+            const regPerc = projectRates.registration_percentage || 7.6;
+            const regBase = projectRates.registration_base_charge || 1050;
+            let registerCharge = ((parseFloat(totalCostofUnit) * (regPerc / 100)) + parseFloat(regBase)).toFixed(2);
             setRegistrationCharge(parseFloat(registerCharge));
 
             if (saleableAreaSqFt) {
-                let maintainCharge = ((parseFloat(saleableAreaSqFt) * 3) * 24).toFixed(2);
+                const maintRate = projectRates.maintenance_rate_per_sqft || 3;
+                const maintDur = projectRates.maintenance_duration_months || 24;
+                let maintainCharge = ((parseFloat(saleableAreaSqFt) * maintRate) * maintDur).toFixed(2);
                 setMaintenceCharge(parseFloat(maintainCharge));
-                let corpusFund = (parseFloat(saleableAreaSqFt) * 50).toFixed(2);
-                setCorpusFund(parseFloat(corpusFund));
 
-                setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge) + parseFloat(maintainCharge) + parseFloat(corpusFund) + parseFloat(documentationFee))
+                const corpusFundVal = projectRates.corpus_fund || 50;
+                let calculatedCorpusFund = (parseFloat(saleableAreaSqFt) * corpusFundVal).toFixed(2);
+                setCorpusFund(parseFloat(calculatedCorpusFund));
+
+                setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(registerCharge) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge) + parseFloat(maintainCharge) + parseFloat(calculatedCorpusFund) + parseFloat(documentationFee))
             }
         } else {
             setGst("");
@@ -670,7 +697,7 @@ function Assignflattolead() {
             setCorpusFund("");
             setGrandTotal("");
         }
-    }, [totalCostofUnit, saleableAreaSqFt, documentationFee, manjeeraConnectionCharge, manjeeraMeterCharge]);
+    }, [totalCostofUnit, saleableAreaSqFt, documentationFee, manjeeraConnectionCharge, manjeeraMeterCharge, projectRates]);
 
 
     const handleSubmit = async () => {
@@ -845,7 +872,7 @@ function Assignflattolead() {
                 toatlcostofuint: parseFloat(totalCostofUnit),
                 gst: parseFloat(gst),
                 costofunitwithtax: parseFloat(costofUnitWithTax),
-                // registrationcharge: parseFloat(registartionCharge),
+                registrationcharge: parseFloat(registartionCharge),
                 maintenancecharge: parseFloat(maintenceCharge),
                 documentaionfee: parseFloat(documentationFee),
                 corpusfund: parseFloat(corpusFund),
@@ -1203,7 +1230,7 @@ function Assignflattolead() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>GST (5%) (₹)</Label>
+                                    <Label>GST ({projectRates.gst_percentage || 5}%) (₹)</Label>
                                     <Input
                                         value={gst ? parseFloat(gst).toLocaleString('en-IN') : ''}
                                         readOnly
@@ -1218,6 +1245,16 @@ function Assignflattolead() {
                                         readOnly
                                         className="bg-gray-50 font-semibold border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Registration Charge ({projectRates.registration_percentage || 7.6}%) (₹) <span className="text-red-500">*</span></Label>
+                                    <Input
+                                        value={registartionCharge ? parseFloat(registartionCharge).toLocaleString('en-IN') : ''}
+                                        readOnly
+                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                    />
+                                    {registrationChargeError && <p className="text-xs text-red-500">{registrationChargeError}</p>}
                                 </div>
 
                                 <div className="space-y-2">
@@ -1245,7 +1282,7 @@ function Assignflattolead() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Maintenance @3/- per sqft for 2 Yrs (₹)</Label>
+                                    <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Yrs (₹)</Label>
                                     <Input
                                         value={maintenceCharge ? parseFloat(maintenceCharge).toLocaleString('en-IN') : ''}
                                         readOnly
@@ -1264,7 +1301,7 @@ function Assignflattolead() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Corpus Fund (50 * SFT) (₹)</Label>
+                                    <Label>Corpus Fund ({projectRates.corpus_fund || 50} * SFT) (₹)</Label>
                                     <Input
                                         value={corpusFund ? parseFloat(corpusFund).toLocaleString('en-IN') : ''}
                                         readOnly
