@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import ExcelJS from "exceljs";
 import Customerapi from "../api/Customerapi.jsx";
@@ -924,7 +924,14 @@ function Leadwrapper() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={9} className="text-center py-3 text-neutral-500 text-sm"  >
+                      <td
+                        colSpan={
+                          Object.keys(visibleColumns).filter(
+                            (key) => visibleColumns[key]
+                          ).length + 2
+                        }
+                        className="text-center py-2 text-neutral-500 text-sm"
+                      >
                         No leads found
                       </td>
                     </tr>
@@ -935,9 +942,9 @@ function Leadwrapper() {
                       colSpan={
                         Object.keys(visibleColumns).filter(
                           (key) => visibleColumns[key]
-                        ).length
+                        ).length + 2
                       }
-                      className="text-center py-6 text-gray-400 text-[15px] font-medium"
+                      className="text-center py-2 text-gray-400 text-sm"
                     >
                       Loading...
                     </td>
