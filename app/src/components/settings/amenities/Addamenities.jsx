@@ -65,17 +65,25 @@ function Addamenities({ refreshAmenities }) {
 
     const handleSubmit = async () => {
         setIsLoading(true)
-        if (amountType === "") {
+
+        if (projectId === "") {
             setIsLoading(false)
-            setAmountTypeError("Please enter an amount")
+            setProjectIdError("Project is required")
             return false
         }
 
         if (flatType === "") {
             setIsLoading(false)
-            setFlatTypeError("Please enter a flat type")
+            setFlatTypeError("Flat type is required")
             return false
         }
+
+        if (amountType === "") {
+            setIsLoading(false)
+            setAmountTypeError("Amount is required")
+            return false
+        }
+
 
         // Project is optional, but if you want to force selection:
         // if (projectId === "") {

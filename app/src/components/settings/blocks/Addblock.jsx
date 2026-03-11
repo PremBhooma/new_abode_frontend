@@ -20,7 +20,7 @@ function Addblock({ refreshBlocks }) {
         setIsLoading(true)
         if (blockName === "") {
             setIsLoading(false)
-            setBlockNameError("Please enter a block name")
+            setBlockNameError("Block is required")
             return false
         }
 

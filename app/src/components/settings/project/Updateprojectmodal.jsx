@@ -24,25 +24,91 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
     const [projectAddressError, setProjectAddressError] = useState('')
 
     const [projectCornerPrice, setProjectCornerPrice] = useState('');
+    const [projectCornerPriceError, setProjectCornerPriceError] = useState('');
     const [projectEastPrice, setProjectEastPrice] = useState('');
+    const [projectEastPriceError, setProjectEastPriceError] = useState('');
     const [projectSixFloorPrice, setProjectSixFloorPrice] = useState('');
+    const [projectSixFloorPriceError, setProjectSixFloorPriceError] = useState('');
     const [projectRewards, setProjectRewards] = useState(false);
 
     const [gstPercentage, setGstPercentage] = useState('');
+    const [gstPercentageError, setGstPercentageError] = useState('');
     const [manjeeraConnectionCharges, setManjeeraConnectionCharges] = useState('');
+    const [manjeeraConnectionChargesError, setManjeeraConnectionChargesError] = useState('');
     const [manjeeraMeterCharges, setManjeeraMeterCharges] = useState('');
+    const [manjeeraMeterChargesError, setManjeeraMeterChargesError] = useState('');
     const [documentationFee, setDocumentationFee] = useState('');
+    const [documentationFeeError, setDocumentationFeeError] = useState('');
     const [registrationPercentage, setRegistrationPercentage] = useState('');
+    const [registrationPercentageError, setRegistrationPercentageError] = useState('');
     const [registrationBaseCharge, setRegistrationBaseCharge] = useState('');
+    const [registrationBaseChargeError, setRegistrationBaseChargeError] = useState('');
     const [maintenanceRatePerSqft, setMaintenanceRatePerSqft] = useState('');
+    const [maintenanceRatePerSqftError, setMaintenanceRatePerSqftError] = useState('');
     const [maintenanceDurationMonths, setMaintenanceDurationMonths] = useState('');
+    const [maintenanceDurationMonthsError, setMaintenanceDurationMonthsError] = useState('');
     const [corpusFund, setCorpusFund] = useState('');
+    const [corpusFundError, setCorpusFundError] = useState('');
 
     const handleSubmit = () => {
         setIsLoadingEffect(true);
+        let hasError = false;
+
         if (projectName === '') {
+            setProjectNameError('Project is required');
+            hasError = true;
+        }
+        if (projectCornerPrice === '') {
+            setProjectCornerPriceError('Corner Price is required');
+            hasError = true;
+        }
+        if (projectEastPrice === '') {
+            setProjectEastPriceError('East Price is required');
+            hasError = true;
+        }
+        if (projectSixFloorPrice === '') {
+            setProjectSixFloorPriceError('6th Floor+ Price is required');
+            hasError = true;
+        }
+        if (gstPercentage === '') {
+            setGstPercentageError('GST (%) is required');
+            hasError = true;
+        }
+        if (manjeeraConnectionCharges === '') {
+            setManjeeraConnectionChargesError('Manjeera Conn. Charges are required');
+            hasError = true;
+        }
+        if (manjeeraMeterCharges === '') {
+            setManjeeraMeterChargesError('Manjeera Meter Charges are required');
+            hasError = true;
+        }
+        if (documentationFee === '') {
+            setDocumentationFeeError('Doc. Fee is required');
+            hasError = true;
+        }
+        if (registrationPercentage === '') {
+            setRegistrationPercentageError('Reg. (%) is required');
+            hasError = true;
+        }
+        if (registrationBaseCharge === '') {
+            setRegistrationBaseChargeError('Reg. Base Charge is required');
+            hasError = true;
+        }
+        if (maintenanceRatePerSqft === '') {
+            setMaintenanceRatePerSqftError('Maint. /sqft is required');
+            hasError = true;
+        }
+        if (maintenanceDurationMonths === '') {
+            setMaintenanceDurationMonthsError('Maint. Month(s) is required');
+            hasError = true;
+        }
+        if (corpusFund === '') {
+            setCorpusFundError('Corpus Fund is required');
+            hasError = true;
+        }
+
+        if (hasError) {
             setIsLoadingEffect(false);
-            setProjectNameError('Enter project name');
             return false;
         }
 
@@ -63,7 +129,7 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
             maintenance_rate_per_sqft: maintenanceRatePerSqft,
             maintenance_duration_months: maintenanceDurationMonths,
             corpus_fund: corpusFund,
-            ...(isEdit && {  id: projectData?.id }),
+            ...(isEdit && { id: projectData?.id }),
         };
 
         Projectapi.post(apiEndpoint, payload)
@@ -144,7 +210,7 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                         }}
                         className={`bg-white ${projectNameError ? 'border-red-500' : ''}`}
                     />
-                    {projectNameError && <p className="text-sm text-red-500">{projectNameError}</p>}
+                    {projectNameError && <p className="text-xs text-red-500">{projectNameError}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -155,9 +221,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Price"
                             value={projectCornerPrice}
-                            onChange={(e) => setProjectCornerPrice(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setProjectCornerPrice(e.target.value);
+                                setProjectCornerPriceError('');
+                            }}
+                            className={`bg-white ${projectCornerPriceError ? 'border-red-500' : ''}`}
                         />
+                        {projectCornerPriceError && <p className="text-xs text-red-500">{projectCornerPriceError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -167,9 +237,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Price"
                             value={projectEastPrice}
-                            onChange={(e) => setProjectEastPrice(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setProjectEastPrice(e.target.value);
+                                setProjectEastPriceError('');
+                            }}
+                            className={`bg-white ${projectEastPriceError ? 'border-red-500' : ''}`}
                         />
+                        {projectEastPriceError && <p className="text-xs text-red-500">{projectEastPriceError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -179,9 +253,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Price"
                             value={projectSixFloorPrice}
-                            onChange={(e) => setProjectSixFloorPrice(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setProjectSixFloorPrice(e.target.value);
+                                setProjectSixFloorPriceError('');
+                            }}
+                            className={`bg-white ${projectSixFloorPriceError ? 'border-red-500' : ''}`}
                         />
+                        {projectSixFloorPriceError && <p className="text-xs text-red-500">{projectSixFloorPriceError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -191,9 +269,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="e.g. 5"
                             value={gstPercentage}
-                            onChange={(e) => setGstPercentage(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setGstPercentage(e.target.value);
+                                setGstPercentageError('');
+                            }}
+                            className={`bg-white ${gstPercentageError ? 'border-red-500' : ''}`}
                         />
+                        {gstPercentageError && <p className="text-xs text-red-500">{gstPercentageError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -203,9 +285,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Charges"
                             value={manjeeraConnectionCharges}
-                            onChange={(e) => setManjeeraConnectionCharges(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setManjeeraConnectionCharges(e.target.value);
+                                setManjeeraConnectionChargesError('');
+                            }}
+                            className={`bg-white ${manjeeraConnectionChargesError ? 'border-red-500' : ''}`}
                         />
+                        {manjeeraConnectionChargesError && <p className="text-xs text-red-500">{manjeeraConnectionChargesError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -215,9 +301,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Charges"
                             value={manjeeraMeterCharges}
-                            onChange={(e) => setManjeeraMeterCharges(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setManjeeraMeterCharges(e.target.value);
+                                setManjeeraMeterChargesError('');
+                            }}
+                            className={`bg-white ${manjeeraMeterChargesError ? 'border-red-500' : ''}`}
                         />
+                        {manjeeraMeterChargesError && <p className="text-xs text-red-500">{manjeeraMeterChargesError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -227,9 +317,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Fee"
                             value={documentationFee}
-                            onChange={(e) => setDocumentationFee(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setDocumentationFee(e.target.value);
+                                setDocumentationFeeError('');
+                            }}
+                            className={`bg-white ${documentationFeeError ? 'border-red-500' : ''}`}
                         />
+                        {documentationFeeError && <p className="text-xs text-red-500">{documentationFeeError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -239,9 +333,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Percentage"
                             value={registrationPercentage}
-                            onChange={(e) => setRegistrationPercentage(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setRegistrationPercentage(e.target.value);
+                                setRegistrationPercentageError('');
+                            }}
+                            className={`bg-white ${registrationPercentageError ? 'border-red-500' : ''}`}
                         />
+                        {registrationPercentageError && <p className="text-xs text-red-500">{registrationPercentageError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -251,9 +349,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Charge"
                             value={registrationBaseCharge}
-                            onChange={(e) => setRegistrationBaseCharge(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setRegistrationBaseCharge(e.target.value);
+                                setRegistrationBaseChargeError('');
+                            }}
+                            className={`bg-white ${registrationBaseChargeError ? 'border-red-500' : ''}`}
                         />
+                        {registrationBaseChargeError && <p className="text-xs text-red-500">{registrationBaseChargeError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -263,9 +365,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Rate"
                             value={maintenanceRatePerSqft}
-                            onChange={(e) => setMaintenanceRatePerSqft(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setMaintenanceRatePerSqft(e.target.value);
+                                setMaintenanceRatePerSqftError('');
+                            }}
+                            className={`bg-white ${maintenanceRatePerSqftError ? 'border-red-500' : ''}`}
                         />
+                        {maintenanceRatePerSqftError && <p className="text-xs text-red-500">{maintenanceRatePerSqftError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -275,9 +381,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Months"
                             value={maintenanceDurationMonths}
-                            onChange={(e) => setMaintenanceDurationMonths(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setMaintenanceDurationMonths(e.target.value);
+                                setMaintenanceDurationMonthsError('');
+                            }}
+                            className={`bg-white ${maintenanceDurationMonthsError ? 'border-red-500' : ''}`}
                         />
+                        {maintenanceDurationMonthsError && <p className="text-xs text-red-500">{maintenanceDurationMonthsError}</p>}
                     </div>
 
                     <div className="grid gap-2">
@@ -287,9 +397,13 @@ function Updateprojectmodal({ closeUpdateProjectModal, projectData, refreshProje
                             type="number"
                             placeholder="Amount/Rate"
                             value={corpusFund}
-                            onChange={(e) => setCorpusFund(e.target.value)}
-                            className="bg-white"
+                            onChange={(e) => {
+                                setCorpusFund(e.target.value);
+                                setCorpusFundError('');
+                            }}
+                            className={`bg-white ${corpusFundError ? 'border-red-500' : ''}`}
                         />
+                        {corpusFundError && <p className="text-xs text-red-500">{corpusFundError}</p>}
                     </div>
                 </div>
 

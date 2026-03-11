@@ -20,7 +20,7 @@ function Updateblocksmodal({ closeUpdateBlocksModal, singleBlockData, refreshBlo
         setIsLoadingEffect(true);
         if (blockName === '') {
             setIsLoadingEffect(false);
-            setBlockNameError('Enter the block name');
+            setBlockNameError('Block is required');
             return false;
         }
 

@@ -54,15 +54,22 @@ function Updateamenities({ closeUpdateAmenities, singleAmenitiesData, refreshAme
 
     const handleSubmit = () => {
         setIsLoadingEffect(true);
-        if (amountType === '') {
-            setIsLoadingEffect(false);
-            setAmountTypeError('Enter the amount');
-            return false;
+
+        if (projectId === "") {
+            setIsLoading(false)
+            setProjectIdError("Project is required")
+            return false
         }
 
         if (flatType === '') {
             setIsLoadingEffect(false);
-            setFlatTypeError('Enter the flat type');
+            setFlatTypeError('Flat type is required');
+            return false;
+        }
+
+        if (amountType === '') {
+            setIsLoadingEffect(false);
+            setAmountTypeError('Amount is required');
             return false;
         }
 

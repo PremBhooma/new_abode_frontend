@@ -35,10 +35,10 @@ const Addbank = ({ refreshBanks }) => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-md border border-[#ebecef] flex flex-col gap-4">
-            <h2 className="text-lg font-semibold">Add Bank</h2>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
+        <div className="bg-white p-6 rounded-md border border-[#ebecef] flex flex-col gap-3">
+            {/* <h2 className="text-lg font-semibold">Add Bank</h2> */}
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <div className="flex flex-col">
                     <label className="text-sm font-medium">Bank Name</label>
                     <Input
                         value={bankName}

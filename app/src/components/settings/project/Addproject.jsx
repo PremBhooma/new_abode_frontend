@@ -18,8 +18,11 @@ function Addproject({ refreshProject }) {
     const [projectAddressError, setProjectAddressError] = useState('');
 
     const [projectCornerPrice, setProjectCornerPrice] = useState('');
+    const [projectCornerPriceError, setProjectCornerPriceError] = useState('');
     const [projectEastPrice, setProjectEastPrice] = useState('');
+    const [projectEastPriceError, setProjectEastPriceError] = useState('');
     const [projectSixFloorPrice, setProjectSixFloorPrice] = useState('');
+    const [projectSixFloorPriceError, setProjectSixFloorPriceError] = useState('');
     const [projectRewards, setProjectRewards] = useState(false);
 
 
@@ -29,10 +32,18 @@ function Addproject({ refreshProject }) {
             setProjectNameError("Enter project name");
             hasError = true;
         }
-        // if (!projectAddress) {
-        //     setProjectAddressError("Enter project address");
-        //     hasError = true;
-        // }
+        if (!projectCornerPrice) {
+            setProjectCornerPriceError("Corner Price is required");
+            hasError = true;
+        }
+        if (!projectEastPrice) {
+            setProjectEastPriceError("East Price is required");
+            hasError = true;
+        }
+        if (!projectSixFloorPrice) {
+            setProjectSixFloorPriceError("6th Floor+ Price is required");
+            hasError = true;
+        }
         if (hasError) return;
 
         setIsLoading(true);
@@ -110,10 +121,14 @@ function Addproject({ refreshProject }) {
                             id="projectCornerPrice"
                             type="number"
                             placeholder="Enter Corner Price"
-                            className="bg-white border-gray-300 focus:border-black rounded-[4px] focus-visible:ring-0"
+                            className={`bg-white border-gray-300 focus:border-black rounded-[4px] focus-visible:ring-0 ${projectCornerPriceError ? 'border-red-500' : ''}`}
                             value={projectCornerPrice}
-                            onChange={(e) => setProjectCornerPrice(e.target.value)}
+                            onChange={(e) => {
+                                setProjectCornerPrice(e.target.value);
+                                setProjectCornerPriceError('');
+                            }}
                         />
+                        {projectCornerPriceError && <p className="text-xs text-red-500">{projectCornerPriceError}</p>}
                     </div>
 
                     <div className="flex flex-col gap-2">
@@ -122,10 +137,14 @@ function Addproject({ refreshProject }) {
                             id="projectEastPrice"
                             type="number"
                             placeholder="Enter East Price"
-                            className="bg-white border-gray-300 focus:border-black rounded-[4px] focus-visible:ring-0"
+                            className={`bg-white border-gray-300 focus:border-black rounded-[4px] focus-visible:ring-0 ${projectEastPriceError ? 'border-red-500' : ''}`}
                             value={projectEastPrice}
-                            onChange={(e) => setProjectEastPrice(e.target.value)}
+                            onChange={(e) => {
+                                setProjectEastPrice(e.target.value);
+                                setProjectEastPriceError('');
+                            }}
                         />
+                        {projectEastPriceError && <p className="text-xs text-red-500">{projectEastPriceError}</p>}
                     </div>
 
                     <div className="flex flex-col gap-2">
@@ -134,10 +153,14 @@ function Addproject({ refreshProject }) {
                             id="projectSixFloorPrice"
                             type="number"
                             placeholder="Enter Six Floor Onwards Price"
-                            className="bg-white border-gray-300 focus:border-black rounded-[4px] focus-visible:ring-0"
+                            className={`bg-white border-gray-300 focus:border-black rounded-[4px] focus-visible:ring-0 ${projectSixFloorPriceError ? 'border-red-500' : ''}`}
                             value={projectSixFloorPrice}
-                            onChange={(e) => setProjectSixFloorPrice(e.target.value)}
+                            onChange={(e) => {
+                                setProjectSixFloorPrice(e.target.value);
+                                setProjectSixFloorPriceError('');
+                            }}
                         />
+                        {projectSixFloorPriceError && <p className="text-xs text-red-500">{projectSixFloorPriceError}</p>}
                     </div>
 
                     <div className="flex items-center gap-2 mt-2">
