@@ -21,11 +21,13 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Addnewlead = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoadingEffect, setIsLoadingEffect] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   const employeeInfo = useEmployeeDetails((state) => state.employeeInfo);
   const employeeId = employeeInfo?.id || null;
@@ -221,14 +223,14 @@ const Addnewlead = () => {
     setAadharCardNoError("");
   };
 
-  const [countryOfCitizenship, setCountryOfCitizenship] = useState("101");
+  const [countryOfCitizenship, setCountryOfCitizenship] = useState("");
   const [countryOfCitizenshipError, setCountryOfCitizenshipError] = useState("");
   const updateCountryOfCitizenship = (value) => {
     setCountryOfCitizenship(value);
     setCountryOfCitizenshipError("");
   };
 
-  const [countryOfResidence, setCountryOfResidence] = useState("101");
+  const [countryOfResidence, setCountryOfResidence] = useState("");
   const [countryOfResidenceError, setCountryOfResidenceError] = useState("");
   const updateCountryOfResidence = (value) => {
     setCountryOfResidence(value);
@@ -289,7 +291,11 @@ const Addnewlead = () => {
 
   // New Lead Schema Fields
   const [leadStatus, setLeadStatus] = useState("");
-  const updateLeadStatus = (value) => setLeadStatus(value);
+  const [leadStatusError, setLeadStatusError] = useState("");
+  const updateLeadStatus = (value) => {
+    setLeadStatus(value);
+    setLeadStatusError("");
+  };
 
   const [minBudget, setMinBudget] = useState("");
   const updateMinBudget = (e) => setMinBudget(e.target.value);
@@ -310,22 +316,27 @@ const Addnewlead = () => {
   const updateLeadAge = (e) => setLeadAge(e.target.value);
 
   const [leadStageId, setLeadStageId] = useState("");
+  const [leadStageError, setLeadStageError] = useState("");
   const [leadStagesData, setLeadStagesData] = useState([]);
   const [selectedLeadStageName, setSelectedLeadStageName] = useState("");
 
   const updateLeadStage = (value) => {
     setLeadStageId(value);
+    setLeadStageError("");
     const selectedStage = leadStagesData.find(stage => stage.id.toString() === value);
     const stageName = selectedStage ? selectedStage.name : "";
     setSelectedLeadStageName(stageName);
 
-    // clear lead status if stage is Not Interested (or just handled by visibility, but good to reset logic if needed)
-    // The requirement says: if Interested/New Lead show, if Not Interested hide.
-    // If hidden, we might want to clear it, but maybe not strictly required.
+    // Clear lead status if stage changes to one that doesn't show status
+    if (!["Interested", "New Lead"].includes(stageName)) {
+      setLeadStatus("");
+      setLeadStatusError("");
+    }
   };
 
   const [projects, setProjects] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState("");
+  const [projectError, setProjectError] = useState("");
 
   async function getProjects() {
     try {
@@ -342,11 +353,12 @@ const Addnewlead = () => {
   const [correspondenceCityData, setCorrespondenceCityData] = useState([]);
   const [permanentCityData, setPermanentCityData] = useState([]);
 
-  const [correspondenceCountry, setCorrespondenceCountry] = useState("101");
+  const [correspondenceCountry, setCorrespondenceCountry] = useState("");
   const [correspondenceCountryError, setCorrespondenceCountryError] = useState("");
   const updateCorrespondenceCountry = (value) => {
     setCorrespondenceCountry(value);
-    getStates(value);
+    setCorrespondenceState("");
+    setCorrespondenceCity("");
     setCorrespondenceCountryError("");
   };
 
@@ -378,10 +390,12 @@ const Addnewlead = () => {
     setCorrespondenceAddressError("");
   };
 
-  const [permanentCountry, setPermanentCountry] = useState("101");
+  const [permanentCountry, setPermanentCountry] = useState("");
   const [permanentCountryError, setPermanentCountryError] = useState("");
   const updatePermanentCountry = (value) => {
     setPermanentCountry(value);
+    setPermanentState("");
+    setPermanentCity("");
     setPermanentCountryError("");
   };
 
@@ -537,6 +551,7 @@ const Addnewlead = () => {
   }
 
   async function getStates(country) {
+    if (!country) return;
     await Settingsapi.get("/get-states", {
       params: {
         country_id: country,
@@ -551,11 +566,9 @@ const Addnewlead = () => {
             server_res: data,
           };
           setErrorMessage(finalResponse);
-          setIsLoadingEffect(false);
           return;
         }
         setStateData(data?.data || []);
-        setIsLoadingEffect(false);
       })
       .catch((error) => {
         console.log("Error:", error);
@@ -572,7 +585,6 @@ const Addnewlead = () => {
           };
         }
         setErrorMessage(finalresponse);
-        setIsLoadingEffect(false);
       });
   }
 
@@ -681,12 +693,45 @@ const Addnewlead = () => {
   }, [permanentState]);
 
   useEffect(() => {
-    fetchCountryCodes();
-    fetchCountryNames();
-    getStates(101);
-    getLeadStages();
-    getProjects();
+    const loadInitialData = async () => {
+      setIsInitialLoading(true);
+      try {
+        await Promise.all([
+          fetchCountryCodes(),
+          fetchCountryNames(),
+          getLeadStages(),
+          getProjects(),
+        ]);
+      } catch (error) {
+        console.error("Error loading initial data:", error);
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+    loadInitialData();
   }, []);
+
+  // Set India as default country and fetch states once countryNames are loaded
+  useEffect(() => {
+    if (countryNames && countryNames.length > 0) {
+      const indiaCountry = countryNames.find((c) => c.label === "India");
+      if (indiaCountry) {
+        if (!countryOfCitizenship) setCountryOfCitizenship(indiaCountry.value);
+        if (!countryOfResidence) setCountryOfResidence(indiaCountry.value);
+        if (!correspondenceCountry) setCorrespondenceCountry(indiaCountry.value);
+        if (!permanentCountry) setPermanentCountry(indiaCountry.value);
+      }
+    }
+  }, [countryNames]);
+
+  // Fetch states when correspondence country changes
+  useEffect(() => {
+    if (correspondenceCountry) {
+      getStates(correspondenceCountry);
+    } else {
+      setStateData([]);
+    }
+  }, [correspondenceCountry]);
 
   const handleSubmit = async () => {
     setIsLoadingEffect(true);
@@ -721,6 +766,26 @@ const Addnewlead = () => {
       isValid = false;
     } else if (phoneNumber.length !== 10 || !/^\d{10}$/.test(phoneNumber)) {
       setPhoneNumberError("Please enter a valid 10-digit phone number");
+      isValid = false;
+    }
+
+    if (selectedProjectId === "") {
+      setProjectError("Project is required");
+      isValid = false;
+    }
+
+    if (employee === "") {
+      setEmployeeError("Employee is required");
+      isValid = false;
+    }
+
+    if (leadStageId === "") {
+      setLeadStageError("Lead Stage is required");
+      isValid = false;
+    }
+
+    if (["Interested", "New Lead"].includes(selectedLeadStageName) && leadStatus === "") {
+      setLeadStatusError("Lead Status is required");
       isValid = false;
     }
 
@@ -788,27 +853,27 @@ const Addnewlead = () => {
         spouse_prefixes: spousePrefix,
         spouse_name: spouseName,
         marital_status: maritalStatus,
-        number_of_children: Number(numberOfChildren),
+        number_of_children: numberOfChildren ? Number(numberOfChildren) : null,
         wedding_aniversary: weddingAniversary,
         spouse_dob: spouseDob,
         pan_card_no: panCardNo,
         aadhar_card_no: aadharCardNo,
-        country_of_citizenship: countryOfCitizenship,
-        country_of_residence: countryOfResidence,
+        country_of_citizenship: countryOfCitizenship || null,
+        country_of_residence: countryOfResidence || null,
         mother_tongue: motherTongue,
         name_of_poa: nameOfPoa,
         holder_poa: holderPoa,
-        no_of_years_correspondence_address: Number(noOfYearsCorrespondenceAddress),
-        no_of_years_city: Number(noOfYearsCity),
+        no_of_years_correspondence_address: noOfYearsCorrespondenceAddress ? Number(noOfYearsCorrespondenceAddress) : null,
+        no_of_years_city: noOfYearsCity ? Number(noOfYearsCity) : null,
         have_you_owned_abode: haveYouOwnedAbode,
         if_owned_project_name: ifOwnedProjectName,
-        correspondence_country: correspondenceCountry,
-        correspondence_state: correspondenceState,
+        correspondence_country: correspondenceCountry || null,
+        correspondence_state: correspondenceState || null,
         correspondence_city: correspondenceCity,
         correspondence_address: correspondenceAddress,
         correspondence_pincode: correspondencePincode,
-        permanent_country: permanentCountry,
-        permanent_state: permanentState,
+        permanent_country: permanentCountry || null,
+        permanent_state: permanentState || null,
         permanent_city: permanentCity,
         permanent_address: permanentAddress,
         permanent_pincode: permanentPincode,
@@ -816,8 +881,8 @@ const Addnewlead = () => {
         current_designation: currentDesignation,
         name_of_current_organization: currentOrganization,
         address_of_current_organization: organizationAddress,
-        no_of_years_work_experience: parseFloat(workExperience),
-        current_annual_income: parseFloat(annualIncome),
+        no_of_years_work_experience: workExperience ? parseFloat(workExperience) : null,
+        current_annual_income: annualIncome ? parseFloat(annualIncome) : null,
         // New Lead Fields
         lead_status: leadStatus || null,
         min_budget: minBudget ? parseFloat(minBudget) : null,
@@ -828,7 +893,7 @@ const Addnewlead = () => {
 
         lead_age: leadAge ? parseInt(leadAge) : null,
         lead_stage_id: leadStageId || null,
-        project_id: selectedProjectId,
+        project_id: selectedProjectId || null,
       }, {
         headers: {
           "Content-Type": "application/json",
@@ -904,135 +969,184 @@ const Addnewlead = () => {
         </Link>
       </div>
       <div className="flex flex-col gap-6 w-full bg-white rounded-lg shadow-sm border border-[#ebecef] p-8">
-        {/* Lead Basic Info */}
-        <div className="flex flex-col gap-4">
-          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Lead Basic Info</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Prefix <span className="text-red-500">*</span></Label>
-              <Select value={prefixes} onValueChange={updatePrefix}>
-                <SelectTrigger className={prefixError ? "border-red-500" : ""}>
-                  <SelectValue placeholder="Select Prefix" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Mr">Mr</SelectItem>
-                  <SelectItem value="Mrs">Mrs</SelectItem>
-                  <SelectItem value="Miss">Miss</SelectItem>
-                  <SelectItem value="Mx">Mx</SelectItem>
-                </SelectContent>
-              </Select>
-              {prefixError && <p className="text-red-500 text-xs">{prefixError}</p>}
+        {isInitialLoading ? (
+          <div className="flex flex-col gap-6">
+            {/* Lead Basic Info Skeleton */}
+            <div className="flex flex-col gap-4">
+              <Skeleton className="h-7 w-40" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="flex flex-col gap-1.5">
+                    <Skeleton className="h-4 w-28" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                ))}
+              </div>
             </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Full Name <span className="text-red-500">*</span></Label>
-              <Input
-                placeholder="Enter Full Name"
-                value={fullName}
-                onChange={updateFullName}
-                className={fullNameError ? "border-red-500" : ""}
-              />
-              {fullNameError && <p className="text-red-500 text-xs">{fullNameError}</p>}
+            {/* Lead Preferences Skeleton */}
+            <div className="flex flex-col gap-4 pt-4 border-t">
+              <Skeleton className="h-7 w-44" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="flex flex-col gap-1.5">
+                    <Skeleton className="h-4 w-28" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                ))}
+              </div>
             </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Email Address</Label>
-              <Input
-                placeholder="Enter Email Address"
-                value={email}
-                onChange={updateEmail}
-                className={emailError ? "border-red-500" : ""}
-              />
-              {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
+            {/* Lead Address Skeleton */}
+            <div className="flex flex-col gap-4 pt-4 border-t">
+              <Skeleton className="h-7 w-36" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex flex-col gap-1.5">
+                    <Skeleton className="h-4 w-28" />
+                    <Skeleton className="h-10 w-full" />
+                  </div>
+                ))}
+              </div>
             </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Phone Number <span className="text-red-500">*</span></Label>
-              <div className="flex gap-2">
-                <div className="w-[100px]">
-                  <Select value={phoneCode} onValueChange={updatePhoneCode}>
-                    <SelectTrigger className={phoneCodeError ? "border-red-500" : ""}>
-                      <SelectValue placeholder="Code" />
+            {/* Submit Button Skeleton */}
+            <div className="flex justify-end">
+              <Skeleton className="h-10 w-24" />
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Lead Basic Info */}
+            <div className="flex flex-col gap-4">
+              <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Lead Basic Info</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Prefix <span className="text-red-500">*</span></Label>
+                  <Select value={prefixes} onValueChange={updatePrefix}>
+                    <SelectTrigger className={prefixError ? "border-red-500" : ""}>
+                      <SelectValue placeholder="Select Prefix" />
                     </SelectTrigger>
                     <SelectContent>
-                      {countryCodes.map((c) => (
-                        <SelectItem key={c.value} value={String(c.value)}>+{c.value}</SelectItem>
-                      ))}
+                      <SelectItem value="Mr">Mr</SelectItem>
+                      <SelectItem value="Mrs">Mrs</SelectItem>
+                      <SelectItem value="Miss">Miss</SelectItem>
+                      <SelectItem value="Mx">Mx</SelectItem>
                     </SelectContent>
                   </Select>
+                  {prefixError && <p className="text-red-500 text-xs">{prefixError}</p>}
                 </div>
-                <div className="flex-1">
+
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Full Name <span className="text-red-500">*</span></Label>
                   <Input
-                    placeholder="Enter Phone Number"
-                    value={phoneNumber}
-                    onChange={updatePhoneNumber}
-                    className={phoneNumberError ? "border-red-500" : ""}
+                    placeholder="Enter Full Name"
+                    value={fullName}
+                    onChange={updateFullName}
+                    className={fullNameError ? "border-red-500" : ""}
                   />
+                  {fullNameError && <p className="text-red-500 text-xs">{fullNameError}</p>}
                 </div>
-              </div>
-              {(phoneCodeError || phoneNumberError) && (
-                <p className="text-red-500 text-xs">{phoneCodeError || phoneNumberError}</p>
-              )}
-            </div>
 
-            {/* Project Selection */}
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Project</Label>
-              <Select
-                value={selectedProjectId}
-                onValueChange={(value) => setSelectedProjectId(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Project" />
-                </SelectTrigger>
-                <SelectContent>
-                  {projects.length > 0 ? projects.map((project) => (
-                    <SelectItem key={project.id} value={String(project.id)}>
-                      {project.project_name}
-                    </SelectItem>
-                  )) : (
-                    <p className="text-sm text-gray-500 px-2 py-1.5">No data found</p>
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Email Address</Label>
+                  <Input
+                    placeholder="Enter Email Address"
+                    value={email}
+                    onChange={updateEmail}
+                    className={emailError ? "border-red-500" : ""}
+                  />
+                  {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Phone Number <span className="text-red-500">*</span></Label>
+                  <div className="flex gap-2">
+                    <div className="w-[100px]">
+                      <Select value={phoneCode} onValueChange={updatePhoneCode}>
+                        <SelectTrigger className={phoneCodeError ? "border-red-500" : ""}>
+                          <SelectValue placeholder="Code" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countryCodes.map((c) => (
+                            <SelectItem key={c.value} value={String(c.value)}>+{c.value}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex-1">
+                      <Input
+                        placeholder="Enter Phone Number"
+                        value={phoneNumber}
+                        onChange={updatePhoneNumber}
+                        className={phoneNumberError ? "border-red-500" : ""}
+                      />
+                    </div>
+                  </div>
+                  {(phoneCodeError || phoneNumberError) && (
+                    <p className="text-red-500 text-xs">{phoneCodeError || phoneNumberError}</p>
                   )}
-                </SelectContent>
-              </Select>
-            </div>
+                </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Assign to Employee</Label>
-              <Select value={employee} onValueChange={updateEmployee} disabled={!selectedProjectId}>
-                <SelectTrigger className={employeeError ? "border-red-500" : ""}>
-                  <SelectValue placeholder="Select Employee" />
-                </SelectTrigger>
-                <SelectContent>
-                  {employeeData.length > 0 ? employeeData.map((e) => (
-                    <SelectItem key={e.value} value={String(e.value)}>{e.label}</SelectItem>
-                  )) : (
-                    <p className="text-sm text-gray-500 px-2 py-1.5">No data found</p>
-                  )}
-                </SelectContent>
-              </Select>
-              {employeeError && <p className="text-red-500 text-xs">{employeeError}</p>}
-            </div>
+                {/* Project Selection */}
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Project <span className="text-red-500">*</span></Label>
+                  <Select
+                    value={selectedProjectId}
+                    onValueChange={(value) => {
+                      setSelectedProjectId(value);
+                      setProjectError("");
+                    }}
+                  >
+                    <SelectTrigger className={projectError ? "border-red-500" : ""}>
+                      <SelectValue placeholder="Select Project" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {projects.length > 0 ? projects.map((project) => (
+                        <SelectItem key={project.id} value={String(project.id)}>
+                          {project.project_name}
+                        </SelectItem>
+                      )) : (
+                        <p className="text-sm text-gray-500 px-2 py-1.5">No data found</p>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {projectError && <p className="text-red-500 text-xs">{projectError}</p>}
+                </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Source of Lead </Label>
-              <Select value={sourseOfLead} onValueChange={updateSourseOfLead}>
-                <SelectTrigger className={sourseOfLeadError ? "border-red-500" : ""}>
-                  <SelectValue placeholder="Select Source" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Instagram">Instagram</SelectItem>
-                  <SelectItem value="Facebook">Facebook</SelectItem>
-                  <SelectItem value="Referral">Referral</SelectItem>
-                  <SelectItem value="Friend">Friend</SelectItem>
-                  <SelectItem value="Walk-In">Walk-In</SelectItem>
-                  <SelectItem value="Others">Others</SelectItem>
-                </SelectContent>
-              </Select>
-              {sourseOfLeadError && <p className="text-red-500 text-xs">{sourseOfLeadError}</p>}
-            </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Assign to Employee <span className="text-red-500">*</span></Label>
+                  <Select value={employee} onValueChange={updateEmployee} disabled={!selectedProjectId}>
+                    <SelectTrigger className={employeeError ? "border-red-500" : ""}>
+                      <SelectValue placeholder="Select Employee" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {employeeData.length > 0 ? employeeData.map((e) => (
+                        <SelectItem key={e.value} value={String(e.value)}>{e.label}</SelectItem>
+                      )) : (
+                        <p className="text-sm text-gray-500 px-2 py-1.5">No data found</p>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {employeeError && <p className="text-red-500 text-xs">{employeeError}</p>}
+                </div>
 
-            {/* <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Source of Lead </Label>
+                  <Select value={sourseOfLead} onValueChange={updateSourseOfLead}>
+                    <SelectTrigger className={sourseOfLeadError ? "border-red-500" : ""}>
+                      <SelectValue placeholder="Select Source" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Instagram">Instagram</SelectItem>
+                      <SelectItem value="Facebook">Facebook</SelectItem>
+                      <SelectItem value="Referral">Referral</SelectItem>
+                      <SelectItem value="Friend">Friend</SelectItem>
+                      <SelectItem value="Walk-In">Walk-In</SelectItem>
+                      <SelectItem value="Others">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {sourseOfLeadError && <p className="text-red-500 text-xs">{sourseOfLeadError}</p>}
+                </div>
+
+                {/* <div className="flex flex-col gap-1.5">
               <Label className="text-neutral-700 font-medium">Gender</Label>
               <Select value={gender} onValueChange={updateGender}>
                 <SelectTrigger className={genderError ? "border-red-500" : ""}>
@@ -1047,7 +1161,7 @@ const Addnewlead = () => {
               {genderError && <p className="text-red-500 text-xs">{genderError}</p>}
             </div> */}
 
-            {/* <div className="flex flex-col gap-1.5">
+                {/* <div className="flex flex-col gap-1.5">
               <Label className="text-neutral-700 font-medium">Date of Birth</Label>
               <Datepicker
                 value={dateOfBirth}
@@ -1114,9 +1228,9 @@ const Addnewlead = () => {
               />
               {aadharCardNoError && <p className="text-red-500 text-xs">{aadharCardNoError}</p>}
             </div> */}
-          </div>
+              </div>
 
-          {/* {maritalStatus === "Married" && (
+              {/* {maritalStatus === "Married" && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-md border border-gray-100">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-neutral-700 font-medium">Spouse Prefix</Label>
@@ -1167,113 +1281,115 @@ const Addnewlead = () => {
               </div>
             </div>
           )} */}
-        </div>
-
-        {/* Lead Preferences */}
-        <div className="flex flex-col gap-4 pt-4 border-t">
-          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Lead Preferences</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Lead Stage</Label>
-              <Select value={leadStageId} onValueChange={updateLeadStage}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Stage" />
-                </SelectTrigger>
-                <SelectContent>
-                  {leadStagesData.map((stage) => (
-                    <SelectItem key={stage.id} value={String(stage.id)}>{stage.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
 
-            {["Interested", "New Lead"].includes(selectedLeadStageName) && (
-              <div className="flex flex-col gap-1.5">
-                <Label className="text-neutral-700 font-medium">Lead Status</Label>
-                <Select value={leadStatus} onValueChange={updateLeadStatus}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Hot">Hot</SelectItem>
-                    <SelectItem value="Cold">Cold</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
+            {/* Lead Preferences */}
+            <div className="flex flex-col gap-4 pt-4 border-t">
+              <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Lead Preferences</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Bedroom Preference</Label>
-              <Select value={bedroom} onValueChange={(val) => setBedroom(val)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Bedroom" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2 BHK">2 BHK</SelectItem>
-                  <SelectItem value="3 BHK">3 BHK</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Minimum Budget</Label>
-              <Input
-                type="number"
-                placeholder="Enter min budget"
-                value={minBudget}
-                onChange={updateMinBudget}
-              />
-            </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Lead Stage <span className="text-red-500">*</span></Label>
+                  <Select value={leadStageId} onValueChange={updateLeadStage}>
+                    <SelectTrigger className={leadStageError ? "border-red-500" : ""}>
+                      <SelectValue placeholder="Select Stage" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {leadStagesData.map((stage) => (
+                        <SelectItem key={stage.id} value={String(stage.id)}>{stage.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {leadStageError && <p className="text-red-500 text-xs">{leadStageError}</p>}
+                </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Maximum Budget</Label>
-              <Input
-                type="number"
-                placeholder="Enter max budget"
-                value={maxBudget}
-                onChange={updateMaxBudget}
-              />
-            </div>
+                {["Interested", "New Lead"].includes(selectedLeadStageName) && (
+                  <div className="flex flex-col gap-1.5">
+                    <Label className="text-neutral-700 font-medium">Lead Status <span className="text-red-500">*</span></Label>
+                    <Select value={leadStatus} onValueChange={updateLeadStatus}>
+                      <SelectTrigger className={leadStatusError ? "border-red-500" : ""}>
+                        <SelectValue placeholder="Select Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Hot">Hot</SelectItem>
+                        <SelectItem value="Cold">Cold</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {leadStatusError && <p className="text-red-500 text-xs">{leadStatusError}</p>}
+                  </div>
+                )}
 
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Purpose</Label>
-              <Select value={purpose} onValueChange={updatePurpose}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Purpose" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Enduse">End Use</SelectItem>
-                  <SelectItem value="Investment">Investment</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Bedroom Preference</Label>
+                  <Select value={bedroom} onValueChange={(val) => setBedroom(val)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Bedroom" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="2 BHK">2 BHK</SelectItem>
+                      <SelectItem value="3 BHK">3 BHK</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Funding</Label>
-              <Select value={funding} onValueChange={updateFunding}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Funding Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Selfloan">Self Loan</SelectItem>
-                  <SelectItem value="Bankloan">Bank Loan</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Minimum Budget</Label>
+                  <Input
+                    type="number"
+                    placeholder="Enter min budget"
+                    value={minBudget}
+                    onChange={updateMinBudget}
+                  />
+                </div>
 
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-neutral-700 font-medium">Lead Age (Days)</Label>
-              <Input
-                type="number"
-                placeholder="Enter lead age in days"
-                value={leadAge}
-                onChange={updateLeadAge}
-              />
-            </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Maximum Budget</Label>
+                  <Input
+                    type="number"
+                    placeholder="Enter max budget"
+                    value={maxBudget}
+                    onChange={updateMaxBudget}
+                  />
+                </div>
 
-            {/* <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Purpose</Label>
+                  <Select value={purpose} onValueChange={updatePurpose}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Purpose" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Enduse">End Use</SelectItem>
+                      <SelectItem value="Investment">Investment</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Funding</Label>
+                  <Select value={funding} onValueChange={updateFunding}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Funding Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Selfloan">Self Loan</SelectItem>
+                      <SelectItem value="Bankloan">Bank Loan</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Label className="text-neutral-700 font-medium">Lead Age (Days)</Label>
+                  <Input
+                    type="number"
+                    placeholder="Enter lead age in days"
+                    value={leadAge}
+                    onChange={updateLeadAge}
+                  />
+                </div>
+
+                {/* <div className="flex flex-col gap-1.5">
               <Label className="text-neutral-700 font-medium">Country of Citizenship</Label>
               <Select value={countryOfCitizenship} onValueChange={updateCountryOfCitizenship}>
                 <SelectTrigger>
@@ -1301,7 +1417,7 @@ const Addnewlead = () => {
               </Select>
             </div> */}
 
-            {/* <div className="flex flex-col gap-1.5">
+                {/* <div className="flex flex-col gap-1.5">
               <Label className="text-neutral-700 font-medium">POA Holder Status</Label>
               <Select value={holderPoa} onValueChange={updateHolderPoa}>
                 <SelectTrigger>
@@ -1322,152 +1438,156 @@ const Addnewlead = () => {
                 onChange={updateNameOfPoa}
               />
             </div> */}
-          </div>
-        </div>
-
-        {/* Lead Address */}
-        <div className="flex flex-col gap-4 pt-4 border-t">
-          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Lead Address</h3>
-
-          <div className="flex flex-col gap-6">
-            {/* Correspondence Address */}
-            <div className="flex flex-col gap-4">
-              <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Correspondence Address</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <Label className="text-neutral-700 font-medium">Country</Label>
-                  <Select value={correspondenceCountry} onValueChange={updateCorrespondenceCountry}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Country" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="101">India</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <Label className="text-neutral-700 font-medium">State</Label>
-                  <Select value={correspondenceState} onValueChange={updateCorrespondenceState}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select State" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {stateData.map((s) => (
-                        <SelectItem key={s.value} value={String(s.value)}>{s.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <Label className="text-neutral-700 font-medium">City</Label>
-                  <Select value={correspondenceCity} onValueChange={updateCorrespondenceCity}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select City" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {correspondenceCityData.map((c) => (
-                        <SelectItem key={c.value} value={String(c.value)}>{c.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col gap-1.5 md:col-span-2">
-                  <Label className="text-neutral-700 font-medium">Address</Label>
-                  <Textarea
-                    placeholder="Enter correspondence address"
-                    value={correspondenceAddress}
-                    onChange={updateCorrespondenceAddress}
-                    className="min-h-[80px]"
-                  />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <Label className="text-neutral-700 font-medium">Pin Code</Label>
-                  <Input
-                    placeholder="Enter pin code"
-                    value={correspondencePincode}
-                    onChange={updateCorrespondencePincode}
-                  />
-                </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 py-2">
-              <input
-                type="checkbox"
-                id="isSameAddress"
-                checked={isSameAddress}
-                onChange={(e) => handleIsSameAddress(e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-              />
-              <Label htmlFor="isSameAddress" className="text-sm font-medium text-gray-700 cursor-pointer">
-                Permanent Address same as Correspondence Address
-              </Label>
-            </div>
+            {/* Lead Address */}
+            <div className="flex flex-col gap-4 pt-4 border-t">
+              <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Lead Address</h3>
 
-            {/* Permanent Address */}
-            {!isSameAddress && (
-              <div className="flex flex-col gap-4">
-                <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Permanent Address</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <Label className="text-neutral-700 font-medium">Country</Label>
-                    <Select value={permanentCountry} onValueChange={updatePermanentCountry}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="101">India</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <Label className="text-neutral-700 font-medium">State</Label>
-                    <Select value={permanentState} onValueChange={updatePermanentState}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select State" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {stateData.map((s) => (
-                          <SelectItem key={s.value} value={String(s.value)}>{s.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <Label className="text-neutral-700 font-medium">City</Label>
-                    <Select value={permanentCity} onValueChange={updatePermanentCity}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select City" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {permanentCityData.map((c) => (
-                          <SelectItem key={c.value} value={String(c.value)}>{c.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex flex-col gap-1.5 md:col-span-2">
-                    <Label className="text-neutral-700 font-medium">Address</Label>
-                    <Textarea
-                      placeholder="Enter permanent address"
-                      value={permanentAddress}
-                      onChange={updatePermanentAddress}
-                      className="min-h-[80px]"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <Label className="text-neutral-700 font-medium">Pin Code</Label>
-                    <Input
-                      placeholder="Enter pin code"
-                      value={permanentPincode}
-                      onChange={updatePermanentPincode}
-                    />
+              <div className="flex flex-col gap-6">
+                {/* Correspondence Address */}
+                <div className="flex flex-col gap-4">
+                  <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Correspondence Address</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <Label className="text-neutral-700 font-medium">Country</Label>
+                      <Select value={correspondenceCountry} onValueChange={updateCorrespondenceCountry}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countryNames.map((c) => (
+                            <SelectItem key={c.value} value={String(c.value)}>{c.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <Label className="text-neutral-700 font-medium">State</Label>
+                      <Select value={correspondenceState} onValueChange={updateCorrespondenceState}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select State" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {stateData.map((s) => (
+                            <SelectItem key={s.value} value={String(s.value)}>{s.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <Label className="text-neutral-700 font-medium">City</Label>
+                      <Select value={correspondenceCity} onValueChange={updateCorrespondenceCity}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select City" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {correspondenceCityData.map((c) => (
+                            <SelectItem key={c.value} value={String(c.value)}>{c.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex flex-col gap-1.5 md:col-span-2">
+                      <Label className="text-neutral-700 font-medium">Address</Label>
+                      <Textarea
+                        placeholder="Enter correspondence address"
+                        value={correspondenceAddress}
+                        onChange={updateCorrespondenceAddress}
+                        className="min-h-[80px]"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <Label className="text-neutral-700 font-medium">Pin Code</Label>
+                      <Input
+                        placeholder="Enter pin code"
+                        value={correspondencePincode}
+                        onChange={updateCorrespondencePincode}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+                <div className="flex items-center gap-2 py-2">
+                  <input
+                    type="checkbox"
+                    id="isSameAddress"
+                    checked={isSameAddress}
+                    onChange={(e) => handleIsSameAddress(e.target.checked)}
+                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                  />
+                  <Label htmlFor="isSameAddress" className="text-sm font-medium text-gray-700 cursor-pointer">
+                    Permanent Address same as Correspondence Address
+                  </Label>
+                </div>
+
+                {/* Permanent Address */}
+                {!isSameAddress && (
+                  <div className="flex flex-col gap-4">
+                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Permanent Address</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <Label className="text-neutral-700 font-medium">Country</Label>
+                        <Select value={permanentCountry} onValueChange={updatePermanentCountry}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Country" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {countryNames.map((c) => (
+                              <SelectItem key={c.value} value={String(c.value)}>{c.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <Label className="text-neutral-700 font-medium">State</Label>
+                        <Select value={permanentState} onValueChange={updatePermanentState}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select State" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {stateData.map((s) => (
+                              <SelectItem key={s.value} value={String(s.value)}>{s.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <Label className="text-neutral-700 font-medium">City</Label>
+                        <Select value={permanentCity} onValueChange={updatePermanentCity}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select City" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {permanentCityData.map((c) => (
+                              <SelectItem key={c.value} value={String(c.value)}>{c.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex flex-col gap-1.5 md:col-span-2">
+                        <Label className="text-neutral-700 font-medium">Address</Label>
+                        <Textarea
+                          placeholder="Enter permanent address"
+                          value={permanentAddress}
+                          onChange={updatePermanentAddress}
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <Label className="text-neutral-700 font-medium">Pin Code</Label>
+                        <Input
+                          placeholder="Enter pin code"
+                          value={permanentPincode}
+                          onChange={updatePermanentPincode}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-neutral-700 font-medium">Years at Correspondence Address</Label>
                 <Input
@@ -1487,10 +1607,10 @@ const Addnewlead = () => {
                 />
               </div>
             </div> */}
-          </div>
-        </div>
+              </div>
+            </div>
 
-        {/* <Textinput
+            {/* <Textinput
           placeholder="Enter Pan Card No"
           label="Pan Card No (e.g., XXXXX1234X)"
           value={panCardNo}
@@ -1606,6 +1726,8 @@ const Addnewlead = () => {
             inputClassName="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#044093] focus:outline-none transition-colors duration-200 placeholder-gray-400"
           />
         )} */}
+          </>
+        )}
       </div>
       {/* <hr className="border border-[#ebecef]" />
             <div className="flex flex-col gap-3">
