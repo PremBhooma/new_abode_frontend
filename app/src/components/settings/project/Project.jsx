@@ -14,7 +14,14 @@ import {
     TableHeader,
     TableRow,
 } from "../../ui/table";
-import { Dialog, DialogContent } from "../../ui/dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter
+} from "../../ui/dialog";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
 import Singleprojectdetails from "./Singleprojectdetails";
@@ -26,6 +33,8 @@ const Project = () => {
     const [selectedProject, setSelectedProject] = useState(null);
     const [updateProjectModal, setUpdateProjectModal] = useState(false);
     const [viewProjectDrawer, setViewProjectDrawer] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [projectToDelete, setProjectToDelete] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
 
     const openUpdateProjectModal = (project) => {
@@ -83,11 +92,18 @@ const Project = () => {
             });
     }
 
-    const handleDeleteProject = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this project?")) return;
+    const confirmDeleteProject = (id) => {
+        setProjectToDelete(id);
+        setDeleteModalOpen(true);
+    };
+
+    const executeDeleteProject = async () => {
+        if (!projectToDelete) return;
 
         setIsLoading(true);
-        Projectapi.post("delete-project", { id})
+        setDeleteModalOpen(false);
+
+        Projectapi.post("delete-project", { id: projectToDelete })
             .then((response) => {
                 const data = response.data;
                 if (data.status === "success") {
@@ -97,11 +113,13 @@ const Project = () => {
                     toast.error(data.message);
                 }
                 setIsLoading(false);
+                setProjectToDelete(null);
             })
             .catch((error) => {
                 console.error("Error deleting project:", error);
                 toast.error("Failed to delete project");
                 setIsLoading(false);
+                setProjectToDelete(null);
             });
     };
 
@@ -198,8 +216,9 @@ const Project = () => {
                                                     )}
                                                     {permissions?.settings_page?.includes("delete_project") && (
                                                         <div
-                                                            onClick={() => handleDeleteProject(project.id)}
+                                                            onClick={() => confirmDeleteProject(project.id)}
                                                             className="p-1 hover:bg-red-50 rounded-md transition-colors text-neutral-500 hover:text-red-600 cursor-pointer"
+                                                            title="Delete Project"
                                                         >
                                                             <IconTrash size={18} />
                                                         </div>
@@ -239,6 +258,29 @@ const Project = () => {
                 isOpen={viewProjectDrawer}
                 onClose={setViewProjectDrawer}
             />
+
+            <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Delete Project</DialogTitle>
+                        <DialogDescription className="mt-2 text-sm text-neutral-500">
+                            Are you sure you want to delete this project? This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="flex justify-end gap-2 mt-4 pt-4 border-t border-neutral-100">
+                        <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={executeDeleteProject}
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                        >
+                            Delete
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
