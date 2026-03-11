@@ -390,6 +390,7 @@ function Editleadwrapper() {
   const [correspondenceStateError, setCorrespondenceStateError] = useState("");
   const updateCorrespondenceState = (value) => {
     setCorrespondenceState(value);
+    setCorrespondenceCity("");
     setCorrespondenceStateError("");
   };
 
@@ -432,6 +433,7 @@ function Editleadwrapper() {
   const [permanentStateError, setPermanentStateError] = useState("");
   const updatePermanentState = (value) => {
     setPermanentState(value);
+    setPermanentCity("");
     setPermanentStateError("");
   };
 
