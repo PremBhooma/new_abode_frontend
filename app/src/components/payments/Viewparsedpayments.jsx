@@ -565,11 +565,22 @@ function Viewparsedpayments() {
                 // Map backend errors to rows
                 const updatedRows = validatedData.map((row) => {
                     const backendError = data.errors.find(err => String(err.flat_id) === String(row.flat_id));
+                    let txnError = '';
+                    let genError = '';
+                    if (backendError) {
+                        if (backendError.message.toLowerCase().includes('transaction id')) {
+                            txnError = backendError.message;
+                        } else {
+                            genError = backendError.message;
+                        }
+                    }
+
                     return {
                         ...row,
                         error: {
                             ...row.error,
-                            backend: backendError ? backendError.message : ''
+                            transaction_id: txnError || row.error.transaction_id,
+                            backend: genError
                         }
                     };
                 });
@@ -648,6 +659,11 @@ function Viewparsedpayments() {
                 <hr className='border border-[#ebecef]' />
                 {bulkUpload?.map((row, index) => (
                     <div key={index} ref={el => rowRefs.current[index] = el} className="relative flex flex-col gap-2 border border-[#ebecef] rounded-xl bg-white px-8 py-6">
+                        {row?.error.backend && (
+                            <div className="w-full text-sm text-red-600 bg-red-50 px-3 py-2 rounded-md border border-red-200">
+                                {row.error.backend}
+                            </div>
+                        )}
                         <div className="w-full flex flex-row gap-4">
                             <div className="w-1/2 flex flex-col gap-2">
                                 <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">

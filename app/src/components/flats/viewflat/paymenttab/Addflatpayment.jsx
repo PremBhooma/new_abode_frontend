@@ -244,10 +244,14 @@ function Addflatpayment({ flat_id, closeAddFlatPayment, refreshAllPayments, cust
             });
             const data = res.data;
             if (data.status === "error") {
-                setErrorMessage({
-                    message: data.message,
-                    server_res: data,
-                });
+                if (data?.message?.toLowerCase().includes("transaction id")) {
+                    setTransactionIdError(data.message);
+                } else {
+                    setErrorMessage({
+                        message: data.message,
+                        server_res: data,
+                    });
+                }
                 setIsLoadingEffect(false);
                 return false;
             }
