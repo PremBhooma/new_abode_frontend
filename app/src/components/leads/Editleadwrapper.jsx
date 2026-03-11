@@ -376,7 +376,7 @@ function Editleadwrapper() {
   const [correspondenceCityData, setCorrespondenceCityData] = useState([]);
   const [permanentCityData, setPermanentCityData] = useState([]);
 
-  const [correspondenceCountry, setCorrespondenceCountry] = useState("101");
+  const [correspondenceCountry, setCorrespondenceCountry] = useState("");
   const [correspondenceCountryError, setCorrespondenceCountryError] =
     useState("");
   const updateCorrespondenceCountry = (value) => {
@@ -420,7 +420,7 @@ function Editleadwrapper() {
     setCorrespondenceAddressError("");
   };
 
-  const [permanentCountry, setPermanentCountry] = useState("101");
+  const [permanentCountry, setPermanentCountry] = useState("");
   const [permanentCountryError, setPermanentCountryError] = useState("");
   const updatePermanentCountry = (value) => {
     setPermanentCountry(value);
@@ -646,8 +646,23 @@ function Editleadwrapper() {
     }
   }, [permanentState]);
 
+
+
   const [countryCodes, setCountryCodes] = useState([]);
   const [countryNames, setCountryNames] = useState([]);
+
+  // Set India as default country once countryNames are loaded
+  useEffect(() => {
+    if (countryNames && countryNames.length > 0) {
+      const indiaCountry = countryNames.find((c) => c.label === "India");
+      if (indiaCountry) {
+        if (!countryOfCitizenship) setCountryOfCitizenship(indiaCountry.value);
+        if (!countryOfResidence) setCountryOfResidence(indiaCountry.value);
+        if (!correspondenceCountry) setCorrespondenceCountry(indiaCountry.value);
+        if (!permanentCountry) setPermanentCountry(indiaCountry.value);
+      }
+    }
+  }, [countryNames]);
 
   async function fetchCountryCodes() {
     setIsLoadingEffect(true);
@@ -781,13 +796,13 @@ function Editleadwrapper() {
           setHaveYouOwnedAbode(data?.data?.have_you_owned_abode || "");
           setIfOwnedProjectName(data?.data?.if_owned_project_name || "");
           setCorrespondenceCountry(
-            data?.data?.correspondenceCountryId || "101"
+            data?.data?.correspondenceCountryId || ""
           );
           setCorrespondenceState(data?.data?.correspondenceStateId || "");
           setCorrespondenceCity(data?.data?.correspondenceCityId || "");
           setCorrespondenceAddress(data?.data?.correspondenceAddress || "");
           setCorrespondencePincode(data?.data?.correspondencePincode || "");
-          setPermanentCountry(data?.data?.permanentCountryId || "101");
+          setPermanentCountry(data?.data?.permanentCountryId || "");
           setPermanentState(data?.data?.permanentStateId || "");
           setPermanentCity(data?.data?.permanentCityId || "");
           setPermanentAddress(data?.data?.permanentAddress || "");
