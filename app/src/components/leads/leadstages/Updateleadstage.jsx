@@ -3,7 +3,9 @@ import Settingsapi from "../../api/Settingsapi";
 import Leadapi from "../../api/Leadapi";
 import Errorpanel from '../../shared/Errorpanel';
 import { toast } from 'react-toastify';
-import { Button, Card, Group, Loadingoverlay, Select, Text } from '@nayeshdaggula/tailify';
+import { Button } from '../../ui/button';
+import { Skeleton } from '../../ui/skeleton';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 
 function Updateleadstage({ closeUpdateLeadStageModal, refreshLead, leadStageValue, currentLeadId, onUpdateLeadStage }) {
@@ -111,35 +113,41 @@ function Updateleadstage({ closeUpdateLeadStageModal, refreshLead, leadStageValu
     return (
         <>
             <div className='flex flex-col gap-4'>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center mb-4'>
                     <p className="!font-semibold text-[18px] text-[#2b2b2b]">Update Lead Stage</p>
 
-                    <Button onClick={closeUpdateLeadStageModal} size="sm" variant="default" className='!px-2 !py-1.5 !text-red-500 hover:!border-red-500'>
+                    <Button onClick={closeUpdateLeadStageModal} size="sm" variant="outline" className='!px-2 !py-1.5 !text-red-500 hover:!border-red-500 bg-white group'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                            <path d="M1 13L7 7L13 13M13 1L6.99886 7L1 1" stroke="#FF0000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M1 13L7 7L13 13M13 1L6.99886 7L1 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </Button>
                 </div>
-                <Select
-                    data={leadStagesData}
-                    placeholder="Lead Stage"
-                    searchable
-                    value={updateLeadStage}
-                    error={updateLeadStageError}
-                    onChange={updateLead}
-                    selectWrapperClass="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#044093] focus:outline-none transition-colors duration-200 placeholder-gray-400 !shadow-none"
-                    className="w-full"
-                    dropdownClassName="max-h-48 border border-gray-300 rounded-md bg-white overflow-y-auto"
-                />
+                
+                <div className="flex flex-col gap-1 w-full relative z-[99999]">
+                    <Select value={updateLeadStage || ""} onValueChange={updateLead}>
+                        <SelectTrigger className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-[#044093] focus:outline-none transition-colors duration-200 shadow-none bg-white">
+                            <SelectValue placeholder="Select lead stage" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-48 bg-white z-[99999]">
+                            <SelectGroup>
+                                {leadStagesData?.map((item) => (
+                                    <SelectItem key={item.value || item.id} value={item.value || item.id}>
+                                        {item.label || item.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                    {updateLeadStageError && <span className="text-red-500 text-sm mt-1">{updateLeadStageError}</span>}
+                </div>
+
                 {isLoadingEffect ? (
-                    isLoadingEffect && (
-                        <div className="absolute inset-0 bg-[#2b2b2bcc] flex flex-row justify-center items-center  rounded">
-                            <Loadingoverlay visible={isLoadingEffect} overlayBg="" />
-                        </div>
-                    )
+                    <div className="mt-4 flex flex-col items-end gap-2">
+                        <Skeleton className="h-10 w-24 rounded-md" />
+                    </div>
                 ) : (
-                    <div className='flex justify-end !p-0'>
-                        <button onClick={handleSubmit} disabled={isLoadingEffect} className="px-3 text-[14px] bg-[#0083bf] hover:!bg-[#0083bf]/90 text-white py-2 rounded cursor-pointer">Submit</button>
+                    <div className='flex justify-end !p-0 mt-4 relative z-[9999] pointer-events-auto'>
+                        <Button onClick={handleSubmit} disabled={isLoadingEffect} className="px-5 bg-[#0083bf] hover:bg-[#0083bf]/90 text-white rounded cursor-pointer relative z-[9999] pointer-events-auto">Submit</Button>
                     </div>
                 )}
             </div>

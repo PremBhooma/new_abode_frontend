@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "../ui/dialog.jsx";
 import { Link, useParams, NavLink, useNavigate } from "react-router-dom";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails.jsx";
@@ -407,7 +407,7 @@ function Leadview() {
       {errorMessage && <Errorpanel errorMessages={errorMessage} setErrorMessages={setErrorMessage} />}
 
       <Dialog open={uploadFileModal} onOpenChange={setUploadFileModal}>
-        <DialogContent className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] px-5 [&>button]:hidden">
+        <DialogContent onInteractOutside={(e) => e.preventDefault()} className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] px-5 [&>button]:hidden">
           {uploadFileModal && (
             <Uploadleadprofile
               closeUploadFileModal={closeUploadFileModal}
@@ -420,7 +420,7 @@ function Leadview() {
       </Dialog>
 
       <Dialog open={assignLead} onOpenChange={setAssignLead}>
-        <DialogContent className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] p-5 [&>button]:hidden">
+        <DialogContent onInteractOutside={(e) => e.preventDefault()} className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] p-5 [&>button]:hidden">
           {assignLead && (
             <AssignleadModal
               closeAsignLead={closeAsignLead}
@@ -432,7 +432,7 @@ function Leadview() {
       </Dialog>
 
       <Dialog open={transferLead} onOpenChange={setTransferLead}>
-        <DialogContent className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] p-5 [&>button]:hidden">
+        <DialogContent onInteractOutside={(e) => e.preventDefault()} className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] p-5 [&>button]:hidden">
           {transferLead && (
             <TransferleadModal
               closeTransferLead={closeTransferLead}
@@ -445,7 +445,7 @@ function Leadview() {
       </Dialog>
 
       <Dialog open={updateLeadStageModal} onOpenChange={setUpdateLeadStageModal}>
-        <DialogContent className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] !p-5 [&>button]:hidden">
+        <DialogContent onInteractOutside={(e) => e.preventDefault()} className="!max-w-[300px] xxm:!max-w-[350px] xs:!max-w-[390px] md:!max-w-[440px] !p-5 [&>button]:hidden">
           {updateLeadStageModal && (
             <Updateleadstage
               closeUpdateLeadStageModal={closeUpdateLeadStageModal}
