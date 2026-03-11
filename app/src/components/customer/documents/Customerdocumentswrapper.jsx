@@ -57,7 +57,7 @@ function Customerdocumentswrapper() {
       params: {
         currentFolderId: currentFolderId,
         currentFolderParentId: currentFolderParentId,
-        id: id,
+        customer_id_ref: id,
       },
       headers: {
         "Content-Type": "application/json",

@@ -69,7 +69,7 @@ function UploadfileModal({
     const formData = new FormData();
     formData.append("uploadfile", file);
     formData.append("folderPath", folderPath);
-    formData.append("id", id);
+    formData.append("customer_id_ref", id);
     formData.append("currentFolderId", currentFolderId);
     formData.append("file_type", filetype);
     formData.append("user_id", user_id);

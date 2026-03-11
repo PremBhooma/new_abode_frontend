@@ -54,7 +54,7 @@ function Addfoldermodal({
         user_id,
         currentFolderId,
         currentFolderUuid,
-        id,
+        customer_id_ref: id,
         employee_id: employeeId,
       },
       {

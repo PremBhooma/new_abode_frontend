@@ -49,7 +49,7 @@ function Toolbarwrapper({ refreshFolderDeatils, currentFolderUid, currentFolderI
         await Customerdocumentsapi.post(
             "/syncfilesystemwithdb",
             {
-                id: id,
+                customer_id_ref: id,
                 employee_id: employeeId
             },
             {
