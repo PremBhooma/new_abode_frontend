@@ -65,6 +65,27 @@ function Viewparsedpayments() {
         rowRefs.current = bulkUpload.map((_, i) => rowRefs.current[i] ?? React.createRef());
     }, [bulkUpload]);
 
+    const getRemainingForCategory = (row, category) => {
+        if (!row?.paymentDetails?.paymentSummary) return null;
+
+        const ptLower = (category || '').toLowerCase();
+        let catKey = null;
+
+        if (['flat', 'flat cost', 'base price', 'flat cost (base price)'].includes(ptLower)) catKey = 'flat';
+        else if (['gst'].includes(ptLower)) catKey = 'gst';
+        else if (['corpus fund'].includes(ptLower)) catKey = 'corpusFund';
+        else if (['maintenance charges', 'maintenance'].includes(ptLower)) catKey = 'maintenanceCharges';
+        else if (['documentation fee', 'documentation'].includes(ptLower)) catKey = 'documentationFee';
+        else if (['manjeera connection charge', 'manjeera connection'].includes(ptLower)) catKey = 'manjeeraConnectionCharge';
+        else if (['manjeera meter connection', 'manjeera meter charge'].includes(ptLower)) catKey = 'manjeeraMeterCharge';
+        else if (['registration'].includes(ptLower)) catKey = 'registration';
+
+        if (catKey && row.paymentDetails.paymentSummary[catKey]) {
+            return row.paymentDetails.paymentSummary[catKey].remaining;
+        }
+        return null;
+    };
+
 
     async function getAllParsedPayments() {
         try {
@@ -474,6 +495,16 @@ function Viewparsedpayments() {
                 hasError = true;
             }
 
+            const rem = getRemainingForCategory(row, row.payment_towards);
+            const numAmount = Number(String(row.amount || '').replace(/,/g, ''));
+            if (!hasRowError && rem !== null && numAmount > rem) {
+                errors.amount = `Amount (₹${new Intl.NumberFormat('en-IN').format(numAmount)}) exceeds remaining balance (₹${new Intl.NumberFormat('en-IN').format(rem)}) for ${row.payment_towards}`;
+                if (firstErrorIndex === null) {
+                    firstErrorIndex = index;
+                    hasError = true;
+                }
+            }
+
             return {
                 ...row,
                 error: errors
@@ -650,12 +681,14 @@ function Viewparsedpayments() {
                                                 <SelectValue placeholder="Select Payment Towards" />
                                             </SelectTrigger>
                                             <SelectContent className="border border-gray-200">
-                                                <SelectItem value="Flat">Flat</SelectItem>
-                                                <SelectItem value="GST">GST</SelectItem>
-                                                <SelectItem value="Corpus fund">Corpus fund</SelectItem>
-                                                <SelectItem value="Registration">Registration</SelectItem>
-                                                <SelectItem value="TDS">TDS</SelectItem>
-                                                <SelectItem value="Maintenance">Maintenance</SelectItem>
+                                                {["Flat", "GST", "Corpus Fund", "Maintenance Charges", "Manjeera Connection Charge", "Manjeera Meter Connection", "Documentation Fee", "Registration"].map(cat => {
+                                                    const rem = getRemainingForCategory(row, cat);
+                                                    return (
+                                                        <SelectItem key={cat} value={cat}>
+                                                            {rem !== null ? `${cat} (Remaining: ₹${new Intl.NumberFormat('en-IN').format(rem)})` : cat}
+                                                        </SelectItem>
+                                                    );
+                                                })}
                                             </SelectContent>
                                         </Select>
                                         {row?.error.payment_towards && <p className="text-xs text-red-600 font-medium">{row?.error.payment_towards}</p>}
