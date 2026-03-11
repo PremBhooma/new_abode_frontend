@@ -354,10 +354,12 @@ function Editflatpayment({ flat_id, flatPaymentUUID, closeEditFlatPayment, refre
                         data={[
                             { value: 'Flat', label: 'Flat' },
                             { value: 'GST', label: 'GST' },
-                            { value: 'Corpus fund', label: 'Corpus fund' },
+                            { value: 'Corpus Fund', label: 'Corpus Fund' },
+                            { value: 'Maintenance Charges', label: 'Maintenance Charges' },
+                            { value: 'Manjeera Connection Charge', label: 'Manjeera Connection Charge' },
+                            { value: 'Manjeera Meter Connection', label: 'Manjeera Meter Connection' },
+                            { value: 'Documentation Fee', label: 'Documentation Fee' },
                             { value: 'Registration', label: 'Registration' },
-                            { value: 'TDS', label: 'TDS' },
-                            { value: 'Maintenance', label: 'Maintenance' },
                         ]}
                     />
                     <Select

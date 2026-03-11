@@ -722,10 +722,12 @@ function Editpaymentwrapper() {
                                         <SelectContent className="border border-gray-200">
                                             <SelectItem value="Flat">Flat</SelectItem>
                                             <SelectItem value="GST">GST</SelectItem>
-                                            <SelectItem value="Corpus fund">Corpus fund</SelectItem>
+                                            <SelectItem value="Corpus Fund">Corpus Fund</SelectItem>
+                                            <SelectItem value="Maintenance Charges">Maintenance Charges</SelectItem>
+                                            <SelectItem value="Manjeera Connection Charge">Manjeera Connection Charge</SelectItem>
+                                            <SelectItem value="Manjeera Meter Connection">Manjeera Meter Connection</SelectItem>
+                                            <SelectItem value="Documentation Fee">Documentation Fee</SelectItem>
                                             <SelectItem value="Registration">Registration</SelectItem>
-                                            <SelectItem value="TDS">TDS</SelectItem>
-                                            <SelectItem value="Maintenance">Maintenance</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     {paymentTowardsError && <p className="text-xs text-red-500">{paymentTowardsError}</p>}

@@ -130,7 +130,7 @@ function ExcelPaymentTemplate({ closeDownloadTemplate }) {
         worksheet.getColumn(6).numFmt = '@';
 
         const paymentTypes = ['Customer Pay', 'Loan Pay'];
-        const paymentTowards = ['Flat', 'GST', 'Corpus fund', 'Registration', 'TDS', 'Maintenance'];
+        const paymentTowards = ['Flat', 'GST', 'Corpus Fund', 'Maintenance Charges', 'Manjeera Connection Charge', 'Manjeera Meter Connection', 'Documentation Fee', 'Registration'];
         const paymentMethods = ['DD', 'UPI', 'Bank Deposit', 'Cheque', 'Online Transfer (IMPS, NFT)'];
 
         const blockSheet = workbook.addWorksheet('BlockList');
