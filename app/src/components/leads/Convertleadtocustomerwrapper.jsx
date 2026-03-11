@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Generalapi from "../api/Generalapi.jsx";
 import Leadapi from "../api/Leadapi.jsx";
 import Settingsapi from "../api/Settingsapi.jsx";
@@ -279,16 +279,20 @@ function Convertleadtocustomerwrapper() {
         setIfOwnedProjectNameError("");
     };
 
-    const [stateData, setStateData] = useState([]);
-    console.log("stateData:", stateData)
+    const [correspondenceStateData, setCorrespondenceStateData] = useState([]);
+    const [permanentStateData, setPermanentStateData] = useState([]);
     const [correspondenceCityData, setCorrespondenceCityData] = useState([]);
     const [permanentCityData, setPermanentCityData] = useState([]);
 
-    const [correspondenceCountry, setCorrespondenceCountry] = useState("101");
+    const [correspondenceCountry, setCorrespondenceCountry] = useState("");
     const [correspondenceCountryError, setCorrespondenceCountryError] =
         useState("");
     const updateCorrespondenceCountry = (value) => {
         setCorrespondenceCountry(value);
+        setCorrespondenceState("");
+        setCorrespondenceCity("");
+        setCorrespondenceStateData([]);
+        setCorrespondenceCityData([]);
         setCorrespondenceCountryError("");
     };
 
@@ -296,6 +300,8 @@ function Convertleadtocustomerwrapper() {
     const [correspondenceStateError, setCorrespondenceStateError] = useState("");
     const updateCorrespondenceState = (value) => {
         setCorrespondenceState(value);
+        setCorrespondenceCity("");
+        setCorrespondenceCityData([]);
         setCorrespondenceStateError("");
     };
 
@@ -325,10 +331,14 @@ function Convertleadtocustomerwrapper() {
         setCorrespondenceAddressError("");
     };
 
-    const [permanentCountry, setPermanentCountry] = useState("101");
+    const [permanentCountry, setPermanentCountry] = useState("");
     const [permanentCountryError, setPermanentCountryError] = useState("");
     const updatePermanentCountry = (value) => {
         setPermanentCountry(value);
+        setPermanentState("");
+        setPermanentCity("");
+        setPermanentStateData([]);
+        setPermanentCityData([]);
         setPermanentCountryError("");
     };
 
@@ -336,6 +346,8 @@ function Convertleadtocustomerwrapper() {
     const [permanentStateError, setPermanentStateError] = useState("");
     const updatePermanentState = (value) => {
         setPermanentState(value);
+        setPermanentCity("");
+        setPermanentCityData([]);
         setPermanentStateError("");
     };
 
@@ -423,41 +435,38 @@ function Convertleadtocustomerwrapper() {
     };
 
 
-    async function getStates() {
-        await Settingsapi.get("/get-states")
-            .then((response) => {
-                const data = response?.data;
-                if (data?.status === "error") {
-                    let finalResponse;
-                    finalResponse = {
-                        message: data?.message,
-                        server_res: data,
-                    };
-                    setErrorMessage(finalResponse);
-                    setIsLoadingEffect(false);
-                    return;
-                }
-                setStateData(data?.data || []);
-                setIsLoadingEffect(false);
-            })
-            .catch((error) => {
-                console.log("Error:", error);
-                let finalresponse;
-                if (error?.response !== undefined) {
-                    finalresponse = {
-                        message: error.message,
-                        server_res: error.response.data,
-                    };
-                } else {
-                    finalresponse = {
-                        message: error.message,
-                        server_res: null,
-                    };
-                }
-                setErrorMessage(finalresponse);
-                setIsLoadingEffect(false);
+    async function getStates(country, type) {
+        if (!country) return;
+        try {
+            const response = await Settingsapi.get("/get-states", {
+                params: { country_id: country },
             });
+            const data = response?.data;
+            if (data?.status === "error") {
+                setErrorMessage({ message: data?.message, server_res: data });
+                return;
+            }
+            const uniqueStates = Array.from(new Map((data?.data || []).map(item => [item.value, item])).values());
+            if (type === "correspondence") setCorrespondenceStateData(uniqueStates);
+            if (type === "permanent") setPermanentStateData(uniqueStates);
+        } catch (error) {
+            console.log("Error:", error);
+            setErrorMessage({
+                message: error.message,
+                server_res: error?.response?.data || null,
+            });
+        }
     }
+
+    useEffect(() => {
+        if (correspondenceCountry) getStates(correspondenceCountry, "correspondence");
+        else setCorrespondenceStateData([]);
+    }, [correspondenceCountry]);
+
+    useEffect(() => {
+        if (permanentCountry) getStates(permanentCountry, "permanent");
+        else setPermanentStateData([]);
+    }, [permanentCountry]);
 
     async function getCities(stateId) {
         return await Settingsapi.get("/get-cities", {
@@ -466,10 +475,6 @@ function Convertleadtocustomerwrapper() {
             },
         });
     }
-
-    useEffect(() => {
-        getStates();
-    }, []);
 
     useEffect(() => {
         if (correspondenceState) {
@@ -616,11 +621,17 @@ function Convertleadtocustomerwrapper() {
                     setEmail2(data?.data?.email_2 || "");
                     setPhoneCode(`${data?.data?.phone_code || "91"}`);
                     setPhoneNumber(data?.data?.phone_number || "");
-                    setCorrespondenceCountry(data?.data?.correspondenceCountryId || "101");
-                    setCorrespondenceState(data?.data?.correspondenceStateId || "");
-                    setCorrespondenceCity(data?.data?.correspondenceCityId || "");
+                    setCorrespondenceCountry(data?.data?.correspondenceCountryId ? String(data?.data?.correspondenceCountryId) : "");
+                    setCorrespondenceState(data?.data?.correspondenceStateId ? String(data?.data?.correspondenceStateId) : "");
+                    setCorrespondenceCity(data?.data?.correspondenceCityId ? String(data?.data?.correspondenceCityId) : "");
                     setCorrespondenceAddress(data?.data?.correspondenceAddress || "");
                     setCorrespondencePincode(data?.data?.correspondencePincode || "");
+
+                    setPermanentCountry(data?.data?.permanentCountryId ? String(data?.data?.permanentCountryId) : "");
+                    setPermanentState(data?.data?.permanentStateId ? String(data?.data?.permanentStateId) : "");
+                    setPermanentCity(data?.data?.permanentCityId ? String(data?.data?.permanentCityId) : "");
+                    setPermanentAddress(data?.data?.permanentAddress || "");
+                    setPermanentPincode(data?.data?.permanentPincode || "");
                 }
                 setIsLoadingEffect(false);
                 return false;
@@ -765,7 +776,7 @@ function Convertleadtocustomerwrapper() {
         };
 
         Leadapi.post("convert-lead-to-customer", {
-            leadId: leadId,
+            leadUuid: leadId,
             prefixes: prefixes,
             first_name: firstName,
             last_name: lastName,
@@ -1415,7 +1426,15 @@ function Convertleadtocustomerwrapper() {
                                             <SelectValue placeholder="Select Country" />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
-                                            <SelectItem value="101">India</SelectItem>
+                                            {countryNames.length > 0 ? (
+                                                countryNames.map((country) => (
+                                                    <SelectItem key={country.value} value={String(country.value)}>
+                                                        {country.label}
+                                                    </SelectItem>
+                                                ))
+                                            ) : (
+                                                <SelectItem value="loading" disabled>Loading...</SelectItem>
+                                            )}
                                         </SelectContent>
                                     </Select>
                                     {correspondenceCountryError && <p className="text-xs text-red-500">{correspondenceCountryError}</p>}
@@ -1423,13 +1442,13 @@ function Convertleadtocustomerwrapper() {
 
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">State</label>
-                                    <Select value={correspondenceState || undefined} onValueChange={updateCorrespondenceState}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceState ? 'text-gray-400' : ''} ${correspondenceStateError ? 'border-red-500' : 'border-gray-300'}`}>
-                                            <SelectValue placeholder="Select State" />
+                                    <Select disabled={!correspondenceCountry} value={correspondenceState || undefined} onValueChange={updateCorrespondenceState}>
+                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceState ? 'text-gray-400' : ''} ${correspondenceStateError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
+                                            <SelectValue placeholder={!correspondenceCountry ? "Select Country First" : "Select State"} />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
-                                            {stateData.map((state) => (
-                                                <SelectItem key={state.value} value={state.value}>{state.label}</SelectItem>
+                                            {correspondenceStateData.map((state) => (
+                                                <SelectItem key={state.value} value={String(state.value)}>{state.label}</SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
@@ -1438,13 +1457,13 @@ function Convertleadtocustomerwrapper() {
 
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">City</label>
-                                    <Select value={correspondenceCity || undefined} onValueChange={updateCorrespondenceCity}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCity ? 'text-gray-400' : ''} ${correspondenceCityError ? 'border-red-500' : 'border-gray-300'}`}>
-                                            <SelectValue placeholder="Select City" />
+                                    <Select disabled={!correspondenceState} value={correspondenceCity || undefined} onValueChange={updateCorrespondenceCity}>
+                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCity ? 'text-gray-400' : ''} ${correspondenceCityError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
+                                            <SelectValue placeholder={!correspondenceState ? "Select State First" : "Select City"} />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
                                             {correspondenceCityData.map((city) => (
-                                                <SelectItem key={city.value} value={city.value}>{city.label}</SelectItem>
+                                                <SelectItem key={city.value} value={String(city.value)}>{city.label}</SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
@@ -1498,7 +1517,15 @@ function Convertleadtocustomerwrapper() {
                                             <SelectValue placeholder="Select Country" />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
-                                            <SelectItem value="101">India</SelectItem>
+                                            {countryNames.length > 0 ? (
+                                                countryNames.map((country) => (
+                                                    <SelectItem key={country.value} value={String(country.value)}>
+                                                        {country.label}
+                                                    </SelectItem>
+                                                ))
+                                            ) : (
+                                                <SelectItem value="loading" disabled>Loading...</SelectItem>
+                                            )}
                                         </SelectContent>
                                     </Select>
                                     {permanentCountryError && <p className="text-xs text-red-500">{permanentCountryError}</p>}
@@ -1506,13 +1533,13 @@ function Convertleadtocustomerwrapper() {
 
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">State</label>
-                                    <Select value={permanentState || undefined} onValueChange={updatePermanentState}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentState ? 'text-gray-400' : ''} ${permanentStateError ? 'border-red-500' : 'border-gray-300'}`}>
-                                            <SelectValue placeholder="Select State" />
+                                    <Select disabled={!permanentCountry} value={permanentState || undefined} onValueChange={updatePermanentState}>
+                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentState ? 'text-gray-400' : ''} ${permanentStateError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
+                                            <SelectValue placeholder={!permanentCountry ? "Select Country First" : "Select State"} />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
-                                            {stateData.map((state) => (
-                                                <SelectItem key={state.value} value={state.value}>{state.label}</SelectItem>
+                                            {permanentStateData.map((state) => (
+                                                <SelectItem key={state.value} value={String(state.value)}>{state.label}</SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
@@ -1521,13 +1548,13 @@ function Convertleadtocustomerwrapper() {
 
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">City</label>
-                                    <Select value={permanentCity || undefined} onValueChange={updatePermanentCity}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCity ? 'text-gray-400' : ''} ${permanentCityError ? 'border-red-500' : 'border-gray-300'}`}>
-                                            <SelectValue placeholder="Select City" />
+                                    <Select disabled={!permanentState} value={permanentCity || undefined} onValueChange={updatePermanentCity}>
+                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCity ? 'text-gray-400' : ''} ${permanentCityError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
+                                            <SelectValue placeholder={!permanentState ? "Select State First" : "Select City"} />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
                                             {permanentCityData.map((city) => (
-                                                <SelectItem key={city.value} value={city.value}>{city.label}</SelectItem>
+                                                <SelectItem key={city.value} value={String(city.value)}>{city.label}</SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
