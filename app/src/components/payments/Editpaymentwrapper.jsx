@@ -168,6 +168,33 @@ function Editpaymentwrapper() {
     const [paymentDetails, setPaymentDetails] = useState(null);
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [searchError, setSearchError] = useState('');
+    const [originalPaymentAmount, setOriginalPaymentAmount] = useState(0);
+    const [originalPaymentTowards, setOriginalPaymentTowards] = useState(null);
+
+    const getRemainingForCategory = (category) => {
+        if (!paymentDetails?.paymentSummary) return null;
+
+        const ptLower = (category || '').toLowerCase();
+        let catKey = null;
+
+        if (['flat', 'flat cost', 'base price', 'flat cost (base price)'].includes(ptLower)) catKey = 'flat';
+        else if (['gst'].includes(ptLower)) catKey = 'gst';
+        else if (['corpus fund'].includes(ptLower)) catKey = 'corpusFund';
+        else if (['maintenance charges', 'maintenance'].includes(ptLower)) catKey = 'maintenanceCharges';
+        else if (['documentation fee', 'documentation'].includes(ptLower)) catKey = 'documentationFee';
+        else if (['manjeera connection charge', 'manjeera connection'].includes(ptLower)) catKey = 'manjeeraConnectionCharge';
+        else if (['manjeera meter connection', 'manjeera meter charge'].includes(ptLower)) catKey = 'manjeeraMeterCharge';
+        else if (['registration'].includes(ptLower)) catKey = 'registration';
+
+        if (catKey && paymentDetails.paymentSummary[catKey]) {
+            let rem = paymentDetails.paymentSummary[catKey].remaining;
+            if (category === originalPaymentTowards) {
+                rem += originalPaymentAmount;
+            }
+            return rem;
+        }
+        return null;
+    };
 
     const handleSearchTypeChange = (e) => {
         setSearchType(e.target.value);
@@ -275,6 +302,8 @@ function Editpaymentwrapper() {
             if (data.payment_details) {
                 const payment = data.payment_details;
                 setAmount(payment.amount ? payment.amount.toLocaleString('en-IN') : '');
+                setOriginalPaymentAmount(payment.amount || 0);
+                setOriginalPaymentTowards(payment?.payment_towards || null);
                 setPaymentType(payment.payment_type || null);
                 setPaymentTowards(payment?.payment_towards || null);
                 setPaymentMethod(payment.payment_method || null);
@@ -400,6 +429,14 @@ function Editpaymentwrapper() {
         }
 
         if (hasErrors) {
+            setIsLoadingEffect(false);
+            return false;
+        }
+
+        const rem = getRemainingForCategory(paymentTowards);
+        const numAmount = Number(amount.replace(/,/g, ''));
+        if (rem !== null && numAmount > rem) {
+            setAmountError(`Amount (₹${new Intl.NumberFormat('en-IN').format(numAmount)}) exceeds remaining balance (₹${new Intl.NumberFormat('en-IN').format(rem)}) for ${paymentTowards}`);
             setIsLoadingEffect(false);
             return false;
         }
@@ -720,14 +757,14 @@ function Editpaymentwrapper() {
                                             <SelectValue placeholder="Select Payment Towards" />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200">
-                                            <SelectItem value="Flat">Flat</SelectItem>
-                                            <SelectItem value="GST">GST</SelectItem>
-                                            <SelectItem value="Corpus Fund">Corpus Fund</SelectItem>
-                                            <SelectItem value="Maintenance Charges">Maintenance Charges</SelectItem>
-                                            <SelectItem value="Manjeera Connection Charge">Manjeera Connection Charge</SelectItem>
-                                            <SelectItem value="Manjeera Meter Connection">Manjeera Meter Connection</SelectItem>
-                                            <SelectItem value="Documentation Fee">Documentation Fee</SelectItem>
-                                            <SelectItem value="Registration">Registration</SelectItem>
+                                            {["Flat", "GST", "Corpus Fund", "Maintenance Charges", "Manjeera Connection Charge", "Manjeera Meter Connection", "Documentation Fee", "Registration"].map(cat => {
+                                                const rem = getRemainingForCategory(cat);
+                                                return (
+                                                    <SelectItem key={cat} value={cat}>
+                                                        {rem !== null ? `${cat} (Remaining: ₹${new Intl.NumberFormat('en-IN').format(rem)})` : cat}
+                                                    </SelectItem>
+                                                );
+                                            })}
                                         </SelectContent>
                                     </Select>
                                     {paymentTowardsError && <p className="text-xs text-red-500">{paymentTowardsError}</p>}

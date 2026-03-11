@@ -348,6 +348,33 @@ function Addnewpayment() {
             setIsLoadingEffect(false);
             return false;
         }
+
+        const getRemainingForCategorySubmit = (category) => {
+            if (!paymentDetails?.paymentSummary) return null;
+            const ptLower = (category || '').toLowerCase();
+            let catKey = null;
+            if (['flat', 'flat cost', 'base price', 'flat cost (base price)'].includes(ptLower)) catKey = 'flat';
+            else if (['gst'].includes(ptLower)) catKey = 'gst';
+            else if (['corpus fund'].includes(ptLower)) catKey = 'corpusFund';
+            else if (['maintenance charges', 'maintenance'].includes(ptLower)) catKey = 'maintenanceCharges';
+            else if (['documentation fee', 'documentation'].includes(ptLower)) catKey = 'documentationFee';
+            else if (['manjeera connection charge', 'manjeera connection'].includes(ptLower)) catKey = 'manjeeraConnectionCharge';
+            else if (['manjeera meter connection', 'manjeera meter charge'].includes(ptLower)) catKey = 'manjeeraMeterCharge';
+            else if (['registration'].includes(ptLower)) catKey = 'registration';
+
+            if (catKey && paymentDetails.paymentSummary[catKey]) {
+                return paymentDetails.paymentSummary[catKey].remaining;
+            }
+            return null;
+        };
+
+        const rem = getRemainingForCategorySubmit(paymentTowards);
+        const numAmount = Number(amount.replace(/,/g, ''));
+        if (rem !== null && numAmount > rem) {
+            setAmountError(`Amount (₹${new Intl.NumberFormat('en-IN').format(numAmount)}) exceeds remaining balance (₹${new Intl.NumberFormat('en-IN').format(rem)}) for ${paymentTowards}`);
+            setIsLoadingEffect(false);
+            return false;
+        }
         // if (comment === "") {
         //     setCommentError("Enter comments");
         //     setIsLoadingEffect(false);
@@ -413,6 +440,27 @@ function Addnewpayment() {
         { label: 'Email', value: selectedFlat.customer.email },
         { label: 'Phone Number', value: `+${selectedFlat.customer.phone_code} ${selectedFlat.customer.phone_number}` },
     ] : [];
+
+    const getRemainingForCategory = (category) => {
+        if (!paymentDetails?.paymentSummary) return null;
+
+        const ptLower = (category || '').toLowerCase();
+        let catKey = null;
+
+        if (['flat', 'flat cost', 'base price', 'flat cost (base price)'].includes(ptLower)) catKey = 'flat';
+        else if (['gst'].includes(ptLower)) catKey = 'gst';
+        else if (['corpus fund'].includes(ptLower)) catKey = 'corpusFund';
+        else if (['maintenance charges', 'maintenance'].includes(ptLower)) catKey = 'maintenanceCharges';
+        else if (['documentation fee', 'documentation'].includes(ptLower)) catKey = 'documentationFee';
+        else if (['manjeera connection charge', 'manjeera connection'].includes(ptLower)) catKey = 'manjeeraConnectionCharge';
+        else if (['manjeera meter connection', 'manjeera meter charge'].includes(ptLower)) catKey = 'manjeeraMeterCharge';
+        else if (['registration'].includes(ptLower)) catKey = 'registration';
+
+        if (catKey && paymentDetails.paymentSummary[catKey]) {
+            return paymentDetails.paymentSummary[catKey].remaining;
+        }
+        return null;
+    };
 
     console.log("paymentDetails__:", paymentDetails)
 
@@ -681,14 +729,14 @@ function Addnewpayment() {
                                             <SelectValue placeholder="Select Payment Towards" />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200">
-                                            <SelectItem value="Flat">Flat</SelectItem>
-                                            <SelectItem value="GST">GST</SelectItem>
-                                            <SelectItem value="Corpus Fund">Corpus Fund</SelectItem>
-                                            <SelectItem value="Maintenance Charges">Maintenance Charges</SelectItem>
-                                            <SelectItem value="Manjeera Connection Charge">Manjeera Connection Charge</SelectItem>
-                                            <SelectItem value="Manjeera Meter Connection">Manjeera Meter Connection</SelectItem>
-                                            <SelectItem value="Documentation Fee">Documentation Fee</SelectItem>
-                                            <SelectItem value="Registration">Registration</SelectItem>
+                                            {["Flat", "GST", "Corpus Fund", "Maintenance Charges", "Manjeera Connection Charge", "Manjeera Meter Connection", "Documentation Fee", "Registration"].map(cat => {
+                                                const rem = getRemainingForCategory(cat);
+                                                return (
+                                                    <SelectItem key={cat} value={cat}>
+                                                        {cat} {rem !== null ? `(Remaining: ₹${new Intl.NumberFormat('en-IN').format(rem)})` : ''}
+                                                    </SelectItem>
+                                                );
+                                            })}
                                         </SelectContent>
                                     </Select>
                                     {paymentTowardsError && <p className="text-xs text-red-500">{paymentTowardsError}</p>}

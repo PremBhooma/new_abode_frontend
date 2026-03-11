@@ -29,6 +29,9 @@ function Editflatpayment({ flat_id, flatPaymentUUID, closeEditFlatPayment, refre
     const [bankList, setBankList] = useState([]);
     const [loanStatus, setLoanStatus] = useState("");
     const [minDate, setMinDate] = useState(null);
+    const [paymentDetails, setPaymentDetails] = useState(null);
+    const [originalPaymentAmount, setOriginalPaymentAmount] = useState(0);
+    const [originalPaymentTowards, setOriginalPaymentTowards] = useState(null);
 
     useEffect(() => {
         const fetchBanks = async () => {
@@ -48,6 +51,7 @@ function Editflatpayment({ flat_id, flatPaymentUUID, closeEditFlatPayment, refre
                 try {
                     const res = await Flatapi.get(`/get-flat-payment-details?flat_id=${flat_id}`);
                     if (res.data?.status === 'success') {
+                        setPaymentDetails(res.data.data);
                         setLoanStatus(res.data.data.loan_status);
                         if (res.data.data.application_date) {
                             setMinDate(new Date(res.data.data.application_date));
@@ -60,6 +64,31 @@ function Editflatpayment({ flat_id, flatPaymentUUID, closeEditFlatPayment, refre
         };
         fetchPaymentDetails();
     }, [flat_id]);
+
+    const getRemainingForCategory = (category) => {
+        if (!paymentDetails?.paymentSummary) return null;
+
+        const ptLower = (category || '').toLowerCase();
+        let catKey = null;
+
+        if (['flat', 'flat cost', 'base price', 'flat cost (base price)'].includes(ptLower)) catKey = 'flat';
+        else if (['gst'].includes(ptLower)) catKey = 'gst';
+        else if (['corpus fund'].includes(ptLower)) catKey = 'corpusFund';
+        else if (['maintenance charges', 'maintenance'].includes(ptLower)) catKey = 'maintenanceCharges';
+        else if (['documentation fee', 'documentation'].includes(ptLower)) catKey = 'documentationFee';
+        else if (['manjeera connection charge', 'manjeera connection'].includes(ptLower)) catKey = 'manjeeraConnectionCharge';
+        else if (['manjeera meter connection', 'manjeera meter charge'].includes(ptLower)) catKey = 'manjeeraMeterCharge';
+        else if (['registration'].includes(ptLower)) catKey = 'registration';
+
+        if (catKey && paymentDetails.paymentSummary[catKey]) {
+            let rem = paymentDetails.paymentSummary[catKey].remaining;
+            if (category === originalPaymentTowards) {
+                rem += originalPaymentAmount;
+            }
+            return rem;
+        }
+        return null;
+    };
 
     const [amount, setAmount] = useState('');
     const [amountError, setAmountError] = useState('');
@@ -174,6 +203,8 @@ function Editflatpayment({ flat_id, flatPaymentUUID, closeEditFlatPayment, refre
             if (data.payment_details) {
                 const payment = data.payment_details;
                 setAmount(payment?.amount ? payment?.amount.toLocaleString('en-IN') : '');
+                setOriginalPaymentAmount(payment?.amount || 0);
+                setOriginalPaymentTowards(payment?.payment_towards || null);
                 setPaymentType(payment?.payment_type || null);
                 setPaymentTowards(payment?.payment_towards || null);
                 setPaymentMethod(payment?.payment_method || null);
@@ -249,6 +280,14 @@ function Editflatpayment({ flat_id, flatPaymentUUID, closeEditFlatPayment, refre
         }
 
         if (hasErrors) {
+            setIsLoadingEffect(false);
+            return false;
+        }
+
+        const rem = getRemainingForCategory(paymentTowards);
+        const numAmount = Number(amount.replace(/,/g, ''));
+        if (rem !== null && numAmount > rem) {
+            setAmountError(`Amount (₹${new Intl.NumberFormat('en-IN').format(numAmount)}) exceeds remaining balance (₹${new Intl.NumberFormat('en-IN').format(rem)}) for ${paymentTowards}`);
             setIsLoadingEffect(false);
             return false;
         }
@@ -351,16 +390,13 @@ function Editflatpayment({ flat_id, flatPaymentUUID, closeEditFlatPayment, refre
                         error={paymentTowardsError}
                         value={paymentTowards}
                         onChange={updatePaymentTowards}
-                        data={[
-                            { value: 'Flat', label: 'Flat' },
-                            { value: 'GST', label: 'GST' },
-                            { value: 'Corpus Fund', label: 'Corpus Fund' },
-                            { value: 'Maintenance Charges', label: 'Maintenance Charges' },
-                            { value: 'Manjeera Connection Charge', label: 'Manjeera Connection Charge' },
-                            { value: 'Manjeera Meter Connection', label: 'Manjeera Meter Connection' },
-                            { value: 'Documentation Fee', label: 'Documentation Fee' },
-                            { value: 'Registration', label: 'Registration' },
-                        ]}
+                        data={["Flat", "GST", "Corpus Fund", "Maintenance Charges", "Manjeera Connection Charge", "Manjeera Meter Connection", "Documentation Fee", "Registration"].map(cat => {
+                            const rem = getRemainingForCategory(cat);
+                            return {
+                                value: cat,
+                                label: rem !== null ? `${cat} (Remaining: ₹${new Intl.NumberFormat('en-IN').format(rem)})` : cat
+                            };
+                        })}
                     />
                     <Select
                         label="Payment Method"

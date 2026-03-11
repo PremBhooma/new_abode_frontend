@@ -112,6 +112,42 @@ function Addpaymentincustomer({ closeAddnewmodal, customerId, refreshAllPayments
     const [flatsData, setFlatsData] = useState([]);
     const [selectedFlat, setSelectedFlat] = useState(null);
     const [selectedFlatError, setSelectedFlatError] = useState('');
+    const [paymentDetails, setPaymentDetails] = useState(null);
+
+    useEffect(() => {
+        if (selectedFlat?.id) {
+            Flatapi.get(`/get-flat-payment-details?flat_id=${selectedFlat.id}`)
+                .then(res => {
+                    if (res.data?.status === 'success') {
+                        setPaymentDetails(res.data.data);
+                    }
+                })
+                .catch(err => console.error(err));
+        } else {
+            setPaymentDetails(null);
+        }
+    }, [selectedFlat]);
+
+    const getRemainingForCategory = (category) => {
+        if (!paymentDetails?.paymentSummary) return null;
+
+        const ptLower = (category || '').toLowerCase();
+        let catKey = null;
+
+        if (['flat', 'flat cost', 'base price', 'flat cost (base price)'].includes(ptLower)) catKey = 'flat';
+        else if (['gst'].includes(ptLower)) catKey = 'gst';
+        else if (['corpus fund'].includes(ptLower)) catKey = 'corpusFund';
+        else if (['maintenance charges', 'maintenance'].includes(ptLower)) catKey = 'maintenanceCharges';
+        else if (['documentation fee', 'documentation'].includes(ptLower)) catKey = 'documentationFee';
+        else if (['manjeera connection charge', 'manjeera connection'].includes(ptLower)) catKey = 'manjeeraConnectionCharge';
+        else if (['manjeera meter connection', 'manjeera meter charge'].includes(ptLower)) catKey = 'manjeeraMeterCharge';
+        else if (['registration'].includes(ptLower)) catKey = 'registration';
+
+        if (catKey && paymentDetails.paymentSummary[catKey]) {
+            return paymentDetails.paymentSummary[catKey].remaining;
+        }
+        return null;
+    };
 
     async function getFlatsData() {
         try {
@@ -190,6 +226,14 @@ function Addpaymentincustomer({ closeAddnewmodal, customerId, refreshAllPayments
         }
 
         if (hasErrors) {
+            setIsLoadingEffect(false);
+            return false;
+        }
+
+        const rem = getRemainingForCategory(paymentTowards);
+        const numAmount = Number(amount.replace(/,/g, ''));
+        if (rem !== null && numAmount > rem) {
+            setAmountError(`Amount (₹${new Intl.NumberFormat('en-IN').format(numAmount)}) exceeds remaining balance (₹${new Intl.NumberFormat('en-IN').format(rem)}) for ${paymentTowards}`);
             setIsLoadingEffect(false);
             return false;
         }
@@ -299,16 +343,13 @@ function Addpaymentincustomer({ closeAddnewmodal, customerId, refreshAllPayments
                             error={paymentTowardsError}
                             value={paymentTowards}
                             onChange={updatePaymentTowards}
-                            data={[
-                                { value: 'Flat', label: 'Flat' },
-                                { value: 'GST', label: 'GST' },
-                                { value: 'Corpus Fund', label: 'Corpus Fund' },
-                                { value: 'Maintenance Charges', label: 'Maintenance Charges' },
-                                { value: 'Manjeera Connection Charge', label: 'Manjeera Connection Charge' },
-                                { value: 'Manjeera Meter Connection', label: 'Manjeera Meter Connection' },
-                                { value: 'Documentation Fee', label: 'Documentation Fee' },
-                                { value: 'Registration', label: 'Registration' },
-                            ]}
+                            data={["Flat", "GST", "Corpus Fund", "Maintenance Charges", "Manjeera Connection Charge", "Manjeera Meter Connection", "Documentation Fee", "Registration"].map(cat => {
+                                const rem = getRemainingForCategory(cat);
+                                return {
+                                    value: cat,
+                                    label: rem !== null ? `${cat} (Remaining: ₹${new Intl.NumberFormat('en-IN').format(rem)})` : cat
+                                };
+                            })}
                         />
                         <Select
                             label='Payment Method'
