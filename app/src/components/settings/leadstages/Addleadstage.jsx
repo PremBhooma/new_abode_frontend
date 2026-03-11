@@ -20,7 +20,7 @@ function Addleadstage({ refreshLeadStage }) {
         setIsLoading(true)
         if (leadStageName === "") {
             setIsLoading(false)
-            setLeadStageNameError("Please enter a lead stage")
+            setLeadStageNameError("Lead stage is required")
             return false
         }
 
