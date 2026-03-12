@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { IconSearch, IconUser, IconHome, IconChevronRight, IconArrowLeft } from "@tabler/icons-react";
+import { ChevronRight, Gift } from "lucide-react";
 import Generalapi from '../../components/api/Generalapi';
 import Errorpanel from '../../components/shared/Errorpanel';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -104,12 +106,38 @@ function Rewards() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-3">
       {!isRedeeming ? (
         <>
-          <div className="flex flex-col gap-2">
-            <h1 className="crm-title">Rewards Redemption</h1>
-            <p className="text-gray-500 text-sm font-medium">Verify eligibility and unlock delightful rewards for your customers.</p>
+          <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-1.5 mb-4">
+              <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+                Dashboard
+              </Link>
+              <ChevronRight size={12} className="text-slate-300" />
+              <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+                Rewards
+              </span>
+            </div>
+
+            <div className="flex flex-col justify-between gap-4">
+              {/* Top Section */}
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl border border-indigo-300 bg-indigo-50 flex items-center justify-center shadow-sm transition hover:bg-indigo-100">
+                  <Gift size={18} className="text-indigo-600" />
+                </div>
+
+                <div>
+                  <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                    Rewards Redemption
+                  </h1>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Verify eligibility and unlock delightful rewards for your customers
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="bg-white p-5 rounded-lg border border-gray-100 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.05)] flex flex-col gap-6">
