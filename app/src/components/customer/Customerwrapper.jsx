@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { FilterX } from "lucide-react";
+import { ChevronRight, Download, FilterX, Upload, Users } from "lucide-react";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
 import {
   IconDownload,
@@ -406,33 +406,75 @@ function Customerwrapper() {
   return (
     <>
       <div className="crm-page">
-        <div className="crm-header">
-          <p className="crm-title">Customers</p>
-          <div className="crm-actions">
-            <div className="crm-actions">
+        <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-1.5 mb-4">
+            <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+              Dashboard
+            </Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+              Customers
+            </span>
+          </div>
+
+          <div className="flex flex-col justify-between gap-4">
+            {/* Top Section */}
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl border border-blue-300 bg-blue-50 flex items-center justify-center shadow-sm transition hover:bg-blue-100">
+                <Users size={18} className="text-blue-600" />
+              </div>
+
+              <div>
+                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                  Customers
+                </h1>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Manage and track your customer base
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom Section - Actions */}
+            <div className="flex flex-wrap items-center gap-2.5 border-t pt-4">
+              {/* Add Customer */}
               {permissions?.customers_page?.includes("add_customer") && (
-                <Link to={"/customers/onboarding"} className="crm-btn crm-btn-primary">
-                  + Add Customer
+                <Link to={"/customers/onboarding"}>
+                  <button className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-rose-300 text-rose-700 bg-rose-50 text-xs font-semibold shadow-sm hover:bg-rose-100 hover:border-rose-400 hover:-translate-y-[1px] transition-all duration-200">
+                    + Add Customer
+                  </button>
                 </Link>
               )}
+
+              {/* Download Template */}
               {permissions?.customers_page?.includes("download_customer_excel") && (
-                <button onClick={openDownloadTemplate} className="crm-btn crm-btn-primary">
-                  Download Customer Template
+                <button
+                  onClick={openDownloadTemplate}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-amber-300 text-amber-700 bg-amber-50 text-xs font-semibold shadow-sm hover:bg-amber-100 hover:border-amber-400 hover:-translate-y-[1px] transition-all duration-200"
+                >
+                  <Download size={15} strokeWidth={2.5} /> Download Template
                 </button>
               )}
+
+              {/* Export to Excel */}
               {permissions?.customers_page?.includes("export_customer_to_excel") && (
                 <button
                   onClick={handleDownloadFunction}
-                  className="crm-btn crm-btn-muted disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-slate-300 text-slate-700 bg-slate-50 text-xs font-semibold shadow-sm hover:bg-slate-100 hover:border-slate-400 hover:-translate-y-[1px] transition-all duration-200 disabled:bg-gray-200 disabled:cursor-not-allowed"
                   disabled={isLoading}
                 >
                   <IconDownload size={16} />
                   Export to Excel
                 </button>
               )}
+
+              {/* Upload Customers */}
               {permissions?.customers_page?.includes("upload_customer_excel") && (
-                <button onClick={openUploadCustomerExcel} className="crm-btn border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700">
-                  Upload Bulk Customers
+                <button
+                  onClick={openUploadCustomerExcel}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-emerald-300 text-emerald-700 bg-emerald-50 text-xs font-semibold shadow-sm hover:bg-emerald-100 hover:border-emerald-400 hover:-translate-y-[1px] transition-all duration-200"
+                >
+                  <Upload size={15} strokeWidth={2.5} /> Upload Leads
                 </button>
               )}
             </div>

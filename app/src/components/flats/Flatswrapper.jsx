@@ -640,7 +640,7 @@ function Flatswrapper() {
                   className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-emerald-300 text-emerald-700 bg-emerald-50 text-xs font-semibold shadow-sm hover:bg-emerald-100 hover:border-emerald-400 hover:-translate-y-[1px] transition-all duration-200"
                 >
                   <Upload size={15} strokeWidth={2.5} />
-                  Upload Bulk Flats
+                  Upload Flats
                 </button>
               )}
 
