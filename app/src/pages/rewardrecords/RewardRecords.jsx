@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Pagination, Select } from "@nayeshdaggula/tailify";
 import { IconSearch, IconDownload, IconEye } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
+import { ChevronRight, Medal } from "lucide-react";
 import Generalapi from '../../components/api/Generalapi';
 import Errorpanel from '../../components/shared/Errorpanel';
 import { useEmployeeDetails } from '../../components/zustand/useEmployeeDetails';
@@ -149,15 +151,42 @@ function RewardRecords() {
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <p className="text-[22px] font-semibold">Reward Reports</p>
-        <button
-          onClick={handleDownloadExcel}
-          className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition"
-        >
-          <IconDownload size={18} />
-          Export to Excel
-        </button>
+      <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-1.5 mb-4">
+          <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+            Dashboard
+          </Link>
+          <ChevronRight size={12} className="text-slate-300" />
+          <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+            Reward Records
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between gap-4">
+          {/* Top Section */}
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl border border-indigo-300 bg-indigo-50 flex items-center justify-center shadow-sm transition hover:bg-indigo-100">
+              <Medal size={18} className="text-indigo-600" />
+            </div>
+
+            <div>
+              <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                Reward Records
+              </h1>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Track and manage customer rewards distribution and history
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleDownloadExcel}
+            className="flex items-center gap-2 px-4 py-2 rounded-md border border-emerald-300 text-emerald-700 bg-emerald-50 text-xs font-semibold shadow-sm hover:bg-emerald-100 hover:border-emerald-400 hover:-translate-y-[1px] transition-all duration-200"
+          >
+            <IconDownload size={15} strokeWidth={2.5} /> Export to Excel
+          </button>
+        </div>
       </div>
 
       {/* Filters Panel */}
