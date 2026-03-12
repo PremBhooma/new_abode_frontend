@@ -30,28 +30,28 @@ function Filemanager({ fileStructure, folderselect, isLoadingEffect, openDeleteF
             <table className="w-full text-left border-collapse">
                 <thead className="truncate border-b-[0.6px] border-b-[#757575]/30">
                     <tr>
-                        <th scope="col" className="px-4 py-[18px]">
-                            <p className="text-[#4b5563] text-[14px] not-italic font-[500] leading-[18px]">
+                        <th scope="col" className="px-4 py-2">
+                            <p className="text-[#4b5563] text-xs not-italic font-[500] leading-[18px]">
                                 Name
                             </p>
                         </th>
-                        <th scope="col" className="px-4 py-3">
-                            <p className="text-[#4b5563] text-[14px] not-italic font-[500] leading-[18px]">
+                        <th scope="col" className="px-4 py-2">
+                            <p className="text-[#4b5563] text-xs not-italic font-[500] leading-[18px]">
                                 Last Modified
                             </p>
                         </th>
-                        <th scope="col" className="px-4 py-3">
-                            <p className="text-[#4b5563] text-[14px] not-italic font-[500] leading-[18px]">
+                        <th scope="col" className="px-4 py-2">
+                            <p className="text-[#4b5563] text-xs not-italic font-[500] leading-[18px]">
                                 Type
                             </p>
                         </th>
-                        <th scope="col" className="px-4 py-3">
-                            <p className="text-[#4b5563] text-[14px] not-italic font-[500] leading-[18px]">
+                        <th scope="col" className="px-4 py-2">
+                            <p className="text-[#4b5563] text-xs not-italic font-[500] leading-[18px]">
                                 Uploaded By
                             </p>
                         </th>
-                        <th scope="col" className="px-4 py-3">
-                            <p className="text-[#4b5563] text-[14px] not-italic font-[500] leading-[18px]">
+                        <th scope="col" className="px-4 py-2">
+                            <p className="text-[#4b5563] text-xs not-italic font-[500] leading-[18px]">
                                 Actions
                             </p>
                         </th>
@@ -97,35 +97,35 @@ function Filemanager({ fileStructure, folderselect, isLoadingEffect, openDeleteF
                                         key={item?.id}
                                         className="truncate border-b-[0.6px] border-b-[#ebecef]"
                                     >
-                                        <td className="truncate px-4 py-3 whitespace-nowrap">
-                                            <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                        <td className="truncate px-4 py-2 whitespace-nowrap">
+                                            <p className="text-[#4b5563] text-xs not-italic font-normal leading-[18px]">
                                                 <div className='flex flex-row gap-2 items-center'>
                                                     <img src={icon} alt={item.name} className='h-[20px] w-[20px]' />
                                                     {
                                                         item.file_type === 'folder' ?
-                                                            <p className='text-[#4b5563] text-[13px] not-italic font-normal leading-[18px] cursor-pointer' onClick={() => folderselect(item.id, item.id)}>
+                                                            <p className='text-[#4b5563] text-xs not-italic font-normal leading-[18px] cursor-pointer' onClick={() => folderselect(item.id, item.id)}>
                                                                 {item.name}
                                                             </p>
                                                             :
-                                                            <p className='text-[#4b5563] text-[13px] not-italic font-normal leading-[18px] truncate whitespace-nowrap w-[100px]'>
+                                                            <p className='text-[#4b5563] text-xs not-italic font-normal leading-[18px] truncate whitespace-nowrap w-[100px]'>
                                                                 {item.name}
                                                             </p>
                                                     }
                                                 </div>
                                             </p>
                                         </td>
-                                        <td className="px-4 py-3 truncate">
-                                            <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                        <td className="px-4 py-2 truncate">
+                                            <p className="text-[#4b5563] text-xs not-italic font-normal leading-[18px]">
                                                 {dayjs(item.updatedAt).format('DD MMM YYYY')}
                                             </p>
                                         </td>
-                                        <td className="px-4 py-3 truncate">
-                                            <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                        <td className="px-4 py-2 truncate">
+                                            <p className="text-[#4b5563] text-xs not-italic font-normal leading-[18px]">
                                                 {item.file_type || "----"}
                                             </p>
                                         </td>
-                                        <td className="px-4 py-3 truncate">
-                                            <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                        <td className="px-4 py-2 truncate">
+                                            <p className="text-[#4b5563] text-xs not-italic font-normal leading-[18px]">
                                                 {item.uploadedBy}
                                             </p>
                                         </td>
@@ -199,8 +199,8 @@ function Filemanager({ fileStructure, folderselect, isLoadingEffect, openDeleteF
                             }))
                             :
                             <tr>
-                                <td colSpan={6} className="text-center py-4">
-                                    <p className="text-[#4A4D53CC] text-[14px] not-italic font-[400] leading-[18px]">
+                                <td colSpan={6} className="text-center py-2">
+                                    <p className="text-[#4A4D53CC] text-xs not-italic font-[400] leading-[18px]">
                                         No data found
                                     </p>
                                 </td>
