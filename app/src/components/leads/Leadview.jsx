@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "../ui/dialog.jsx";
 import { Link, useParams, NavLink, useNavigate } from "react-router-dom";
+import { ChevronRight, Zap, ArrowRightLeft, UserPlus, RefreshCw, FileText, UserCheck, LayoutDashboard } from "lucide-react";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails.jsx";
 import { IconArrowLeft, IconEdit, IconPointFilled } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -155,7 +156,7 @@ function Leadview() {
 
   return (
     <>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-3">
         {/* <div className="flex justify-between items-center">
           <p className="text-[24px] font-semibold">View Lead</p>
 
@@ -205,7 +206,7 @@ function Leadview() {
           </div>
         </div> */}
 
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        {/* <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
             <h1 className="text-xl font-bold">View Lead</h1>
 
@@ -216,10 +217,6 @@ function Leadview() {
               </div>
 
               {leadData?.lead_assignee ? (
-                // <div className="truncate max-w-[100px] sm:max-w-[150px] flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-100 text-xs font-medium">
-                //   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                //   <span>Assigned: {leadData.lead_assignee.name}</span>
-                // </div>
                 <div className="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-100 text-xs font-medium max-w-[200px]">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
 
@@ -273,6 +270,132 @@ function Leadview() {
             {permissions?.leads_page?.includes("edit_lead") && (
               <Link to={`/lead/edit-lead/${currentLeadId}`} className="px-3 py-2 text-sm font-medium text-white bg-[#0083bf] border border-[#0083bf] rounded-lg hover:bg-[#0072a6] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
                 <IconEdit size={16} />
+                Edit
+              </Link>
+            )}
+          </div>
+        </div> */}
+
+
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+          {/* Row 1: Breadcrumb */}
+          <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.1em] uppercase mb-4">
+            <Link to="/dashboard" className="text-slate-400 hover:text-rose-600 transition-colors flex items-center gap-1.5">
+              <LayoutDashboard size={12} />
+              Dashboard
+            </Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <Link to="/leads" className="text-slate-400 hover:text-rose-600 transition-colors">
+              Leads
+            </Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-rose-600">View Lead</span>
+          </div>
+
+          {/* Row 2: Title, Subtext & Status */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 shadow-sm transition-transform hover:scale-105 duration-300">
+                <Zap size={22} fill="currentColor" fillOpacity={0.15} />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-tight">
+                  Lead Details
+                </h1>
+                <p className="text-[12px] text-slate-500 font-medium mt-0.5">
+                  Overview of lead status, history, and assignments.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 text-[11px]">
+
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-50 text-rose-700 rounded-lg border border-rose-200 font-semibold uppercase tracking-wide shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+                <span className="leading-none">
+                  {leadData?.lead_stage_name || "Unknown Stage"}
+                </span>
+              </div>
+
+              {leadData?.lead_assignee ? (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg border border-emerald-200 font-semibold uppercase tracking-wide shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span className="leading-none">
+                    {leadData.lead_assignee.name}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-400 rounded-lg border border-slate-200 font-semibold uppercase tracking-wide shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                  <span className="leading-none">Unassigned</span>
+                </div>
+              )}
+
+            </div>
+          </div>
+
+          <hr className="my-4 border-slate-100" />
+
+          {/* Row 3: Action Buttons */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            {leadData?.lead_assignee ? (
+              permissions?.leads_page?.includes("transfer_lead") && (
+                <button
+                  onClick={openTransferLead}
+                  className="group flex items-center gap-2 px-4 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg shadow-sm hover:bg-indigo-100 hover:border-indigo-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                >
+                  <ArrowRightLeft size={14} className="transition-transform group-hover:rotate-180 duration-500" />
+                  Transfer
+                </button>
+              )
+            ) : (
+              permissions?.leads_page?.includes("assign_lead") && (
+                <button
+                  onClick={openAsignLead}
+                  className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg shadow-sm hover:bg-blue-100 hover:border-blue-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                >
+                  <UserPlus size={14} />
+                  Assign Lead
+                </button>
+              )
+            )}
+
+            {permissions?.leads_page?.includes("update_lead_stage") && (
+              <button
+                onClick={() => openUpdateLeadStageModal(leadData?.lead_stage_id, leadData?.id)}
+                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-lg shadow-sm hover:bg-rose-100 hover:border-rose-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+              >
+                <RefreshCw size={14} />
+                Update Stage
+              </button>
+            )}
+
+            {permissions?.leads_page?.includes("generate_cost_sheet") && (
+              <button
+                onClick={() => setCostSheetDrawer(true)}
+                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-cyan-700 bg-cyan-50 border border-cyan-200 rounded-lg shadow-sm hover:bg-cyan-100 hover:border-cyan-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+              >
+                <FileText size={14} />
+                Cost Sheet
+              </button>
+            )}
+
+            {permissions?.leads_page?.includes("convert_lead_to_customer") && (
+              <Link
+                to={`/lead/convert-lead-to-customer/${currentLeadId}`}
+                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg shadow-sm hover:bg-emerald-100 hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+              >
+                <UserCheck size={14} />
+                Convert
+              </Link>
+            )}
+
+            {permissions?.leads_page?.includes("edit_lead") && (
+              <Link
+                to={`/lead/edit-lead/${currentLeadId}`}
+                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#0083bf] bg-[#0083bf]/5 border border-[#0083bf]/20 rounded-lg shadow-sm hover:bg-[#0083bf]/10 hover:border-[#0083bf]/40 hover:-translate-y-0.5 transition-all duration-300 flex items-center cursor-pointer"
+              >
+                <IconEdit size={14} />
                 Edit
               </Link>
             )}
