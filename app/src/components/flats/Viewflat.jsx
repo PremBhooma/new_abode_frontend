@@ -30,7 +30,7 @@ import { Input } from "@/components/ui/input";
 import Drawer from 'react-modern-drawer'
 import 'react-modern-drawer/dist/index.css'
 import Bookingstages from "./viewflat/Bookingstages.jsx";
-import { DownloadIcon, File, Files, Upload, X } from "lucide-react";
+import { DownloadIcon, File, Files, Upload, X, ChevronRight, Building2, LayoutDashboard, UserPlus, ArrowRightLeft, FileText, UserCheck, RefreshCw } from "lucide-react";
 import config from "../../config.jsx";
 import Errorpanel from "../shared/Errorpanel.jsx";
 import { set } from "date-fns";
@@ -505,88 +505,110 @@ function Viewflat() {
   return (
     <>
       <div className="w-full flex flex-col gap-4">
-        <div className="flex justify-between">
-          <div className="flex flex-row items-center gap-4">
-            <h1 className="text-[20px] font-semibold">Flat No: {flatDetails?.flat_no} / {flatDetails?.block?.block_name} / Floor No: {flatDetails?.floor_no}</h1>
-            <div className={`flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${flatDetails?.status === 'Sold' ? 'bg-green-100 text-green-600 border-green-200' : 'bg-red-100 text-red-600 border-red-200'}`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${flatDetails?.status === 'Sold' ? 'bg-green-600' : 'bg-red-600'}`} ></span>
-              <span>{flatDetails?.status}</span>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+          {/* Row 1: Breadcrumb */}
+          <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.1em] uppercase mb-4">
+            <Link to="/dashboard" className="text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1.5">
+              <LayoutDashboard size={12} />
+              Dashboard
+            </Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <Link to="/flats" className="text-slate-400 hover:text-blue-600 transition-colors">
+              Flats
+            </Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-blue-600">View Flat</span>
+          </div>
+
+          {/* Row 2: Title, Subtext & Status */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm transition-transform hover:scale-105 duration-300">
+                <Building2 size={22} fill="currentColor" fillOpacity={0.15} />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-tight">
+                  Flat {flatDetails?.flat_no} Details
+                </h1>
+                <p className="text-[12px] text-slate-500 font-medium mt-0.5">
+                  Block: {flatDetails?.block?.block_name} • Floor: {flatDetails?.floor_no}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 text-[11px]">
+              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border font-semibold uppercase tracking-wide shadow-sm ${flatDetails?.status === 'Sold' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${flatDetails?.status === 'Sold' ? 'bg-emerald-500' : 'bg-rose-500 animate-pulse'}`}></span>
+                <span className="leading-none">{flatDetails?.status}</span>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+
+          <hr className="my-4 border-slate-100" />
+
+          {/* Row 3: Action Buttons */}
+          <div className="flex flex-wrap items-center gap-2.5">
             {flatDetails?.status !== 'Sold' && canAssignFlat && (
-              <div onClick={openFlatToCustomer} className="cursor-pointer text-[14px] text-white px-4 py-[7px] rounded  bg-[#b4295e]">
+              <button
+                onClick={openFlatToCustomer}
+                className="group flex items-center gap-2 px-4 py-2 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-lg shadow-sm hover:bg-rose-100 hover:border-rose-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+              >
+                <UserPlus size={14} />
                 Assign Flat to Customer
-              </div>
+              </button>
             )}
-            {flatDetails?.status === 'Sold' && (
+
+            {/* {flatDetails?.status === 'Sold' && (
               <>
-                {/* {
-                  (flatDetails?.pdf_agreement_template_url || flatDetails?.word_agreement_template_url) ?
-                    <>
-                      <button
-                        onClick={() => openDownloadTemplate('agreement')}
-                        className="text-[#000] px-3 gap-1 text-[14px] font-semibold flex items-center justify-center py-[7px] rounded-sm bg-[#e1e1e1] transition-colors duration-200 cursor-pointer"
-                      >
-                        <DownloadIcon size={16} color="#000" />
-                        Download Agreement
-                      </button>
-                      <button
-                        onClick={openCreateAgreementModal}
-                        className="text-[#fff] px-3 gap-1 text-[14px] font-semibold flex items-center justify-center py-[7px] rounded-sm bg-[#000] transition-colors duration-200 cursor-pointer"
-                      >
-                        Re-genrate Agreement
-                      </button>
-                    </>
-                    :
-                    <button
-                      onClick={openCreateAgreementModal}
-                      className="text-[#fff] px-3 gap-1 text-[14px] font-semibold flex items-center justify-center py-[7px] rounded-sm bg-[#000] transition-colors duration-200 cursor-pointer"
-                    >
-                      Create Agreement
-                    </button>
-                } */}
-                {/* {permissions?.flats_page?.includes("upload_sale_deed_template") &&
+                {permissions?.flats_page?.includes("upload_sale_deed_template") && (
                   <button
                     onClick={openSaleDeedTemplateModal}
-                    className="text-[#fff] px-3 gap-1 text-[12px] font-semibold flex items-center justify-center py-[7px] rounded-sm bg-[#0083bf] transition-colors duration-200 cursor-pointer"
+                    className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg shadow-sm hover:bg-indigo-100 hover:border-indigo-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                   >
+                    <Upload size={14} />
                     Upload Sale Deed Template
                   </button>
-                } */}
-                {/* {permissions?.flats_page?.includes("download_sale_deed") &&
+                )}
+
+                {permissions?.flats_page?.includes("download_sale_deed") && (
                   <>
-                    {
-                      (flatDetails?.word_sale_deed_template_url || flatDetails?.pdf_sale_deed_template_url) ?
-                        <>
-                          <button
-                            onClick={() => openDownloadTemplate('saledeed')}
-                            className="text-[#fff] px-3 gap-1 text-[14px] font-semibold flex items-center justify-center py-[7px] rounded-sm bg-[#0083bf] transition-colors duration-200 cursor-pointer"
-                          >
-                            <DownloadIcon size={16} color="#fff" />
-                            Download Sale Deed Template
-                          </button>
-                          <button
-                            onClick={openSaleDeedModal}
-                            className="text-[#fff] px-3 gap-1 text-[14px] font-semibold flex items-center justify-center py-[7px] rounded-sm bg-[#e0589c] transition-colors duration-200 cursor-pointer"
-                          >
-                            Re-genrate Sale Deed
-                          </button>
-                        </>
-                        :
+                    {(flatDetails?.word_sale_deed_template_url || flatDetails?.pdf_sale_deed_template_url) ? (
+                      <>
+                        <button
+                          onClick={() => openDownloadTemplate('saledeed')}
+                          className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg shadow-sm hover:bg-blue-100 hover:border-blue-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                        >
+                          <DownloadIcon size={14} />
+                          Download Sale Deed Template
+                        </button>
                         <button
                           onClick={openSaleDeedModal}
-                          className="text-[#fff] px-3 gap-1 text-[14px] font-semibold flex items-center justify-center py-[7px] rounded-sm bg-[#e0589c] transition-colors duration-200 cursor-pointer"
+                          className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-lg shadow-sm hover:bg-amber-100 hover:border-amber-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                         >
-                          Create Sale Deed
+                          <RefreshCw size={14} />
+                          Re-generate Sale Deed
                         </button>
-                    }
+                      </>
+                    ) : (
+                      <button
+                        onClick={openSaleDeedModal}
+                        className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg shadow-sm hover:bg-emerald-100 hover:border-emerald-300 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                      >
+                        <FileText size={14} />
+                        Create Sale Deed
+                      </button>
+                    )}
                   </>
-                } */}
+                )}
               </>
-            )}
+            )} */}
+
             {permissions?.flats_page?.includes("edit_flat") && (
-              <Link to={`/flats/edit-flat/${id}`} className="text-[14px] text-white font-semibold px-5 py-[7px] border border-[#0083bf] !rounded-sm !bg-[#0083bf] hover:!bg-[#0083bf]/90">
+              <Link
+                to={`/flats/edit-flat/${id}`}
+                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#0083bf] bg-[#0083bf]/5 border border-[#0083bf]/20 rounded-lg shadow-sm hover:bg-[#0083bf]/10 hover:border-[#0083bf]/40 hover:-translate-y-0.5 transition-all duration-300 flex items-center cursor-pointer"
+              >
+                <IconEdit size={14} />
                 Edit
               </Link>
             )}
