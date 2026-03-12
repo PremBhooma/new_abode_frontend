@@ -3,6 +3,7 @@ import { IconArrowLeft, IconEdit, IconUser, IconMail, IconPhone, IconBriefcase, 
 import { Modal } from "@nayeshdaggula/tailify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useParams, useNavigate, Link, NavLink } from "react-router-dom";
+import { ChevronRight, Users, ChevronLeft } from "lucide-react";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
 import Changepassword from "./Changepassword";
 import BasicEditEmployee from "./BasicEditEmployee";
@@ -101,32 +102,67 @@ function SingleEmployeeview() {
   return (
     <>
       <div className="flex flex-col gap-3">
-        <div className="flex justify-between items-center">
-          <p className="crm-title">View Employee</p>
+        <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+          {/* Breadcrumb */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-1.5">
 
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <div className="flex flex-col w-full mr-5">
-              <div className="text-gray-600 shrink-0 text-[10px]">Status</div>
-              <div className="text-gray-900 font-semibold break-all">
-                {userdata?.status === "Inactive" ? (
-                  <span className="text-red-500">Inactive</span>
-                ) : userdata?.status === "Active" ? (
-                  <span className="text-green-500">Active</span>
-                ) : userdata?.status === "Suspended" ? (
-                  <span className="text-gray-500">Suspended</span>
-                ) : (
-                  "---"
-                )}
+              <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+                Dashboard
+              </Link>
+              <ChevronRight size={12} className="text-slate-300" />
+              <Link to="/employees" className="text-xs font-medium text-slate-400 uppercase tracking-widest hover:text-[#de4183] transition-colors">
+                Employees
+              </Link>
+              <ChevronRight size={12} className="text-slate-300" />
+              <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+                Details
+              </span>
+            </div>
+            <div>
+              <Link
+                to="/employees"
+                className="flex items-center gap-2 px-3 py-2 rounded-md border border-slate-200 text-slate-600 bg-white text-xs font-bold shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
+              >
+                <ChevronLeft size={16} /> Back
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl border border-blue-300 bg-blue-50 flex items-center justify-center shadow-sm transition hover:bg-blue-100">
+                <Users size={18} className="text-blue-600" />
+              </div>
+
+              <div>
+                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                  Employee Details
+                </h1>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  View comprehensive profile and role information
+                </p>
               </div>
             </div>
 
-            <Link
-              to={"/employees"}
-              className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-2 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200"
-            >
-              <IconArrowLeft className="mt-0.5" size={18} color="#0083bf" />
-              Back
-            </Link>
+            <div className="flex items-center gap-6">
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Account Status</span>
+                <div className="font-semibold text-sm">
+                  {userdata?.status === "Inactive" ? (
+                    <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[11px]">Inactive</span>
+                  ) : userdata?.status === "Active" ? (
+                    <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-600 text-[11px]">Active</span>
+                  ) : userdata?.status === "Suspended" ? (
+                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[11px]">Suspended</span>
+                  ) : (
+                    <span className="text-slate-400">---</span>
+                  )}
+                </div>
+              </div>
+
+
+            </div>
           </div>
         </div>
 
