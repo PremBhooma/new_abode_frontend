@@ -27,7 +27,7 @@ import { useAllocatedProjectDetails } from "../zustand/useAllocatedProjectDetail
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails.jsx";
 import { IconDownload, IconEdit, IconEye, IconSearch, IconTrash, IconSettings } from "@tabler/icons-react";
 import MultipleleadassignModal from "./MultipleleadassignModal.jsx";
-import { FilterX } from "lucide-react";
+import { ChevronRight, Download, FilterX, Upload, UserPlus, Users } from "lucide-react";
 
 function Leadwrapper() {
   const permissions = useEmployeeDetails((state) => state.permissions);
@@ -553,6 +553,44 @@ function Leadwrapper() {
                   Upload Bulk Leads
                 </button>
               )}
+            </div>
+          </div>
+        </div>
+
+
+        <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+          <div className="flex items-center gap-1.5 mb-4">
+            <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">CRM</span>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-xs font-semibold text-[#B4295E] uppercase tracking-widest">Leads</span>
+          </div>
+          <div className="flex items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B4295E] to-[#8B1A44] flex items-center justify-center shadow-lg shadow-[#B4295E]/20">
+                <Users size={18} className="text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">Leads</h1>
+                <p className="text-xs text-slate-400 mt-0.5">Manage and track your sales pipeline</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2.5">
+              {/* Add Lead */}
+              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-br from-[#B4295E] to-[#8B1A44] text-white text-xs font-semibold shadow-md shadow-[#B4295E]/25 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                <UserPlus size={15} strokeWidth={2.5} /> Add Lead
+              </button>
+              {/* Assign */}
+              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 hover:-translate-y-0.5 shadow-md transition-all duration-200">
+                <Users size={15} strokeWidth={2.5} /> Assign to Employee
+              </button>
+              {/* Download */}
+              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white text-slate-700 text-xs font-semibold border border-slate-200 hover:bg-slate-50 hover:-translate-y-0.5 shadow-sm transition-all duration-200">
+                <Download size={15} strokeWidth={2.5} /> Download Template
+              </button>
+              {/* Upload */}
+              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-emerald-500 text-white text-xs font-semibold hover:bg-emerald-600 hover:-translate-y-0.5 shadow-md shadow-emerald-500/25 transition-all duration-200">
+                <Upload size={15} strokeWidth={2.5} /> Upload Leads
+              </button>
             </div>
           </div>
         </div>
