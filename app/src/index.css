@@ -197,11 +197,11 @@
   }
 
   .crm-panel {
-    @apply rounded-md border border-slate-200 bg-white shadow-sm;
+    @apply flex flex-col gap-3 rounded-md border border-slate-200 bg-white shadow-sm;
   }
 
   .crm-panel-body {
-    @apply p-3 md:p-4;
+    @apply p-3 md:p-4 h-[calc(100vh-150px)] overflow-y-auto overflow-x-hidden;
   }
 
   .crm-toolbar {

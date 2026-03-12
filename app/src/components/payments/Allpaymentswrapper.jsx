@@ -437,8 +437,8 @@ function Allpaymentswrapper() {
                         )}
                     </div>
                 </div>
-                <div className='crm-panel'>
-                    <div className='crm-toolbar px-4 pt-4'>
+                <div className='crm-panel crm-panel-body'>
+                    <div className='crm-toolbar'>
                         <div className="relative">
                             <input
                                 type="text"
@@ -453,8 +453,6 @@ function Allpaymentswrapper() {
                         </div>
 
                         <div className="flex items-center gap-2">
-
-
                             <div className='w-[150px]'>
                                 <Select key={filterKey} value={selectedBlock || undefined} onValueChange={handleBlockChange}>
                                     <SelectTrigger className="w-full h-9 bg-white border-[#e2e8f0] focus:ring-0 focus:ring-offset-0 shadow-none">
@@ -505,128 +503,126 @@ function Allpaymentswrapper() {
                         </div>
                     </div>
                     {/* Table Section  */}
-                    <div className="px-4 pb-4">
-                        <div className="crm-table-wrap w-full relative z-0">
-                            <table className="w-full table-fixed text-left border-collapse">
-                                <thead className="bg-[#f9fafb]">
-                                    <tr className="border-b border-neutral-200">
-                                        <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight !w-[220px] border-r border-neutral-200">
-                                            Flat Details
-                                        </th>
-                                        <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight border-r border-neutral-200">
-                                            Booking Date
-                                        </th>
-                                        <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight border-r border-neutral-200">
-                                            Grand Total
-                                        </th>
-                                        <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight border-r border-neutral-200">
-                                            Current Balance
-                                        </th>
-                                        <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight text-center">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-neutral-200">
-                                    {isLoading === false ? (
-                                        flatsSummary.length > 0 ? (
-                                            flatsSummary.map((flat, index) => (
-                                                <tr key={index} className="hover:bg-neutral-50/50 transition-colors duration-150 border-b border-neutral-200 last:border-0">
-                                                    <td className="px-3 py-2 border-r border-neutral-200">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center border border-purple-100 flex-shrink-0">
-                                                                <span className="text-purple-600 font-bold text-[14px]">
-                                                                    {flat?.flat_no || "----"}
-                                                                </span>
-                                                            </div>
-                                                            <div className="flex flex-col min-w-0">
-                                                                <p className="text-neutral-900 text-[11px] font-semibold leading-tight truncate" title={flat?.project_name}>
-                                                                    {flat?.project_name || "----"}
-                                                                </p>
-                                                                <p className="text-neutral-500 text-[11px] font-medium leading-[16px] flex items-center gap-1">
-                                                                    <span>{flat?.block_name ? `Block: ${flat.block_name}` : "----"}</span>
-                                                                    <span className="text-neutral-300">•</span>
-                                                                    <span>{flat?.floor_no ? `Floor: ${flat.floor_no}` : "----"}</span>
-                                                                </p>
-                                                            </div>
+                    <div className="crm-table-wrap w-full relative z-0">
+                        <table className="w-full table-fixed text-left border-collapse">
+                            <thead className="bg-[#f9fafb]">
+                                <tr className="border-b border-neutral-200">
+                                    <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight !w-[220px] border-r border-neutral-200">
+                                        Flat Details
+                                    </th>
+                                    <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight border-r border-neutral-200">
+                                        Booking Date
+                                    </th>
+                                    <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight border-r border-neutral-200">
+                                        Grand Total
+                                    </th>
+                                    <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight border-r border-neutral-200">
+                                        Current Balance
+                                    </th>
+                                    <th className="px-3 py-3 text-neutral-800 uppercase tracking-widest text-[11px] font-bold leading-tight text-center">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-neutral-200">
+                                {isLoading === false ? (
+                                    flatsSummary.length > 0 ? (
+                                        flatsSummary.map((flat, index) => (
+                                            <tr key={index} className="hover:bg-neutral-50/50 transition-colors duration-150 border-b border-neutral-200 last:border-0">
+                                                <td className="px-3 py-2 border-r border-neutral-200">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center border border-purple-100 flex-shrink-0">
+                                                            <span className="text-purple-600 font-bold text-[14px]">
+                                                                {flat?.flat_no || "----"}
+                                                            </span>
                                                         </div>
-                                                    </td>
-                                                    <td className="px-3 py-2 border-r border-neutral-200">
-                                                        <p className="text-neutral-600 text-[12px] font-medium leading-[18px]">
-                                                            {flat?.booking_date ? dayjs(flat.booking_date).format('DD/MM/YYYY') : "----"}
-                                                        </p>
-                                                    </td>
-                                                    <td className="px-3 py-2 border-r border-neutral-200">
-                                                        <p className="text-neutral-600 text-[12px] font-medium leading-[18px]">
-                                                            {formatCurrency(flat?.grand_total)}
-                                                        </p>
-                                                    </td>
-                                                    <td className="px-3 py-2 border-r border-neutral-200">
-                                                        <p className={`text-[12px] font-medium leading-[18px] ${flat?.balance > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                                                            {formatCurrency(flat?.balance)}
-                                                        </p>
-                                                    </td>
-                                                    <td className="px-3 py-2 text-center border-r border-neutral-200">
-                                                        <div className="flex flex-row items-center justify-center gap-2">
-                                                            {permissions?.payments_page?.includes("view_payment") && (
-                                                                <button
-                                                                    onClick={() => handleViewFlatPayments(flat.flat_id)}
-                                                                    className="p-1.5 hover:bg-blue-50 rounded-md transition-all duration-200 text-neutral-400 hover:text-blue-600 border border-transparent hover:border-blue-100"
-                                                                    title="View Payments"
-                                                                >
-                                                                    <IconEye size={18} />
-                                                                </button>
-                                                            )}
+                                                        <div className="flex flex-col min-w-0">
+                                                            <p className="text-neutral-900 text-[11px] font-semibold leading-tight truncate" title={flat?.project_name}>
+                                                                {flat?.project_name || "----"}
+                                                            </p>
+                                                            <p className="text-neutral-500 text-[11px] font-medium leading-[16px] flex items-center gap-1">
+                                                                <span>{flat?.block_name ? `Block: ${flat.block_name}` : "----"}</span>
+                                                                <span className="text-neutral-300">•</span>
+                                                                <span>{flat?.floor_no ? `Floor: ${flat.floor_no}` : "----"}</span>
+                                                            </p>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan={5} className="text-center py-3">
-                                                    <p className="text-neutral-500 text-sm">
-                                                        No payments found
+                                                    </div>
+                                                </td>
+                                                <td className="px-3 py-2 border-r border-neutral-200">
+                                                    <p className="text-neutral-600 text-[12px] font-medium leading-[18px]">
+                                                        {flat?.booking_date ? dayjs(flat.booking_date).format('DD/MM/YYYY') : "----"}
                                                     </p>
                                                 </td>
+                                                <td className="px-3 py-2 border-r border-neutral-200">
+                                                    <p className="text-neutral-600 text-[12px] font-medium leading-[18px]">
+                                                        {formatCurrency(flat?.grand_total)}
+                                                    </p>
+                                                </td>
+                                                <td className="px-3 py-2 border-r border-neutral-200">
+                                                    <p className={`text-[12px] font-medium leading-[18px] ${flat?.balance > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                                        {formatCurrency(flat?.balance)}
+                                                    </p>
+                                                </td>
+                                                <td className="px-3 py-2 text-center border-r border-neutral-200">
+                                                    <div className="flex flex-row items-center justify-center gap-2">
+                                                        {permissions?.payments_page?.includes("view_payment") && (
+                                                            <button
+                                                                onClick={() => handleViewFlatPayments(flat.flat_id)}
+                                                                className="p-1.5 hover:bg-blue-50 rounded-md transition-all duration-200 text-neutral-400 hover:text-blue-600 border border-transparent hover:border-blue-100"
+                                                                title="View Payments"
+                                                            >
+                                                                <IconEye size={18} />
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </td>
                                             </tr>
-                                        )
+                                        ))
                                     ) : (
-                                        <>
-                                            {[...Array(5)].map((_, i) => (
-                                                <tr key={i} className="border-b border-neutral-200 last:border-0">
-                                                    <td className="px-3 py-4 border-r border-neutral-200">
-                                                        <div className="flex items-center gap-3">
-                                                            <Skeleton className="w-10 h-10 rounded-xl" />
-                                                            <div className="space-y-2">
-                                                                <Skeleton className="h-3 w-[120px]" />
-                                                                <Skeleton className="h-3 w-[80px]" />
-                                                            </div>
+                                        <tr>
+                                            <td colSpan={5} className="text-center py-3">
+                                                <p className="text-neutral-500 text-sm">
+                                                    No payments found
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    )
+                                ) : (
+                                    <>
+                                        {[...Array(5)].map((_, i) => (
+                                            <tr key={i} className="border-b border-neutral-200 last:border-0">
+                                                <td className="px-3 py-4 border-r border-neutral-200">
+                                                    <div className="flex items-center gap-3">
+                                                        <Skeleton className="w-10 h-10 rounded-xl" />
+                                                        <div className="space-y-2">
+                                                            <Skeleton className="h-3 w-[120px]" />
+                                                            <Skeleton className="h-3 w-[80px]" />
                                                         </div>
-                                                    </td>
-                                                    <td className="px-3 py-4 border-r border-neutral-200">
-                                                        <Skeleton className="h-3 w-[100px]" />
-                                                    </td>
-                                                    <td className="px-3 py-4 border-r border-neutral-200">
-                                                        <Skeleton className="h-3 w-[120px]" />
-                                                    </td>
-                                                    <td className="px-3 py-4 border-r border-neutral-200">
-                                                        <Skeleton className="h-3 w-[120px]" />
-                                                    </td>
-                                                    <td className="px-3 py-4">
-                                                        <div className="flex justify-center">
-                                                            <Skeleton className="w-8 h-8 rounded-md" />
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-3 py-4 border-r border-neutral-200">
+                                                    <Skeleton className="h-3 w-[100px]" />
+                                                </td>
+                                                <td className="px-3 py-4 border-r border-neutral-200">
+                                                    <Skeleton className="h-3 w-[120px]" />
+                                                </td>
+                                                <td className="px-3 py-4 border-r border-neutral-200">
+                                                    <Skeleton className="h-3 w-[120px]" />
+                                                </td>
+                                                <td className="px-3 py-4">
+                                                    <div className="flex justify-center">
+                                                        <Skeleton className="w-8 h-8 rounded-md" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </>
+                                )}
+                            </tbody>
+                        </table>
                     </div>
                     {flatsSummary?.length > 0 && (
-                        <div className="flex flex-row-reverse p-4">
+                        <div className="flex flex-row-reverse">
                             <Pagination
                                 totalpages={totalPages}
                                 value={page}

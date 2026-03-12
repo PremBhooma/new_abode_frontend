@@ -210,14 +210,14 @@ function Flatpaymentswrapper() {
             <div className="flex flex-col gap-4">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                        <p className="text-[22px] font-semibold">Flat Payments -</p>
+                        <p className="crm-title">Flat Payments -</p>
                         {isLoading ? (
                             <Skeleton className="h-7 w-20" />
                         ) : (
-                            <p className="text-[22px] font-semibold">{flatDetails?.flat_no || "---"}</p>
+                            <p className="crm-title">{flatDetails?.flat_no || "---"}</p>
                         )}
                         {!isLoading && flatDetails?.project_name && (
-                            <p className="text-[22px] font-semibold ml-1">- {flatDetails.project_name}</p>
+                            <p className="crm-title ml-1">- {flatDetails.project_name}</p>
                         )}
                     </div>
                     <Link to={'/payments'} className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200 hover:bg-[#0083bf] hover:text-white" >
@@ -274,10 +274,10 @@ function Flatpaymentswrapper() {
                 )}
 
                 {/* Payments Table */}
-                <div className='flex flex-col gap-4 bg-white rounded-md'>
-                    <div className='px-4 pt-4'>
-                        <p className="text-lg font-semibold text-neutral-700">Payment History</p>
-                    </div>
+                <div className='flex flex-col gap-3 p-4 bg-white rounded-md'>
+                    {/* <div className=''> */}
+                    <p className="text-lg font-semibold text-neutral-700">Payment History</p>
+                    {/* </div> */}
                     <div className="w-full relative overflow-x-auto border border-neutral-200 rounded-lg z-0">
                         <table className="w-full table-fixed text-left border-collapse">
                             <thead className="bg-[#f9fafb]">

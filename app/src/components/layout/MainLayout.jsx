@@ -50,7 +50,7 @@ const MainLayout = ({ children }) => {
                 <Header toggleSidebar={toggleSidebar} />
 
                 <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 md:py-3 md:pr-3 md:pl-0">
-                    <div className="mx-auto w-full max-w-[1800px]">
+                    <div className="mx-auto w-full">
                         {children}
                     </div>
                 </main>
