@@ -1,4 +1,4 @@
-﻿import react, { useEffect, useState } from "react";
+import react, { useEffect, useState } from "react";
 import { Link, NavLink, useParams } from 'react-router-dom';
 import Paymentapi from "../api/Paymentapi";
 import dayjs from "dayjs";
@@ -8,6 +8,8 @@ import { IconArrowLeft } from "@tabler/icons-react";
 import Errorpanel from "../shared/Errorpanel";
 import { Loadingoverlay } from "@nayeshdaggula/tailify";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
+import { Skeleton } from "../ui/skeleton";
+import { ChevronRight, CircleDollarSign, LayoutDashboard, ArrowLeft } from "lucide-react";
 
 const getFileInfo = (url) => {
     // Get file name from the URL
@@ -106,20 +108,62 @@ function Singlepaymentwrapper() {
 
     return (
         <>
-            <div className="flex flex-col gap-3">
-                <div className="flex justify-between items-center">
-                    <p className="text-[20px] font-semibold">Payment Details</p>
-                    <Link to={'/payments'} className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200" >
-                        <IconArrowLeft className='mt-0.5' size={18} color="#0083bf" />Back
-                    </Link>
+            <div className="flex flex-col gap-4">
+                <div className="bg-white rounded-md shadow-sm border border-slate-100 p-4">
+                    {/* Row 1: Breadcrumb */}
+                    <div className="flex justify-between items-center text-[10px] font-bold tracking-[0.1em] uppercase mb-2">
+                        <div className="flex items-center gap-2">
+                            <Link to="/dashboard" className="text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1.5">
+                                <LayoutDashboard size={12} />
+                                Dashboard
+                            </Link>
+                            <ChevronRight size={12} className="text-slate-300" />
+                            <Link to="/payments" className="text-slate-400 hover:text-blue-600 transition-colors">
+                                Payments
+                            </Link>
+                            <ChevronRight size={12} className="text-slate-300" />
+                            <span className="text-blue-600">Payment Details</span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Link to={'/payments'} className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#0083bf] bg-[#0083bf]/5 border border-[#0083bf]/20 rounded-lg shadow-sm hover:bg-[#0083bf]/10 hover:border-[#0083bf]/40 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
+                                <ArrowLeft size={14} />
+                                Back
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Row 2: Title & Module Identifier */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-600 shadow-sm transition-transform hover:scale-105 duration-300">
+                                <CircleDollarSign size={22} fill="currentColor" fillOpacity={0.15} />
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-tight">
+                                        Payment Details
+                                    </h1>
+                                    {/* {!isLoadingEffect && (
+                                        <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-bold">
+                                            {paymentDetails?.id || "---"}
+                                        </span>
+                                    )} */}
+                                </div>
+                                <p className="text-[12px] text-slate-500 font-medium mt-0.5">
+                                    {isLoadingEffect ? <Skeleton className="h-3 w-32" /> : `Transaction ID: ${paymentDetails?.transaction_id || "---"}`}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="relative w-full p-6 bg-white rounded-xl">
+                <div className="relative w-full p-6 bg-white rounded-md shadow-sm border border-slate-100">
                     {/* <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment </h3> */}
                     <div className="space-y-6 text-sm">
-                        <div className="flex">
+                        {/* <div className="flex">
                             <span className="basis-[20%] text-gray-600">Payment Ref Id</span>
                             <span className="basis-[80%] font-semibold text-gray-900">{paymentDetails?.id}</span>
-                        </div>
+                        </div> */}
                         <div className="flex">
                             <span className="basis-[20%] text-gray-600">Transaction Id</span>
                             <span className="basis-[80%] font-semibold text-gray-900">{paymentDetails?.transaction_id || '---'}</span>
