@@ -396,59 +396,59 @@ function Allpaymentswrapper() {
 
     return (
         <>
-            <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                    <p className="text-[22px] font-semibold">
+            <div className="crm-page">
+                <div className="crm-header">
+                    <p className="crm-title">
                         All Payments
                     </p>
-                    <div className="flex justify-end items-center gap-2">
+                    <div className="crm-actions">
                         {permissions?.payments_page?.includes("print_all_payments") && (
                             <button
                                 disabled={flatsSummary.length > 0 ? false : true}
                                 onClick={() => handlePrint(searchQuery, selectedFlats, selectedBlock)}
-                                className={`cursor-pointer flex items-center gap-x-1 text-[14px] text-white px-4 py-[7px] rounded bg-[#e0589c] ${flatsSummary.length > 0 ? 'hover:bg-pink-600' : 'bg-gray-400 !cursor-not-allowed'}`}
+                                className={`crm-btn border-[#e0589c] bg-[#e0589c] text-white ${flatsSummary.length > 0 ? 'hover:bg-pink-600' : 'bg-gray-400 !cursor-not-allowed'}`}
                             >
                                 <IconPrinter size={14} /> Print
                             </button>
                         )}
                         {permissions?.payments_page?.includes("add_payment") && (
-                            <Link to={'/payments/addnew'} className="cursor-pointer text-[14px] text-white px-4 py-[7px] rounded bg-black">
+                            <Link to={'/payments/addnew'} className="crm-btn crm-btn-primary">
                                 + Add Payment
                             </Link>
                         )}
                         {permissions?.payments_page?.includes("download_payment_excel") && (
-                            <button onClick={openDownloadTemplate} className="cursor-pointer text-[14px] text-white px-4 !py-[7px] !rounded !bg-[#0083bf]">
+                            <button onClick={openDownloadTemplate} className="crm-btn crm-btn-primary">
                                 Download Payment Template
                             </button>
                         )}
                         {permissions?.payments_page?.includes("export_payment_to_excel") && (
                             <button
                                 onClick={handleDownload}
-                                className="cursor-pointer text-[14px] text-white px-4 py-[7px] rounded bg-[#931f42] flex items-center gap-1 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                className="crm-btn crm-btn-muted disabled:bg-gray-300 disabled:cursor-not-allowed"
                             >
                                 <IconDownload size={16} />
                                 Export to Excel
                             </button>
                         )}
                         {permissions?.payments_page?.includes("upload_payment_excel") && (
-                            <button onClick={openUploadPaymentExcel} className="cursor-pointer text-[14px] text-white px-4 !py-[7px] !rounded bg-emerald-500">
+                            <button onClick={openUploadPaymentExcel} className="crm-btn border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700">
                                 Upload Bulk Payment
                             </button>
                         )}
                     </div>
                 </div>
-                <div className='flex flex-col gap-4 bg-white rounded-md'>
-                    <div className='flex justify-between px-4 pt-4 items-center'>
+                <div className='crm-panel'>
+                    <div className='crm-toolbar px-4 pt-4'>
                         <div className="relative">
                             <input
                                 type="text"
                                 placeholder="Search by Flat No"
-                                className="focus:outline-none text-[14px] pl-6 py-2 rounded-md"
+                                className="h-9 focus:outline-none text-[13px] pl-8 py-1.5 rounded-md border border-[#e2e8f0]"
                                 onChange={updateSearchQuery}
                                 value={searchQuery}
                             />
-                            <div className="absolute left-0 top-3 px-1">
-                                <IconSearch size={16} color="#e5e2e2" />
+                            <div className="absolute left-2.5 top-2.5">
+                                <IconSearch size={14} color="#94a3b8" />
                             </div>
                         </div>
 
@@ -457,7 +457,7 @@ function Allpaymentswrapper() {
 
                             <div className='w-[150px]'>
                                 <Select key={filterKey} value={selectedBlock || undefined} onValueChange={handleBlockChange}>
-                                    <SelectTrigger className="w-full h-9 bg-white border-[#ebecef] focus:ring-0 focus:ring-offset-0 shadow-none">
+                                    <SelectTrigger className="w-full h-9 bg-white border-[#e2e8f0] focus:ring-0 focus:ring-offset-0 shadow-none">
                                         <SelectValue placeholder="Blocks" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -471,7 +471,7 @@ function Allpaymentswrapper() {
                             </div>
                             <div className='w-[160px]'>
                                 <Select key={filterKey} value={selectedFlats || undefined} onValueChange={handleFlatsChange}>
-                                    <SelectTrigger className="w-full h-9 bg-white border-[#ebecef] focus:ring-0 focus:ring-offset-0 shadow-none">
+                                    <SelectTrigger className="w-full h-9 bg-white border-[#e2e8f0] focus:ring-0 focus:ring-offset-0 shadow-none">
                                         <SelectValue placeholder="Flats" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -485,7 +485,7 @@ function Allpaymentswrapper() {
                             </div>
                             <div className='w-[60px]'>
                                 <Select value={limit.toString()} onValueChange={updateLimit}>
-                                    <SelectTrigger className="w-full h-9 bg-white border-[#ebecef] focus:ring-0 focus:ring-offset-0 shadow-none">
+                                    <SelectTrigger className="w-full h-9 bg-white border-[#e2e8f0] focus:ring-0 focus:ring-offset-0 shadow-none">
                                         <SelectValue placeholder="10" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -506,7 +506,7 @@ function Allpaymentswrapper() {
                     </div>
                     {/* Table Section  */}
                     <div className="px-4 pb-4">
-                        <div className="w-full relative overflow-x-auto border border-neutral-200 rounded-lg z-0">
+                        <div className="crm-table-wrap w-full relative z-0">
                             <table className="w-full table-fixed text-left border-collapse">
                                 <thead className="bg-[#f9fafb]">
                                     <tr className="border-b border-neutral-200">

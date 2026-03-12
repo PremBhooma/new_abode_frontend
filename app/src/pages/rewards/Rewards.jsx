@@ -104,15 +104,15 @@ function Rewards() {
   };
 
   return (
-    <div className="flex flex-col gap-6 bg-gray-50">
+    <div className="flex flex-col gap-6">
       {!isRedeeming ? (
         <>
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-black text-gray-900 tracking-tight">Rewards Redemption</h1>
+            <h1 className="crm-title">Rewards Redemption</h1>
             <p className="text-gray-500 text-sm font-medium">Verify eligibility and unlock delightful rewards for your customers.</p>
           </div>
 
-          <div className="bg-white p-8 rounded-lg border border-gray-100 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.05)] flex flex-col gap-6">
+          <div className="bg-white p-5 rounded-lg border border-gray-100 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.05)] flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <label className="text-sm font-bold text-gray-500 uppercase tracking-widest">Search Eligible Sold Flats</label>
               <div className="flex gap-4 p-1.5 bg-gray-50 rounded-2xl w-fit">
@@ -141,7 +141,7 @@ function Rewards() {
                   placeholder={searchType === 'flatNo' ? 'Enter Flat No (e.g. A-101)' : 'Name, Email or Phone'}
                   value={searchQuery}
                   onChange={updateSearchQuery}
-                  className="block w-full pl-12 pr-4 h-14 bg-gray-50 border-2 border-transparent rounded-[20px] text-gray-900 font-medium placeholder-gray-400 focus:outline-none focus:bg-white focus:border-[#0083bf] focus:ring-4 focus:ring-[#0083bf]/10 transition-all shadow-sm"
+                  className="block w-full pl-12 pr-4 h-14 bg-gray-50 border-2 border-transparent rounded-xl text-gray-900 font-medium placeholder-gray-400 focus:outline-none focus:bg-white focus:border-[#0083bf] focus:ring-4 focus:ring-[#0083bf]/10 transition-all shadow-sm"
                 />
               </div>
 

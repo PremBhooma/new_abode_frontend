@@ -297,7 +297,7 @@ function DashboardWrapper() {
       title: 'Total Flats',
       value: dashboardData.totalFlats,
       icon: <Home size={24} />,
-      bgColor: 'bg-gradient-to-r from-[#ff9966] to-[#ff5e62]', // Peach/Pink gradient
+      bgColor: 'bg-gradient-to-r from-[#0078af] to-[#0091d3]',
       subStats: [
         { label: 'Sold', value: dashboardData.soldFlats, color: 'text-white/90', icon: <CheckCircle size={14} /> },
         { label: 'Unsold', value: dashboardData.unsoldFlats, color: 'text-white/90', icon: <XCircle size={14} /> }
@@ -307,7 +307,7 @@ function DashboardWrapper() {
       title: 'Total Customers',
       value: dashboardData.totalCustomers,
       icon: <Users size={24} />,
-      bgColor: 'bg-gradient-to-r from-[#56CCF2] to-[#2F80ED]', // Blue gradient
+      bgColor: 'bg-gradient-to-r from-[#0b9fd1] to-[#0f7abf]',
       subStats: [
         // { label: 'Active', value: dashboardData.activeCustomers, color: 'text-white/90', icon: <UserCheck size={14} /> },
         // { label: 'Inactive', value: dashboardData.inactiveCustomers, color: 'text-white/90', icon: <UserMinus size={14} /> },
@@ -338,7 +338,7 @@ function DashboardWrapper() {
 
   if (isLoadingEffect) {
     return (
-      <div className="w-full space-y-4">
+      <div className="w-full space-y-3">
         {/* Header Skeleton */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div className="space-y-2">
@@ -384,10 +384,10 @@ function DashboardWrapper() {
         )}
 
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="crm-header">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900 tracking-tight">Dashboard</h1>
-            <p className="text-neutral-500 mt-1">{greeting}, {employeeInfo?.name || "User"}!</p>
+            <h1 className="crm-title">Dashboard</h1>
+            <p className="text-slate-500 mt-1 text-[12px]">{greeting}, {employeeInfo?.name || "User"}!</p>
           </div>
           {/* Action Buttons could go here */}
         </div>
@@ -397,17 +397,17 @@ function DashboardWrapper() {
           {statsCards?.map((card, index) => (
             <div
               key={index}
-              className={`${card.bgColor} rounded-2xl shadow-lg relative overflow-hidden p-6 flex flex-col justify-between min-h-[180px]`}
+              className={`${card.bgColor} rounded-md shadow-sm border border-white/30 relative overflow-hidden p-4 flex flex-col justify-between min-h-[150px]`}
             >
               {/* Decorative Background Circles */}
-              <div className="absolute top-[-20%] right-[-10%] w-40 h-40 bg-white opacity-10 rounded-full pointer-events-none"></div>
-              <div className="absolute bottom-[-10%] right-[10%] w-24 h-24 bg-white opacity-10 rounded-full pointer-events-none"></div>
-              <div className="absolute top-[30%] right-[20%] w-16 h-16 bg-white opacity-5 rounded-full pointer-events-none"></div>
+              <div className="absolute top-[-20%] right-[-10%] w-32 h-32 bg-white opacity-10 rounded-full pointer-events-none"></div>
+              <div className="absolute bottom-[-10%] right-[10%] w-20 h-20 bg-white opacity-10 rounded-full pointer-events-none"></div>
+              <div className="absolute top-[30%] right-[20%] w-14 h-14 bg-white opacity-5 rounded-full pointer-events-none"></div>
 
               <div className="relative z-10 w-full h-full flex flex-col justify-between">
                 {/* Header: Title and Icon */}
                 <div className="flex justify-between items-start mb-2">
-                  <p className="text-white/90 font-medium text-base tracking-wide">{card.title}</p>
+                  <p className="text-white/90 font-medium text-[13px] tracking-wide">{card.title}</p>
                   <div className="text-white opacity-80">
                     {card.icon}
                   </div>
@@ -415,7 +415,7 @@ function DashboardWrapper() {
 
                 {/* Main Value */}
                 <div className="mb-4">
-                  <h3 className="text-4xl font-bold text-white tracking-tight">{card.value}</h3>
+                  <h3 className="text-[28px] font-bold text-white tracking-tight">{card.value}</h3>
                 </div>
 
                 {/* Sub-stats */}
@@ -425,8 +425,8 @@ function DashboardWrapper() {
                       <div key={idx} className="flex items-center gap-1.5 min-w-0">
                         <span className="text-white/80 shrink-0">{stat.icon}</span>
                         <div className="flex items-baseline gap-1 truncate">
-                          <span className="text-sm font-semibold text-white">{stat.value}</span>
-                          <span className="text-[10px] text-white/70 uppercase tracking-widest">{stat.label}</span>
+                          <span className="text-[12px] font-semibold text-white">{stat.value}</span>
+                          <span className="text-[9px] text-white/70 uppercase tracking-widest">{stat.label}</span>
                         </div>
                       </div>
                     ))}
@@ -636,13 +636,13 @@ function DashboardWrapper() {
         <div className={`grid grid-cols-1 ${permissions?.main_page?.includes("customers_page") && permissions?.main_page?.includes("payments_page") ? 'xl:grid-cols-2' : 'xl:grid-cols-1'} gap-6`}>
           {/* Customers Table */}
           {permissions?.main_page?.includes("customers_page") && (
-            <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-md border border-neutral-200 shadow-sm overflow-hidden">
               <div className="px-3 py-3 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
-                <h4 className="text-base font-semibold text-neutral-900 flex items-center gap-2">
+                <h4 className="text-[13px] font-semibold text-neutral-900 flex items-center gap-2">
                   <IconUsers className="text-teal-600" size={18} />
                   Recent Customers
                 </h4>
-                <span className="text-xs font-medium bg-teal-50 text-teal-700 px-2.5 py-1 rounded-full">{dashboardData.customersData.length} New</span>
+                <span className="text-[11px] font-medium bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full">{dashboardData.customersData.length} New</span>
               </div>
               <div className="overflow-x-auto">
                 {dashboardData.customersData.length > 0 ? (
@@ -696,13 +696,13 @@ function DashboardWrapper() {
 
           {/* Payments Table */}
           {permissions?.main_page?.includes("payments_page") && (
-            <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-md border border-neutral-200 shadow-sm overflow-hidden">
               <div className="px-3 py-3 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
-                <h4 className="text-base font-semibold text-neutral-900 flex items-center gap-2">
+                <h4 className="text-[13px] font-semibold text-neutral-900 flex items-center gap-2">
                   <IconCash className="text-green-600" size={18} />
                   Recent Payments
                 </h4>
-                <span className="text-xs font-medium bg-green-50 text-green-700 px-2.5 py-1 rounded-full">{dashboardData.paymentsData.length} New</span>
+                <span className="text-[11px] font-medium bg-green-50 text-green-700 px-2 py-0.5 rounded-full">{dashboardData.paymentsData.length} New</span>
               </div>
               <div className="overflow-x-auto">
                 {dashboardData.paymentsData.length > 0 ? (

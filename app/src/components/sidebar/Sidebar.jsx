@@ -40,15 +40,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     };
 
     const navItemClass = ({ isActive }) =>
-        `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-            ? "bg-[#0083bf]/10 text-[#0083bf]"
-            : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+        `flex items-center gap-3 px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 ${isActive
+            ? "bg-[#0083bf]/12 text-[#0078af] border border-[#0083bf]/15"
+            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-transparent"
         }`;
 
     const subItemClass = ({ isActive }) =>
-        `block pl-10 pr-3 py-2 text-sm transition-colors duration-200 ${isActive
-            ? "text-[#0083bf] font-medium"
-            : "text-neutral-500 hover:text-neutral-900"
+        `block pl-10 pr-3 py-1.5 text-[12px] rounded-md transition-colors duration-200 ${isActive
+            ? "text-[#0078af] bg-[#0083bf]/8 font-medium"
+            : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/70"
         }`;
 
     return (
@@ -56,38 +56,38 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             {/* Mobile Overlay */}
             {isOpen && (
                 <div
-                    className="lg:hidden fixed inset-0 bg-black/50 z-40 transition-opacity"
+                    className="lg:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[1px] z-40 transition-opacity"
                     onClick={toggleSidebar}
                 />
             )}
 
             {/* Sidebar Container */}
             <aside
-                className={`fixed lg:static top-0 left-0 h-full w-[220px] bg-white border-r border-neutral-200 z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                className={`fixed lg:static top-0 left-0 h-full w-[240px] bg-white border-r border-slate-200 z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                     }`}
             >
                 <div className="flex flex-col h-full">
                     {/* Logo Area */}
-                    <div className="h-16 flex items-center justify-between px-4 border-b border-neutral-100">
+                    <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200">
                         <Link to="/dashboard" className="flex items-center gap-2">
                             <img
                                 crossOrigin="anonymous"
                                 src="./assets/dashboard/logo.png"
                                 alt="Logo"
-                                className="h-12 w-auto object-contain"
+                                className="h-10 w-auto object-contain"
                             />
                         </Link>
                         <button
                             onClick={toggleSidebar}
-                            className="lg:hidden p-1 text-neutral-500 hover:bg-neutral-100 rounded-md"
+                            className="lg:hidden p-1 text-slate-500 hover:bg-slate-100 rounded-md"
                         >
                             <IconX size={20} />
                         </button>
                     </div>
 
                     {/* Navigation Links */}
-                    <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
-                        <p className="px-3 text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+                    <div className="flex-1 overflow-y-auto py-5 px-3 space-y-1">
+                        <p className="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-[0.12em] mb-2">
                             Main Menu
                         </p>
 
@@ -101,9 +101,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                             <div className="space-y-1">
                                 <button
                                     onClick={() => toggleSubmenu("employee")}
-                                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${openSubmenu === "employee"
-                                        ? "text-neutral-900 bg-neutral-50"
-                                        : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                                    className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 border ${openSubmenu === "employee"
+                                        ? "text-slate-900 bg-slate-100 border-slate-200"
+                                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -171,9 +171,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                             <div className="space-y-1">
                                 <button
                                     onClick={() => toggleSubmenu("records")}
-                                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${openSubmenu === "records"
-                                        ? "text-neutral-900 bg-neutral-50"
-                                        : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                                    className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 border ${openSubmenu === "records"
+                                        ? "text-slate-900 bg-slate-100 border-slate-200"
+                                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -222,13 +222,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     </div>
 
                     {/* User Profile (Sidebar Footer) */}
-                    <div className="p-4 border-t border-neutral-100">
+                    <div className="p-3 border-t border-slate-200">
                         <NavLink
                             to={`/single-employee-view/${employeeInfo?.id}`}
                             className={({ isActive }) =>
-                                `flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${isActive
-                                    ? "bg-[#0083bf]/10 ring-1 ring-[#0083bf]/20"
-                                    : "bg-neutral-50 hover:bg-neutral-100"
+                                `flex items-center gap-3 p-2.5 rounded-md transition-all duration-200 border ${isActive
+                                    ? "bg-[#0083bf]/10 border-[#0083bf]/20"
+                                    : "bg-slate-50 hover:bg-slate-100 border-slate-200"
                                 }`
                             }
                         >
@@ -236,13 +236,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                 src={employeeInfo?.profile_pic_url || './assets/dashboard/user.png'}
                                 crossOrigin="anonymous"
                                 alt="User"
-                                className="w-9 h-9 rounded-full object-cover border border-neutral-200"
+                                className="w-9 h-9 rounded-full object-cover border border-slate-200"
                             />
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-neutral-900 truncate">
+                                <p className="text-[12px] font-medium text-slate-900 truncate">
                                     {employeeInfo?.name}
                                 </p>
-                                <p className="text-xs text-neutral-500 truncate">
+                                <p className="text-[11px] text-slate-500 truncate">
                                     {employeeInfo?.role_name}
                                 </p>
                             </div>

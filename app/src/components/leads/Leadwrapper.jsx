@@ -528,28 +528,28 @@ function Leadwrapper() {
 
   return (
     <>
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <p className="text-[22px] font-semibold">Leads</p>
-          <div className="flex flex-col lg:flex-row justify-end items-center gap-2">
-            <div className="flex gap-2">
+      <div className="crm-page">
+        <div className="crm-header">
+          <p className="crm-title">Leads</p>
+          <div className="crm-actions">
+            <div className="crm-actions">
               {permissions?.leads_page?.includes("add_lead") && (
-                <Link to={"/lead/add-lead"} className="cursor-pointer text-[14px] text-white px-4 py-[7px] rounded bg-black flex items-center gap-1">
+                <Link to={"/lead/add-lead"} className="crm-btn crm-btn-primary">
                   + Add Lead
                 </Link>
               )}
               {permissions?.leads_page?.includes("assign_bulk_leads_to_employee") && (
-                <Button onClick={openAssigneLeaModal} size="sm" className="px-4 py-2 border border-[#B4295E] !rounded-sm !bg-[#B4295E] hover:!bg-[#B4295E]/90 hover:border-[#B4295E]">
+                <Button onClick={openAssigneLeaModal} size="sm" className="px-3 py-2 border border-[#B4295E] !rounded-md !text-[12px] !bg-[#B4295E] hover:!bg-[#B4295E]/90 hover:border-[#B4295E]">
                   Assign leads to employee
                 </Button>
               )}
               {permissions?.leads_page?.includes("download_lead_template") && (
-                <button onClick={openDownloadTemplate} className="cursor-pointer text-[14px] text-white px-4 !py-[7px] !rounded !bg-[#0083bf]">
+                <button onClick={openDownloadTemplate} className="crm-btn crm-btn-primary">
                   Download Lead Template
                 </button>
               )}
               {permissions?.leads_page?.includes("upload_bulk_leads") && (
-                <button onClick={openUploadLeadExcel} className="cursor-pointer text-[14px] text-white px-4 !py-[7px] !rounded bg-emerald-500">
+                <button onClick={openUploadLeadExcel} className="crm-btn border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700">
                   Upload Bulk Leads
                 </button>
               )}
@@ -557,26 +557,26 @@ function Leadwrapper() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 bg-white p-4 rounded-md">
-          <div className="flex justify-between items-center">
+        <div className="crm-panel crm-panel-body">
+          <div className="crm-toolbar">
             <div>
-              <div className="w-[250px] relative">
-                <IconSearch size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10" />
+              <div className="crm-search-wrap">
+                <IconSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 z-10" />
                 <Input
                   type="text"
                   placeholder="Search leads..."
                   onChange={updateSearchQuery}
                   value={searchQuery}
-                  className="h-[38px] pl-9 bg-white border-[#ebecef] text-[14px] text-neutral-600 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="h-9 pl-9 bg-white border-[#e2e8f0] text-[13px] text-neutral-600 focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="crm-toolbar-right">
               {
                 allSubordinates.length > 0 &&
                 <div className="w-[165px]">
                   <Select value={subordinateId || "all"} onValueChange={(val) => updateSubordinateId(val === "all" ? null : val)}>
-                    <SelectTrigger className="h-[38px] bg-white border-[#ebecef] text-[14px] text-neutral-600 focus:ring-0 focus:ring-offset-0">
+                    <SelectTrigger className="h-9 bg-white border-[#e2e8f0] text-[13px] text-neutral-600 focus:ring-0 focus:ring-offset-0">
                       <SelectValue placeholder="Select subordinate..." />
                     </SelectTrigger>
                     <SelectContent className="max-h-[200px]">
@@ -592,7 +592,7 @@ function Leadwrapper() {
               }
               <div className="w-[160px]">
                 <Select value={selectedProject || "all"} onValueChange={(val) => updateSelectedProject(val === "all" ? null : val)}>
-                  <SelectTrigger className="h-[38px] bg-white border-[#ebecef] text-[14px] text-neutral-600 focus:ring-0 focus:ring-offset-0">
+                  <SelectTrigger className="h-9 bg-white border-[#e2e8f0] text-[13px] text-neutral-600 focus:ring-0 focus:ring-offset-0">
                     <SelectValue placeholder="Select Project..." />
                   </SelectTrigger>
                   <SelectContent className="max-h-[200px]">
@@ -607,7 +607,7 @@ function Leadwrapper() {
               </div>
               <div className="w-[160px]">
                 <Select value={selectedLeadStage || "all"} onValueChange={(val) => handleLeadStageChange(val === "all" ? null : val)}>
-                  <SelectTrigger className="h-[38px] bg-white border-[#ebecef] text-[14px] text-neutral-600 focus:ring-0 focus:ring-offset-0">
+                  <SelectTrigger className="h-9 bg-white border-[#e2e8f0] text-[13px] text-neutral-600 focus:ring-0 focus:ring-offset-0">
                     <SelectValue placeholder="Select Lead Stages..." />
                   </SelectTrigger>
                   <SelectContent className="max-h-[200px]">
@@ -622,7 +622,7 @@ function Leadwrapper() {
               </div>
               <div className="w-[70px]">
                 <Select value={limit} onValueChange={updateLimit}>
-                  <SelectTrigger className="h-[38px] bg-white border-[#ebecef] text-[14px] text-neutral-600 focus:ring-0 focus:ring-offset-0">
+                  <SelectTrigger className="h-9 bg-white border-[#e2e8f0] text-[13px] text-neutral-600 focus:ring-0 focus:ring-offset-0">
                     <SelectValue placeholder="10" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[200px] min-w-[70px]">
@@ -637,13 +637,13 @@ function Leadwrapper() {
               <div ref={containerRef} className="relative">
                 <button
                   onClick={() => setShowColumnToggle(!showColumnToggle)}
-                  className="cursor-pointer flex items-center gap-1 px-2 py-2 text-sm border border-[#ebecef] rounded-sm bg-white hover:bg-gray-50"
+                  className="crm-btn h-9 px-2.5 py-0"
                 >
                   <IconSettings size={16} className="mr-1" /> Columns
                 </button>
 
                 {showColumnToggle && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-[#ebecef] rounded-md shadow z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-[#e2e8f0] rounded-md shadow-sm z-50">
                     <div className="p-2">
                       {Object.keys(visibleColumns).map((colKey) => (
                         <label
@@ -669,7 +669,7 @@ function Leadwrapper() {
               )}
             </div>
           </div>
-          <div className="w-full relative overflow-x-auto overflow-y-hidden border border-neutral-200 rounded-lg z-0">
+          <div className="crm-table-wrap w-full relative overflow-y-hidden z-0">
             <table className="w-full table-fixed text-left border-collapse">
               <thead className="bg-gray-50 border-b border-neutral-200">
                 <tr className="w-full">

@@ -38,7 +38,7 @@ const MainLayout = ({ children }) => {
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
     return (
-        <div className="flex bg-neutral-50 h-screen w-full overflow-hidden">
+        <div className="flex h-screen w-full overflow-hidden bg-slate-100">
             {/* Sidebar - Persistent on Desktop, Toggable on Mobile */}
             <Sidebar
                 isOpen={isSidebarOpen}
@@ -49,8 +49,8 @@ const MainLayout = ({ children }) => {
             <div className="flex-1 flex flex-col h-full w-full min-w-0 relative">
                 <Header toggleSidebar={toggleSidebar} />
 
-                <main className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-                    <div className="w-full">
+                <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 md:p-4">
+                    <div className="mx-auto w-full max-w-[1800px]">
                         {children}
                     </div>
                 </main>

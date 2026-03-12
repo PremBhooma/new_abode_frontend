@@ -50,13 +50,13 @@ function Settingswrapper() {
 
     return (
         <>
-            <div className='flex flex-col gap-4'>
-                <div className="text-[24px] font-semibold">
+            <div className='crm-page'>
+                <div className="crm-title">
                     Settings
                 </div>
 
 
-                <div className="flex justify-start items-center gap-2 overflow-x-auto pb-2 border-b border-neutral-200 w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="crm-panel bg-white px-2 py-1.5 flex justify-start items-center gap-1 overflow-x-auto w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {[
                         { id: 'company_info', label: 'Company Info', icon: Building2, permission: 'company_info_tab' },
                         { id: 'project', label: 'Project', icon: SquareChartGantt, permission: 'project_tab' },
@@ -79,10 +79,10 @@ function Settingswrapper() {
                             <button
                                 key={tab.id}
                                 onClick={() => tabChange(tab.id)}
-                                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all duration-200 whitespace-nowrap border-b-2 cursor-pointer
+                                className={`flex items-center gap-2 px-3 py-2 text-[12px] font-medium transition-all duration-200 whitespace-nowrap border-b-2 cursor-pointer rounded-md
                                     ${isActive
                                         ? 'border-[#0083bf] text-[#0083bf]'
-                                        : 'border-transparent text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 rounded-t-lg'
+                                        : 'border-transparent text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50'
                                     }`}
                             >
                                 <Icon size={18} strokeWidth={1.5} />

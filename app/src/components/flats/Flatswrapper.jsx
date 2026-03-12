@@ -1,4 +1,4 @@
-﻿import ExcelJS from "exceljs";
+import ExcelJS from "exceljs";
 import Flatapi from "../api/Flatapi.jsx";
 import Flattocustomer from "./Flattocustomer";
 import Datefilter from "../shared/Datefilter";
@@ -509,15 +509,15 @@ function Flatswrapper() {
 
   return (
     <>
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <p className="text-[22px] font-semibold">Flats</p>
-          <div className="flex flex-col lg:flex-row justify-end items-center gap-2">
-            <div className="flex gap-2">
+      <div className="crm-page">
+        <div className="crm-header">
+          <p className="crm-title">Flats</p>
+          <div className="crm-actions">
+            <div className="crm-actions">
               {permissions?.flats_page?.includes("add_flat") && (
                 <Link
                   to={"/flats/add-flat"}
-                  className="cursor-pointer text-[14px] text-white px-4 py-[7px] rounded bg-black flex items-center gap-1"
+                  className="crm-btn crm-btn-primary"
                 >
                   + Add Flat
                 </Link>
@@ -526,20 +526,20 @@ function Flatswrapper() {
               {permissions?.flats_page?.includes("assign_flat_to_customer") && (
                 <div
                   onClick={openFlatToCustomer}
-                  className="cursor-pointer text-[14px] text-white px-4 py-[7px] rounded bg-[#b4295e] flex items-center gap-1"
+                  className="crm-btn border-[#b4295e] bg-[#b4295e] text-white hover:bg-[#9a234f]"
                 >
                   Assign Flat to Customer
                 </div>
               )}
               {permissions?.flats_page?.includes("download_flat_excel") && (
-                <button onClick={openDownloadTemplate} className="cursor-pointer text-[14px] text-white px-4 !py-[7px] !rounded !bg-[#0083bf]">
+                <button onClick={openDownloadTemplate} className="crm-btn crm-btn-primary">
                   Download Flat Template
                 </button>
               )}
               {permissions?.flats_page?.includes("export_flat_to_excel") && (
                 <button
                   onClick={handleDownloadFunction}
-                  className="cursor-pointer text-[14px] text-white px-4 py-[7px] rounded bg-[#931f42] flex items-center gap-1 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  className="crm-btn crm-btn-muted disabled:bg-gray-300 disabled:cursor-not-allowed"
                   disabled={isLoadingEffect}
                 >
                   <IconDownload size={16} />
@@ -547,7 +547,7 @@ function Flatswrapper() {
                 </button>
               )}
               {permissions?.flats_page?.includes("upload_flat_excel") && (
-                <button onClick={openUploadFlatExcel} className="cursor-pointer text-[14px] text-white px-4 !py-[7px] !rounded bg-emerald-500">
+                <button onClick={openUploadFlatExcel} className="crm-btn border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700">
                   Upload Bulk Flats
                 </button>
               )}
@@ -555,21 +555,21 @@ function Flatswrapper() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 bg-white p-4 rounded-md z-0">
-          <div className="flex w-full m-auto items-center">
-            <div className="w-[20%] z-0">
+        <div className="crm-panel crm-panel-body z-0">
+          <div className="crm-toolbar">
+            <div className="crm-search-wrap z-0">
               <input
                 type="text"
                 placeholder="Search Flats..."
-                className="focus:outline-none text-[14px] pl-6 py-2 rounded-md"
+                className="h-9 focus:outline-none text-[13px] pl-8 py-1.5 rounded-md border border-[#e2e8f0]"
                 onChange={updateSearchQuery}
                 value={searchQuery}
               />
-              <div className="absolute left-0 top-3 px-1">
-                <IconSearch size={16} color="#ebecef" />
+              <div className="absolute left-2.5 top-2.5">
+                <IconSearch size={14} color="#94a3b8" />
               </div>
             </div>
-            <div className="w-[80%] flex justify-end items-center gap-2">
+            <div className="crm-toolbar-right">
 
 
               {/* <Select
@@ -580,7 +580,7 @@ function Flatswrapper() {
                 placeholder="Search Group..."
                 searchable
                 mainContainerClass="!w-35"
-                selectWrapperClass="!bg-white !rounded-sm !shadow-none !border !border-[#ebecef] !py-1.5"
+                selectWrapperClass="!bg-white !rounded-sm !shadow-none !border !border-[#e2e8f0] !py-1.5"
                 dropDownClass=" overflow-y-hidden"
                 clearable
               /> */}
@@ -595,7 +595,7 @@ function Flatswrapper() {
                 placeholder="Select Mortgage"
                 searchable
                 mainContainerClass="!w-35"
-                selectWrapperClass="!bg-white !rounded-sm !shadow-none !border !border-[#ebecef] !py-1.5"
+                selectWrapperClass="!bg-white !rounded-sm !shadow-none !border !border-[#e2e8f0] !py-1.5"
                 dropDownClass=" overflow-y-hidden"
                 clearable
               /> */}
@@ -616,7 +616,7 @@ function Flatswrapper() {
                       value={statusFilter}
                       onChange={handleStatusFilterChange}
                       mainContainerClass="!w-30"
-                      selectWrapperClass="focus:ring-0 !focus:border-[#fff] focus:outline-none !py-1.5 !bg-white !rounded-sm !shadow-none !border !border-[#ebecef]"
+                      selectWrapperClass="focus:ring-0 !focus:border-[#fff] focus:outline-none !py-1 !bg-white !rounded-md !shadow-none !border !border-[#e2e8f0]"
                       className="!m-0 !p-0 !border-0 "
                       dropdownClassName="option min-h-[100px] max-h-[200px] z-50 overflow-y-auto focus:ring-0 focus:border-[#0083bf] focus:outline-none"
                     />
@@ -631,7 +631,7 @@ function Flatswrapper() {
                 placeholder="Search Customers..."
                 searchable
                 mainContainerClass="!w-40"
-                selectWrapperClass="!bg-white !rounded-sm !shadow-none !border !border-[#ebecef] !py-1.5"
+                selectWrapperClass="!bg-white !rounded-md !shadow-none !border !border-[#e2e8f0] !py-1"
                 dropDownClass=" overflow-y-hidden"
                 clearable
               />
@@ -647,7 +647,7 @@ function Flatswrapper() {
                   placeholder="10"
                   value={limit}
                   onChange={updateLimit}
-                  selectWrapperClass="focus:ring-0 !focus:border-[#fff] focus:outline-none !py-[7px] !bg-white !rounded-md !shadow-none !border !border-[#ebecef]"
+                  selectWrapperClass="focus:ring-0 !focus:border-[#fff] focus:outline-none !py-[5px] !bg-white !rounded-md !shadow-none !border !border-[#e2e8f0]"
                   className="!m-0 !p-0 !border-0"
                   dropdownClassName="option min-h-[100px] max-h-[200px] z-50 overflow-y-auto focus:ring-0 focus:border-[#0083bf] focus:outline-none"
                 />
@@ -656,13 +656,13 @@ function Flatswrapper() {
               <div ref={containerRef} className="relative">
                 <button
                   onClick={() => setShowColumnToggle(!showColumnToggle)}
-                  className="cursor-pointer flex items-center gap-1 px-2 py-[7px] text-sm border border-[#ebecef] rounded-md bg-white hover:bg-gray-50"
+                  className="crm-btn h-9 px-2.5 py-0"
                 >
                   <IconSettings size={16} className="mr-1" /> Columns
                 </button>
 
                 {showColumnToggle && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-[#ebecef] rounded-md shadow z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-[#e2e8f0] rounded-md shadow-sm z-50">
                     <div className="p-2">
                       {Object.keys(visibleColumns).map((colKey) => (
                         <label
@@ -688,7 +688,7 @@ function Flatswrapper() {
               )}
             </div>
           </div>
-          <div className="w-full relative overflow-x-auto border border-neutral-200 rounded-lg z-0">
+          <div className="crm-table-wrap w-full relative z-0">
             <table className="w-full table-fixed text-left border-collapse">
               <thead className="bg-gray-50 border-b border-neutral-200">
                 <tr className="w-full">
