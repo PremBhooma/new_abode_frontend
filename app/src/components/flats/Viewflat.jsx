@@ -714,26 +714,30 @@ function Viewflat() {
                     </div>
                   )
                 } */}
-                <div className={`mb-3 grid ${customerFlatDetails ? 'grid-cols-6' : 'grid-cols-5'} relative border border-[#ebecef] rounded-md bg-[#f1f1f1] p-2`}>
+                <div className="flex items-center gap-6 border-b border-slate-200 pb-2 mb-4">
                   {allTabs.map((tab) => (
                     <button
                       key={tab}
-                      className={`py-2 px-2 font-medium relative cursor-pointer flex justify-center items-center rounded-md
-                    transition duration-300 ease-in-out
-                    ${activeTab === tab
-                          ? "text-[#0083bf] bg-white shadow-md"
-                          : "text-gray-900 bg-transparent"}`}
                       onClick={() => {
                         setActiveTab(tab);
                         if (tab === "flat-info" && activeTab !== "flat-info") {
                           fetchFlat(id, false);
                         }
                       }}
+                      className={`relative py-2 text-sm font-semibold transition-all duration-300 cursor-pointer
+                        ${activeTab === tab
+                          ? "text-rose-600"
+                          : "text-slate-500 hover:text-slate-800"
+                        }`}
                     >
                       {tab
                         .replace("-tab", "")
                         .replace("-", " ")
                         .replace(/\b\w/g, (l) => l.toUpperCase())}
+
+                      {activeTab === tab && (
+                        <span className="absolute left-0 -bottom-[9px] h-[2px] w-full bg-rose-600 rounded-full"></span>
+                      )}
                     </button>
                   ))}
                 </div>
