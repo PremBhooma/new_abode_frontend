@@ -101,9 +101,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                             <div className="space-y-1">
                                 <button
                                     onClick={() => toggleSubmenu("employee")}
-                                    className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 border ${openSubmenu === "employee"
+                                    className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 ${openSubmenu === "employee"
                                         ? "text-slate-900 bg-slate-100 border-slate-200"
-                                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent"
+                                        : "text-slate-600 hover:text-slate-900 border-transparent"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -173,7 +173,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                     onClick={() => toggleSubmenu("records")}
                                     className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 border ${openSubmenu === "records"
                                         ? "text-slate-900 bg-slate-100 border-slate-200"
-                                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-transparent"
+                                        : "text-slate-600 hover:text-slate-900 border-transparent"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
