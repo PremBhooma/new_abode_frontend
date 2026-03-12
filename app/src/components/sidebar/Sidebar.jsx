@@ -132,7 +132,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                         )}
 
                         {permissions?.main_page?.includes("leads_page") && (
-                            <NavLink to="/leads" className={navItemClass}>
+                            <NavLink
+                                to="/leads"
+                                className={({ isActive }) =>
+                                    navItemClass({ isActive: isActive || location.pathname.startsWith("/lead") })
+                                }
+                            >
                                 <IconUsersGroup size={20} stroke={1.5} />
                                 <span>Leads</span>
                             </NavLink>
@@ -153,7 +158,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                         )}
 
                         {permissions?.main_page?.includes("payments_page") && (
-                            <NavLink to="/payments" className={navItemClass}>
+                            <NavLink
+                                to="/payments"
+                                className={({ isActive }) =>
+                                    navItemClass({ isActive: isActive || location.pathname.startsWith("/singlepaymentview") })
+                                }
+                            >
                                 <IconCurrencyRupee size={20} stroke={1.5} />
                                 <span>Payments</span>
                             </NavLink>
