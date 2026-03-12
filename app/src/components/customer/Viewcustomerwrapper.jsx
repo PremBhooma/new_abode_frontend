@@ -289,30 +289,33 @@ function Viewcustomerwrapper() {
               </div>
             </div>
             <div className="relative w-[78%]">
-              <div className="mb-3 grid grid-cols-6 relative border border-[#ebecef] rounded-md bg-[#f1f1f1] p-2">
+              <div className="flex items-center gap-6 border-b border-slate-200 pb-2 mb-4">
                 {[
                   { key: "other-info", label: "Other Info" },
                   { key: "flat-information", label: "Flats Info" },
-                  // { key: "payments-information", label: "Payments Info" },
                   { key: "documents", label: "Documents" },
                   { key: "notes", label: "Notes" },
                   { key: "activity", label: "Activity" },
                 ].map(({ key, label }) => (
                   <button
                     key={key}
-                    className={`py-2 px-2 font-medium relative cursor-pointer flex justify-center items-center rounded-md
-                    transition duration-300 ease-in-out
-                    ${activeTab === key
-                        ? "text-[#0083bf] bg-white shadow-md"
-                        : "text-gray-900 bg-transparent"
-                      }`}
                     onClick={() => setActiveTab(key)}
+                    className={`relative py-2 text-sm font-semibold transition-all duration-300 cursor-pointer
+                     ${activeTab === key
+                        ? "text-rose-600"
+                        : "text-slate-500 hover:text-slate-800"
+                      }`}
                   >
                     {label}
+
+                    {activeTab === key && (
+                      <span className="absolute left-0 -bottom-[9px] h-[2px] w-full bg-rose-600 rounded-full"></span>
+                    )}
                   </button>
                 ))}
               </div>
-              <div className="flex-1 p-6 bg-white rounded-md shadow-md">
+
+              <div className="flex-1 p-8 bg-white rounded-2xl shadow-[0_2px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100">
                 {activeTab === "other-info" && (
                   <>
                     {permissions?.customers_page?.includes(
