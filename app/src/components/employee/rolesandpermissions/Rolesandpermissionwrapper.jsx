@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ChevronRight, ShieldCheck, Plus } from "lucide-react";
 import Editrole from "./Editrole";
 import Addnewform from "./Addnewform";
 import Permissionpopup from "./Permissionpopup";
@@ -169,10 +171,35 @@ function Rolesandpermissionwrapper() {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <p className="crm-title">
-            Roles & Permissions
-          </p>
+        <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-1.5 mb-4">
+            <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+              Dashboard
+            </Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+              Roles & Permissions
+            </span>
+          </div>
+
+          <div className="flex flex-col justify-between gap-4">
+            {/* Top Section */}
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl border border-indigo-300 bg-indigo-50 flex items-center justify-center shadow-sm transition hover:bg-indigo-100">
+                <ShieldCheck size={18} className="text-indigo-600" />
+              </div>
+
+              <div>
+                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                  Roles & Permissions
+                </h1>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Define access levels and security controls for your team
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col lg:flex-row gap-3 items-start">
           <div className="w-full lg:w-[300px] flex-none">

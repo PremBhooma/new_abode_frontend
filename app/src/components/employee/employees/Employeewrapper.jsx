@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import EditEmployee from "./EditEmployee";
 import AddnewEmployee from "./AddnewEmployee";
@@ -6,7 +6,8 @@ import Employeeapi from "../../api/Employeeapi";
 import Errorpanel from "../../shared/Errorpanel";
 import DeleteModal from "../../../components/shared/DeleteModal";
 import TableLoadingEffect from "../../shared/Tableloadingeffect";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { ChevronRight, Users, Plus } from "lucide-react";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
 import { Modal, Pagination, Select } from "@nayeshdaggula/tailify";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -246,15 +247,41 @@ function Employeewrapper() {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <p className="crm-title">Employees</p>
-          <div className="flex justify-end items-center">
+        <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-1.5 mb-4">
+            <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+              Dashboard
+            </Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+              Employees
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between gap-4">
+            {/* Top Section */}
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl border border-blue-300 bg-blue-50 flex items-center justify-center shadow-sm transition hover:bg-blue-100">
+                <Users size={18} className="text-blue-600" />
+              </div>
+
+              <div>
+                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                  Employee Directory
+                </h1>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Manage your organization's workforce and access levels
+                </p>
+              </div>
+            </div>
+
             {permissions?.employee_page?.includes("add_employee") && (
               <button
                 onClick={openAddnewmodal}
-                className="cursor-pointer text-[14px] text-white px-4 py-[7px] rounded bg-black"
+                className="flex items-center gap-2 px-4 py-2 rounded-md border border-emerald-300 text-emerald-700 bg-emerald-50 text-xs font-semibold shadow-sm hover:bg-emerald-100 hover:border-emerald-400 hover:-translate-y-[1px] transition-all duration-200"
               >
-                + Add Employee{" "}
+                <Plus size={16} strokeWidth={2.5} /> Add Employee
               </button>
             )}
           </div>
