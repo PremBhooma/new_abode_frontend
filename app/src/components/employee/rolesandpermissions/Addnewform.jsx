@@ -77,12 +77,11 @@ function Addnewform({ reloadGetroledata }) {
 
   return (
     <div className="flex flex-col gap-5 border border-neutral-200 rounded-md bg-white p-4">
-      <div className="flex items-center gap-2">
-        {/* Optional Icon if needed, but keeping it clean for now */}
+      {/* <div className="flex items-center gap-2">
         <p className="text-neutral-900 text-lg font-semibold">
           Add Role
         </p>
-      </div>
+      </div> */}
 
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-neutral-700">Role Name</label>

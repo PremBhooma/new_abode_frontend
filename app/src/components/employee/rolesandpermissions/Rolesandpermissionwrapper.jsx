@@ -170,11 +170,11 @@ function Rolesandpermissionwrapper() {
     <>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <p className="text-[22px] font-semibold">
+          <p className="crm-title">
             Roles & Permissions
           </p>
         </div>
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-3 items-start">
           <div className="w-full lg:w-[300px] flex-none">
             <Addnewform reloadGetroledata={reloadGetroledata} />
           </div>

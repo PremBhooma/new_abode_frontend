@@ -247,7 +247,7 @@ function Employeewrapper() {
     <>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <p className="text-[22px] font-semibold">Employees</p>
+          <p className="crm-title">Employees</p>
           <div className="flex justify-end items-center">
             {permissions?.employee_page?.includes("add_employee") && (
               <button

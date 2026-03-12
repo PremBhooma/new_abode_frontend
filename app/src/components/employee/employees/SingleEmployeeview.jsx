@@ -102,7 +102,7 @@ function SingleEmployeeview() {
     <>
       <div className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
-          <p className="text-[24px] font-semibold">View Employee</p>
+          <p className="crm-title">View Employee</p>
 
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <div className="flex flex-col w-full mr-5">

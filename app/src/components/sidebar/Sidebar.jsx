@@ -63,7 +63,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
             {/* Sidebar Container */}
             <aside
-                className={`fixed lg:static top-0 left-0 h-full w-[240px] bg-white border-r border-slate-200 z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                className={`m-3 fixed lg:static top-0 left-0 w-[210px] bg-white rounded-md shadow-sm border-r border-slate-200 z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                     }`}
             >
                 <div className="flex flex-col h-full">

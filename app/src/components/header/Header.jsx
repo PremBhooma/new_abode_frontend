@@ -13,10 +13,10 @@ const Header = ({ toggleSidebar }) => {
         location.pathname === "/dashboard"
             ? "Dashboard"
             : location.pathname
-                  .split("/")
-                  .filter(Boolean)[0]
-                  ?.replace(/-/g, " ")
-                  ?.replace(/\b\w/g, (m) => m.toUpperCase()) || "Overview";
+                .split("/")
+                .filter(Boolean)[0]
+                ?.replace(/-/g, " ")
+                ?.replace(/\b\w/g, (m) => m.toUpperCase()) || "Overview";
 
     const handleLogout = () => {
         resetEmployeeAuthdetails();
@@ -24,7 +24,7 @@ const Header = ({ toggleSidebar }) => {
     };
 
     return (
-        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 h-16 px-4 md:px-5 flex items-center justify-between">
+        <header className="mt-3 mr-3 sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 h-16 px-4 md:px-5 flex items-center justify-between shadow-sm rounded-md">
             {/* Left: Sidebar Toggle & Title (Mobile) */}
             <div className="flex items-center gap-3">
                 <button
