@@ -8,7 +8,7 @@ import AssignProject from "../shared/AssignProject";
 import Groupownerapi from "../api/Groupownerapi.jsx";
 import Uploadflatexcel from "./excelflatwrapper/Uploadflatexcel.jsx";
 import Excelflattemplate from "./excelflatwrapper/Excelflattemplate.jsx";
-import { Funnel, FilterX } from "lucide-react";
+import { Funnel, FilterX, ChevronRight, Building2, Download, Upload } from "lucide-react";
 import { toast } from "react-toastify";
 import { useColumnStore } from "../zustand/useColumnStore";
 import { useNavigate, Link, NavLink, useSearchParams } from "react-router-dom";
@@ -510,7 +510,7 @@ function Flatswrapper() {
   return (
     <>
       <div className="crm-page">
-        <div className="crm-header">
+        {/* <div className="crm-header">
           <p className="crm-title">Flats</p>
           <div className="crm-actions">
             <div className="crm-actions">
@@ -551,6 +551,99 @@ function Flatswrapper() {
                   Upload Bulk Flats
                 </button>
               )}
+            </div>
+          </div>
+        </div> */}
+
+        <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-1.5 mb-4">
+            <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+              Dashboard
+            </Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+              Flats
+            </span>
+          </div>
+
+          <div className="flex flex-col justify-between gap-4">
+
+            {/* top Section */}
+            <div className="flex items-center gap-4">
+
+              <div className="w-10 h-10 rounded-xl border border-blue-300 bg-blue-50 flex items-center justify-center shadow-sm transition hover:bg-blue-100">
+                <Building2 size={18} className="text-blue-600" />
+              </div>
+
+              <div>
+                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                  Flats
+                </h1>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Manage and organize flats in your project
+                </p>
+              </div>
+
+            </div>
+
+
+            {/* bottom Section - Actions */}
+            <div className="flex flex-wrap items-center gap-2.5 border-t pt-4">
+
+              {/* Add Flat */}
+              {permissions?.flats_page?.includes("add_flat") && (
+                <Link to={"/flats/add-flat"}>
+                  <button className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-rose-300 text-rose-700 bg-rose-50 text-xs font-semibold shadow-sm hover:bg-rose-100 hover:border-rose-400 hover:-translate-y-[1px] transition-all duration-200">
+                    + Add Flat
+                  </button>
+                </Link>
+              )}
+
+              {/* Assign Flat */}
+              {permissions?.flats_page?.includes("assign_flat_to_customer") && (
+                <button
+                  onClick={openFlatToCustomer}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-indigo-300 text-indigo-700 bg-indigo-50 text-xs font-semibold shadow-sm hover:bg-indigo-100 hover:border-indigo-400 hover:-translate-y-[1px] transition-all duration-200"
+                >
+                  Assign Flat to Customer
+                </button>
+              )}
+
+              {/* Download Template */}
+              {permissions?.flats_page?.includes("download_flat_excel") && (
+                <button
+                  onClick={openDownloadTemplate}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-amber-300 text-amber-700 bg-amber-50 text-xs font-semibold shadow-sm hover:bg-amber-100 hover:border-amber-400 hover:-translate-y-[1px] transition-all duration-200"
+                >
+                  <Download size={15} strokeWidth={2.5} />
+                  Download Template
+                </button>
+              )}
+
+              {/* Export Excel */}
+              {permissions?.flats_page?.includes("export_flat_to_excel") && (
+                <button
+                  onClick={handleDownloadFunction}
+                  disabled={isLoadingEffect}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-slate-300 text-slate-700 bg-slate-50 text-xs font-semibold shadow-sm hover:bg-slate-100 hover:border-slate-400 hover:-translate-y-[1px] transition-all duration-200 disabled:bg-gray-200 disabled:cursor-not-allowed"
+                >
+                  <IconDownload size={16} />
+                  Export to Excel
+                </button>
+              )}
+
+              {/* Upload Flats */}
+              {permissions?.flats_page?.includes("upload_flat_excel") && (
+                <button
+                  onClick={openUploadFlatExcel}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-emerald-300 text-emerald-700 bg-emerald-50 text-xs font-semibold shadow-sm hover:bg-emerald-100 hover:border-emerald-400 hover:-translate-y-[1px] transition-all duration-200"
+                >
+                  <Upload size={15} strokeWidth={2.5} />
+                  Upload Bulk Flats
+                </button>
+              )}
+
             </div>
           </div>
         </div>

@@ -529,7 +529,7 @@ function Leadwrapper() {
   return (
     <>
       <div className="crm-page">
-        <div className="crm-header">
+        {/* <div className="crm-header">
           <p className="crm-title">Leads</p>
           <div className="crm-actions">
             <div className="crm-actions">
@@ -555,12 +555,12 @@ function Leadwrapper() {
               )}
             </div>
           </div>
-        </div>
+        </div> */}
 
 
         <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
           <div className="flex items-center gap-1.5 mb-4">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">CRM</span>
+            <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">Dashboard</Link>
             <ChevronRight size={12} className="text-slate-300" />
             <span className="text-xs font-semibold text-[#B4295E] uppercase tracking-widest">Leads</span>
           </div>
@@ -575,22 +575,46 @@ function Leadwrapper() {
               </div>
             </div>
             <div className="flex items-center gap-2.5">
+
               {/* Add Lead */}
-              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-br from-[#B4295E] to-[#8B1A44] text-white text-xs font-semibold shadow-md shadow-[#B4295E]/25 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
-                <UserPlus size={15} strokeWidth={2.5} /> Add Lead
-              </button>
+              {permissions?.leads_page?.includes("add_lead") && (
+                <Link to={"/lead/add-lead"}>
+                  <button className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-br from-[#B4295E] to-[#8B1A44] text-white text-xs font-semibold shadow-md shadow-[#B4295E]/25 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                    <UserPlus size={15} strokeWidth={2.5} /> Add Lead
+                  </button>
+                </Link>
+              )}
+
               {/* Assign */}
-              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 hover:-translate-y-0.5 shadow-md transition-all duration-200">
-                <Users size={15} strokeWidth={2.5} /> Assign to Employee
-              </button>
+              {permissions?.leads_page?.includes("assign_bulk_leads_to_employee") && (
+                <button
+                  onClick={openAssigneLeaModal}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 hover:-translate-y-0.5 shadow-md transition-all duration-200"
+                >
+                  <Users size={15} strokeWidth={2.5} /> Assign to Employee
+                </button>
+              )}
+
               {/* Download */}
-              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white text-slate-700 text-xs font-semibold border border-slate-200 hover:bg-slate-50 hover:-translate-y-0.5 shadow-sm transition-all duration-200">
-                <Download size={15} strokeWidth={2.5} /> Download Template
-              </button>
+              {permissions?.leads_page?.includes("download_lead_template") && (
+                <button
+                  onClick={openDownloadTemplate}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white text-slate-700 text-xs font-semibold border border-slate-200 hover:bg-slate-50 hover:-translate-y-0.5 shadow-sm transition-all duration-200"
+                >
+                  <Download size={15} strokeWidth={2.5} /> Download Template
+                </button>
+              )}
+
               {/* Upload */}
-              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-emerald-500 text-white text-xs font-semibold hover:bg-emerald-600 hover:-translate-y-0.5 shadow-md shadow-emerald-500/25 transition-all duration-200">
-                <Upload size={15} strokeWidth={2.5} /> Upload Leads
-              </button>
+              {permissions?.leads_page?.includes("upload_bulk_leads") && (
+                <button
+                  onClick={openUploadLeadExcel}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md bg-emerald-500 text-white text-xs font-semibold hover:bg-emerald-600 hover:-translate-y-0.5 shadow-md shadow-emerald-500/25 transition-all duration-200"
+                >
+                  <Upload size={15} strokeWidth={2.5} /> Upload Leads
+                </button>
+              )}
+
             </div>
           </div>
         </div>

@@ -200,8 +200,12 @@
     @apply flex flex-col gap-3 rounded-md border border-slate-200 bg-white shadow-sm;
   }
 
-  .crm-panel-body {
-    @apply p-3 md:p-4 h-[calc(100vh-150px)] overflow-y-auto overflow-x-hidden;
+  /* .crm-panel-body {
+    @apply p-3 md:p-4 h-[calc(100vh-215px)] overflow-y-auto overflow-x-hidden;
+  } */
+
+    .crm-panel-body {
+    @apply p-3 md:p-4;
   }
 
   .crm-toolbar {
@@ -217,7 +221,7 @@
   }
 
   .crm-table-wrap {
-    @apply overflow-x-auto rounded-md border border-slate-200;
+    @apply  rounded-md border border-slate-200;
   }
 
   .crm-btn {
