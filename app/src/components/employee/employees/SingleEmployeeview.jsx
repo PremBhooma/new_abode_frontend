@@ -242,44 +242,29 @@ function SingleEmployeeview() {
             <div className="relative w-[78%]">
               {!isFetching &&
                 <>
-                  <div className="mb-3 p-1 grid grid-cols-3 gap-1 bg-gray-100/80 rounded-lg border border-gray-200">
-                    <button
-                      className={`flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold rounded-md transition-all duration-300
-                      ${activeTab === "personal-info"
-                          ? "bg-white text-blue-600 shadow-sm ring-1 ring-gray-200"
-                          : "text-gray-500 hover:text-gray-700 hover:bg-gray-200/50"
-                        }`}
-                      onClick={() => setActiveTab("personal-info")}
-                    >
-                      <IconUser size={18} />
-                      Personal Info
-                    </button>
+                  <div className="flex items-center gap-8 border-b border-slate-200 pb-2 mb-4 px-2">
+                    {[
+                      { key: "personal-info", label: "Personal Information", icon: <IconUser size={18} /> },
+                      { key: "project-allocation", label: "Project Allocation", icon: <IconBriefcase size={18} /> },
+                      { key: "change-password", label: "Change Password", icon: <IconLock size={18} /> },
+                    ].map(({ key, label, icon }) => (
+                      <button
+                        key={key}
+                        onClick={() => setActiveTab(key)}
+                        className={`relative flex items-center gap-2 py-2 text-sm font-semibold transition-all duration-300 cursor-pointer
+                        ${activeTab === key
+                            ? "text-rose-600"
+                            : "text-slate-500 hover:text-slate-800"
+                          }`}
+                      >
+                        {icon}
+                        {label}
 
-                    <button
-                      className={`flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold rounded-md transition-all duration-300
-                          ${activeTab === "project-allocation"
-                          ? "bg-white text-blue-600 shadow-sm ring-1 ring-gray-200"
-                          : "text-gray-500 hover:text-gray-700 hover:bg-gray-200/50"
-                        }`}
-                      onClick={() => setActiveTab("project-allocation")}
-                    >
-                      <IconBriefcase size={18} />
-                      Project Allocation
-                    </button>
-
-                    {/* {permissions?.employee_page?.includes("change_password_tab") && ( */}
-                    <button
-                      className={`flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold rounded-md transition-all duration-300
-                          ${activeTab === "change-password"
-                          ? "bg-white text-blue-600 shadow-sm ring-1 ring-gray-200"
-                          : "text-gray-500 hover:text-gray-700 hover:bg-gray-200/50"
-                        }`}
-                      onClick={() => setActiveTab("change-password")}
-                    >
-                      <IconLock size={18} />
-                      Change Password
-                    </button>
-                    {/* )} */}
+                        {activeTab === key && (
+                          <span className="absolute left-0 -bottom-[9px] h-[2px] w-full bg-rose-600 rounded-full"></span>
+                        )}
+                      </button>
+                    ))}
                   </div>
 
                   <div className="flex-1 p-6 bg-white rounded-xl shadow-xl">
