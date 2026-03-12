@@ -489,7 +489,7 @@ function Leadview() {
                 </div>
               </div>
             </div>
-            <div className="relative w-[78%]">
+            {/* <div className="relative w-[78%]">
               <div className="mb-3 grid grid-cols-6 relative border border-[#ebecef] rounded-md bg-[#f1f1f1] p-2">
                 {availableTabs.map(({ key, label }) => (
                   <button
@@ -523,6 +523,58 @@ function Leadview() {
                   </div>
                 )}
               </div>
+            </div> */}
+
+            <div className="relative w-[78%]">
+
+              <div className="flex items-center gap-6 border-b border-slate-200 pb-2">
+
+                {availableTabs.map(({ key, label }) => (
+                  <button
+                    key={key}
+                    onClick={() => setActiveTab(key)}
+                    className={`relative py-2 text-sm font-semibold transition-all duration-300 cursor-pointer
+                     ${activeTab === key
+                        ? "text-rose-600"
+                        : "text-slate-500 hover:text-slate-800"
+                      }`}
+                  >
+                    {label}
+
+                    {activeTab === key && (
+                      <span className="absolute left-0 -bottom-[9px] h-[2px] w-full bg-rose-600 rounded-full"></span>
+                    )}
+                  </button>
+                ))}
+
+              </div>
+
+
+              <div className="flex-1 p-6 bg-white rounded-xl shadow-sm border border-slate-100 mt-4">
+
+                {activeTab === "overview" && (
+                  <Leadinfo leadData={leadData} />
+                )}
+
+                {activeTab === "documents" && permissions?.leads_page?.includes("lead_documents") && (
+                  <Leadsdocumentswrapper />
+                )}
+
+                {activeTab === "notes" && permissions?.leads_page?.includes("lead_notes") && (
+                  <Leadnotestab />
+                )}
+
+                {activeTab === "activity" && (
+                  <div className="text-center text-gray-500">
+                    <Leadactivities
+                      currentLeadId={currentLeadId}
+                      refreshTrigger={refreshTrigger}
+                    />
+                  </div>
+                )}
+
+              </div>
+
             </div>
           </div>
         </div>
