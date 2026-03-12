@@ -14,7 +14,8 @@ import Leadstageswrapper from "./leadstages/Leadstageswrapper.jsx";
 import Templates from "./templates/Templates.jsx"
 import Bankstab from "./banks/Bankstab.jsx";
 import Rewardstab from "./rewards/Rewardstab.jsx";
-import { Blocks as BlocksIcon, Building2, Group as GroupIcon, NotepadText, SquareChartGantt, Landmark, Funnel, LayoutTemplate, Gift, Database } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ChevronRight, Settings, Blocks as BlocksIcon, Building2, Group as GroupIcon, NotepadText, SquareChartGantt, Landmark, Funnel, LayoutTemplate, Gift, Database } from "lucide-react";
 
 function Settingswrapper() {
 
@@ -50,13 +51,39 @@ function Settingswrapper() {
 
     return (
         <>
-            <div className='crm-page'>
-                <div className="crm-title">
-                    Settings
+            <div className='flex flex-col gap-3'>
+                <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+                    {/* Breadcrumb */}
+                    <div className="flex items-center gap-1.5 mb-4">
+                        <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+                            Dashboard
+                        </Link>
+                        <ChevronRight size={12} className="text-slate-300" />
+                        <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+                            Settings
+                        </span>
+                    </div>
+
+                    <div className="flex flex-col justify-between gap-4">
+                        {/* Top Section */}
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl border border-blue-300 bg-blue-50 flex items-center justify-center shadow-sm transition hover:bg-blue-100">
+                                <Settings size={18} className="text-blue-600" />
+                            </div>
+
+                            <div>
+                                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                                    System Settings
+                                </h1>
+                                <p className="text-xs text-slate-400 mt-0.5">
+                                    Configure company information, project details, and global preferences
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-
-                <div className="crm-panel bg-white px-2 py-1.5 flex justify-start items-center gap-1 overflow-x-auto w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="bg-white rounded-md shadow-sm border border-slate-100 p-1.5 flex justify-start items-center gap-1 overflow-x-auto w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {[
                         { id: 'company_info', label: 'Company Info', icon: Building2, permission: 'company_info_tab' },
                         { id: 'project', label: 'Project', icon: SquareChartGantt, permission: 'project_tab' },
@@ -82,7 +109,7 @@ function Settingswrapper() {
                                 className={`flex items-center gap-2 px-3 py-2 text-[12px] font-medium transition-all duration-200 whitespace-nowrap border-b-2 cursor-pointer rounded-md
                                     ${isActive
                                         ? 'border-[#0083bf] text-[#0083bf]'
-                                        : 'border-transparent text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50'
+                                        : 'border-transparent text-neutral-500 hover:text-neutral-900'
                                     }`}
                             >
                                 <Icon size={18} strokeWidth={1.5} />
