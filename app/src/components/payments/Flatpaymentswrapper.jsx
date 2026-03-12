@@ -10,6 +10,7 @@ import DeleteModal from "../shared/DeleteModal";
 import Paymentapi from "../api/Paymentapi";
 import { toast } from "react-toastify";
 import { Skeleton } from "../ui/skeleton";
+import { ChevronRight, CircleDollarSign, LayoutDashboard, ArrowLeft } from "lucide-react";
 
 function Flatpaymentswrapper() {
     const params = useParams();
@@ -208,21 +209,53 @@ function Flatpaymentswrapper() {
     return (
         <>
             <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                        <p className="crm-title">Flat Payments -</p>
-                        {isLoading ? (
-                            <Skeleton className="h-7 w-20" />
-                        ) : (
-                            <p className="crm-title">{flatDetails?.flat_no || "---"}</p>
-                        )}
-                        {!isLoading && flatDetails?.project_name && (
-                            <p className="crm-title ml-1">- {flatDetails.project_name}</p>
-                        )}
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+                    {/* Row 1: Breadcrumb */}
+                    <div className="flex justify-between items-center text-[10px] font-bold tracking-[0.1em] uppercase mb-2">
+                        <div className="flex items-center gap-2">
+                            <Link to="/dashboard" className="text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1.5">
+                                <LayoutDashboard size={12} />
+                                Dashboard
+                            </Link>
+                            <ChevronRight size={12} className="text-slate-300" />
+                            <Link to="/payments" className="text-slate-400 hover:text-blue-600 transition-colors">
+                                Payments
+                            </Link>
+                            <ChevronRight size={12} className="text-slate-300" />
+                            <span className="text-blue-600">Flat Payments</span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Link to={'/payments'} className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#0083bf] bg-[#0083bf]/5 border border-[#0083bf]/20 rounded-lg shadow-sm hover:bg-[#0083bf]/10 hover:border-[#0083bf]/40 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
+                                <ArrowLeft size={14} />
+                                Back
+                            </Link>
+                        </div>
                     </div>
-                    <Link to={'/payments'} className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200 hover:bg-[#0083bf] hover:text-white" >
-                        <IconArrowLeft className='mt-0.5' size={18} />Back
-                    </Link>
+
+                    {/* Row 2: Title, Subtext & Module Identifier */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-600 shadow-sm transition-transform hover:scale-105 duration-300">
+                                <CircleDollarSign size={22} fill="currentColor" fillOpacity={0.15} />
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-tight">
+                                        Flat Payments
+                                    </h1>
+                                    {!isLoading && (
+                                        <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-bold">
+                                            {flatDetails?.flat_no || "---"}
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-[12px] text-slate-500 font-medium mt-0.5">
+                                    {isLoading ? <Skeleton className="h-3 w-32" /> : `Project: ${flatDetails?.project_name || "---"}`}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Summary Cards */}
