@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { IconDownload, IconEye, IconPrinter, IconSearch } from "@tabler/icons-react";
 import Flatapi from "../api/Flatapi";
 import Projectapi from "../api/Projectapi";
-import { Funnel, FilterX } from "lucide-react";
+import { ChevronRight, CircleDollarSign, Download, FilterX, Funnel, Printer, Upload } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import Downloadtemplate from "./Downloadtemplate";
 import Uploadpaymentexcel from "./Uploadpaymentexcel";
@@ -397,44 +397,89 @@ function Allpaymentswrapper() {
     return (
         <>
             <div className="crm-page">
-                <div className="crm-header">
-                    <p className="crm-title">
-                        All Payments
-                    </p>
-                    <div className="crm-actions">
-                        {permissions?.payments_page?.includes("print_all_payments") && (
-                            <button
-                                disabled={flatsSummary.length > 0 ? false : true}
-                                onClick={() => handlePrint(searchQuery, selectedFlats, selectedBlock)}
-                                className={`crm-btn border-[#e0589c] bg-[#e0589c] text-white ${flatsSummary.length > 0 ? 'hover:bg-pink-600' : 'bg-gray-400 !cursor-not-allowed'}`}
-                            >
-                                <IconPrinter size={14} /> Print
-                            </button>
-                        )}
-                        {permissions?.payments_page?.includes("add_payment") && (
-                            <Link to={'/payments/addnew'} className="crm-btn crm-btn-primary">
-                                + Add Payment
-                            </Link>
-                        )}
-                        {permissions?.payments_page?.includes("download_payment_excel") && (
-                            <button onClick={openDownloadTemplate} className="crm-btn crm-btn-primary">
-                                Download Payment Template
-                            </button>
-                        )}
-                        {permissions?.payments_page?.includes("export_payment_to_excel") && (
-                            <button
-                                onClick={handleDownload}
-                                className="crm-btn crm-btn-muted disabled:bg-gray-300 disabled:cursor-not-allowed"
-                            >
-                                <IconDownload size={16} />
-                                Export to Excel
-                            </button>
-                        )}
-                        {permissions?.payments_page?.includes("upload_payment_excel") && (
-                            <button onClick={openUploadPaymentExcel} className="crm-btn border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700">
-                                Upload Bulk Payment
-                            </button>
-                        )}
+                <div className="bg-white rounded-md shadow-sm border-b border-slate-100 px-4 py-4">
+                    {/* Breadcrumb */}
+                    <div className="flex items-center gap-1.5 mb-4">
+                        <Link to="/dashboard" className="text-xs font-medium text-slate-400 uppercase tracking-widest">
+                            Dashboard
+                        </Link>
+                        <ChevronRight size={12} className="text-slate-300" />
+                        <span className="text-xs font-bold text-[#de4183] uppercase tracking-widest">
+                            Payments
+                        </span>
+                    </div>
+
+                    <div className="flex flex-col justify-between gap-4">
+                        {/* Top Section */}
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl border border-violet-300 bg-violet-50 flex items-center justify-center shadow-sm transition hover:bg-violet-100">
+                                <CircleDollarSign size={18} className="text-violet-600" />
+                            </div>
+
+                            <div>
+                                <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">
+                                    All Payments
+                                </h1>
+                                <p className="text-xs text-slate-400 mt-0.5">
+                                    Monitor and manage project financial records
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Bottom Section - Actions */}
+                        <div className="flex flex-wrap items-center gap-2.5 border-t pt-4">
+                            {/* Print */}
+                            {permissions?.payments_page?.includes("print_all_payments") && (
+                                <button
+                                    disabled={flatsSummary.length > 0 ? false : true}
+                                    onClick={() => handlePrint(searchQuery, selectedFlats, selectedBlock)}
+                                    className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-pink-300 text-pink-700 bg-pink-50 text-xs font-semibold shadow-sm hover:bg-pink-100 hover:border-pink-400 hover:-translate-y-[1px] transition-all duration-200 ${flatsSummary.length > 0 ? '' : 'opacity-50 cursor-not-allowed bg-gray-100 border-gray-200 text-gray-400'}`}
+                                >
+                                    <Printer size={15} strokeWidth={2.5} /> Print
+                                </button>
+                            )}
+
+                            {/* Add Payment */}
+                            {permissions?.payments_page?.includes("add_payment") && (
+                                <Link to={'/payments/addnew'}>
+                                    <button className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-rose-300 text-rose-700 bg-rose-50 text-xs font-semibold shadow-sm hover:bg-rose-100 hover:border-rose-400 hover:-translate-y-[1px] transition-all duration-200">
+                                        + Add Payment
+                                    </button>
+                                </Link>
+                            )}
+
+                            {/* Download Template */}
+                            {permissions?.payments_page?.includes("download_payment_excel") && (
+                                <button
+                                    onClick={openDownloadTemplate}
+                                    className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-amber-300 text-amber-700 bg-amber-50 text-xs font-semibold shadow-sm hover:bg-amber-100 hover:border-amber-400 hover:-translate-y-[1px] transition-all duration-200"
+                                >
+                                    <Download size={15} strokeWidth={2.5} /> Download Template
+                                </button>
+                            )}
+
+                            {/* Export to Excel */}
+                            {permissions?.payments_page?.includes("export_payment_to_excel") && (
+                                <button
+                                    onClick={handleDownload}
+                                    className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-slate-300 text-slate-700 bg-slate-50 text-xs font-semibold shadow-sm hover:bg-slate-100 hover:border-slate-400 hover:-translate-y-[1px] transition-all duration-200 disabled:bg-gray-200 disabled:cursor-not-allowed"
+                                    disabled={isLoading}
+                                >
+                                    <IconDownload size={16} />
+                                    Export to Excel
+                                </button>
+                            )}
+
+                            {/* Upload Bulk Payment */}
+                            {permissions?.payments_page?.includes("upload_payment_excel") && (
+                                <button
+                                    onClick={openUploadPaymentExcel}
+                                    className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-md border border-emerald-300 text-emerald-700 bg-emerald-50 text-xs font-semibold shadow-sm hover:bg-emerald-100 hover:border-emerald-400 hover:-translate-y-[1px] transition-all duration-200"
+                                >
+                                    <Upload size={15} strokeWidth={2.5} /> Upload Payments
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className='crm-panel crm-panel-body'>
