@@ -22,7 +22,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
     // Auto-expand submenu if current path matches
     useEffect(() => {
-        if (location.pathname.startsWith("/employees") || location.pathname.startsWith("/roles")) {
+        if (
+            location.pathname.startsWith("/employees") ||
+            location.pathname.startsWith("/roles") ||
+            location.pathname.startsWith("/single-employee-view")
+        ) {
             setOpenSubmenu("employee");
         } else if (
             location.pathname.startsWith("/ageing-records") ||
@@ -101,7 +105,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                             <div className="space-y-1">
                                 <button
                                     onClick={() => toggleSubmenu("employee")}
-                                    className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 ${openSubmenu === "employee"
+                                    className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 ${openSubmenu === "employee" || location.pathname.startsWith("/single-employee-view")
                                         ? "text-slate-900 bg-slate-100 border-slate-200"
                                         : "text-slate-600 hover:text-slate-900 border-transparent"
                                         }`}
