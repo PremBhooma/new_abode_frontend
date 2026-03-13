@@ -177,7 +177,7 @@ function Activitiestab({ flat_id }) {
                 </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto no-scrollbar max-h-[calc(100vh-330px)]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div className="flex-1 overflow-y-auto no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 <style>{`
           .no-scrollbar::-webkit-scrollbar {
             display: none;

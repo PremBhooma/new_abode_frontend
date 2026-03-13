@@ -172,7 +172,7 @@ function Customeractivitiestab({ customerId }) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto no-scrollbar max-h-[400px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div className="flex-1 overflow-y-auto no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <style>{`
           .no-scrollbar::-webkit-scrollbar {
             display: none;
