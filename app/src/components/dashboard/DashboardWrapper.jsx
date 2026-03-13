@@ -180,10 +180,10 @@ function DashboardWrapper() {
     fetchGetAllData();
   }, []);
 
-  const openSingleFlatView = (id) => navigate(`/singlepaymentview/${ id}`);
-  const openSingleCustomer = (id) => navigate(`/customers/${ id}`);
-  const openSingleLead = (id) => navigate(`/lead/${ id}`);
-  const openSingleFlat = (id) => navigate(`/flats/view-flat/${ id}`);
+  const openSingleFlatView = (id) => navigate(`/singlepaymentview/${id}`);
+  const openSingleCustomer = (id) => navigate(`/customers/${id}`);
+  const openSingleLead = (id) => navigate(`/lead/${id}`);
+  const openSingleFlat = (id) => navigate(`/flats/view-flat/${id}`);
 
   // Generate years for the dropdown (2020 to 2040)
   const years = Array.from({ length: 21 }, (_, i) => 2020 + i).map(year => ({
@@ -297,22 +297,34 @@ function DashboardWrapper() {
       title: 'Total Flats',
       value: dashboardData.totalFlats,
       icon: <Home size={24} />,
-      bgColor: 'bg-gradient-to-r from-[#0078af] to-[#0091d3]',
+      cardClass: 'bg-white border-[#e8ecef] border-b-2 border-b-[#de4183]',
+      titleClass: 'text-neutral-900',
+      valueClass: 'text-[#de4183]',
+      iconClass: 'text-[#de4183]',
+      iconWrapClass: 'bg-[#de4183]/12',
+      subLabelClass: 'text-[#8a96a2]',
+      subValueClass: 'text-[#4f5c68]',
       subStats: [
-        { label: 'Sold', value: dashboardData.soldFlats, color: 'text-white/90', icon: <CheckCircle size={14} /> },
-        { label: 'Unsold', value: dashboardData.unsoldFlats, color: 'text-white/90', icon: <XCircle size={14} /> }
+        { label: 'Sold', value: dashboardData.soldFlats, color: 'text-[#2f9e8f]', icon: <CheckCircle size={14} /> },
+        { label: 'Unsold', value: dashboardData.unsoldFlats, color: 'text-[#b35f72]', icon: <XCircle size={14} /> }
       ]
     },
     {
       title: 'Total Customers',
       value: dashboardData.totalCustomers,
       icon: <Users size={24} />,
-      bgColor: 'bg-gradient-to-r from-[#0b9fd1] to-[#0f7abf]',
+      cardClass: 'bg-white border-[#e8ecef] border-b-2 border-b-[#2d8dd6]',
+      titleClass: 'text-neutral-900',
+      valueClass: 'text-[#2d8dd6]',
+      iconClass: 'text-[#2d8dd6]',
+      iconWrapClass: 'bg-[#2d8dd6]/12',
+      subLabelClass: 'text-[#8a96a2]',
+      subValueClass: 'text-[#4f5c68]',
       subStats: [
         // { label: 'Active', value: dashboardData.activeCustomers, color: 'text-white/90', icon: <UserCheck size={14} /> },
         // { label: 'Inactive', value: dashboardData.inactiveCustomers, color: 'text-white/90', icon: <UserMinus size={14} /> },
         // { label: 'Suspended', value: dashboardData.suspendedCustomers, color: 'text-white/90', icon: <UserX size={14} /> }
-        { label: `Loan${dashboardData.loanDelayCount > 1 ? 's' : ''} Delay`, value: dashboardData.loanDelayCount, color: 'text-red-100', icon: <IconClock size={14} /> }
+        { label: `Loan${dashboardData.loanDelayCount > 1 ? 's' : ''} Delay`, value: dashboardData.loanDelayCount, color: 'text-[#c05b7d]', icon: <IconClock size={14} /> }
       ]
     },
     // {
@@ -397,25 +409,22 @@ function DashboardWrapper() {
           {statsCards?.map((card, index) => (
             <div
               key={index}
-              className={`${card.bgColor} rounded-md shadow-sm border border-white/30 relative overflow-hidden p-4 flex flex-col justify-between min-h-[150px]`}
+              className={`${card.cardClass || 'bg-white border-neutral-200'} rounded-md shadow-sm border relative overflow-hidden p-4 flex flex-col justify-between min-h-[150px]`}
             >
-              {/* Decorative Background Circles */}
-              <div className="absolute top-[-20%] right-[-10%] w-32 h-32 bg-white opacity-10 rounded-full pointer-events-none"></div>
-              <div className="absolute bottom-[-10%] right-[10%] w-20 h-20 bg-white opacity-10 rounded-full pointer-events-none"></div>
-              <div className="absolute top-[30%] right-[20%] w-14 h-14 bg-white opacity-5 rounded-full pointer-events-none"></div>
-
               <div className="relative z-10 w-full h-full flex flex-col justify-between">
                 {/* Header: Title and Icon */}
                 <div className="flex justify-between items-start mb-2">
-                  <p className="text-white/90 font-medium text-[13px] tracking-wide">{card.title}</p>
-                  <div className="text-white opacity-80">
-                    {card.icon}
+                  <p className={`font-semibold text-[13px] tracking-wide ${card.titleClass || 'text-slate-700'}`}>{card.title}</p>
+                  <div className={`h-8 w-8 rounded-md flex items-center justify-center ${card.iconWrapClass || 'bg-slate-100'}`}>
+                    <span className={`${card.iconClass || 'text-slate-600'} opacity-90`}>
+                      {card.icon}
+                    </span>
                   </div>
                 </div>
 
                 {/* Main Value */}
                 <div className="mb-4">
-                  <h3 className="text-[28px] font-bold text-white tracking-tight">{card.value}</h3>
+                  <h3 className={`text-[28px] font-bold tracking-tight ${card.valueClass || 'text-slate-900'}`}>{card.value}</h3>
                 </div>
 
                 {/* Sub-stats */}
@@ -423,10 +432,10 @@ function DashboardWrapper() {
                   <div className="grid grid-cols-4 gap-y-1 gap-x-2">
                     {card.subStats.map((stat, idx) => (
                       <div key={idx} className="flex items-center gap-1.5 min-w-0">
-                        <span className="text-white/80 shrink-0">{stat.icon}</span>
+                        <span className={`shrink-0 ${stat.color || 'text-slate-500'}`}>{stat.icon}</span>
                         <div className="flex items-baseline gap-1 truncate">
-                          <span className="text-[12px] font-semibold text-white">{stat.value}</span>
-                          <span className="text-[9px] text-white/70 uppercase tracking-widest">{stat.label}</span>
+                          <span className={`text-[12px] font-semibold ${card.subValueClass || 'text-slate-800'}`}>{stat.value}</span>
+                          <span className={`text-[9px] uppercase tracking-widest ${card.subLabelClass || 'text-slate-500'}`}>{stat.label}</span>
                         </div>
                       </div>
                     ))}
