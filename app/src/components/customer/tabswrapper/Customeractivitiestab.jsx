@@ -172,8 +172,13 @@ function Customeractivitiestab({ customerId }) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent max-h-[400px]">
-        <div className="space-y-8 relative">
+      <div className="flex-1 overflow-y-auto no-scrollbar max-h-[400px]" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <style>{`
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+        <div className="space-y-8 relative mt-4">
           {/* Central Line - drawn once for the whole timeline */}
           <div className="absolute left-[139px] top-4 bottom-4 w-px border-l border-dashed border-gray-300 pointer-events-none"></div>
 
@@ -286,7 +291,7 @@ function Customeractivitiestab({ customerId }) {
       </div>
 
       {hasMore && !isLoadingMore && (
-        <div className="px-6 py-4 bg-gray-50/30 border-t border-gray-100 flex justify-center sticky bottom-0 z-20 backdrop-blur-sm">
+        <div className="px-6 pt-6 bg-gray-50/30 border-t border-gray-100 flex justify-center sticky bottom-0 z-20 backdrop-blur-sm">
           <button
             onClick={loadMoreActivities}
             className="flex items-center gap-2 px-6 py-2 bg-white border border-gray-200 text-gray-700 font-semibold text-xs rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm active:scale-95 cursor-pointer uppercase tracking-widest"
