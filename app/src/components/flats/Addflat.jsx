@@ -3,9 +3,10 @@ import { IconArrowLeft } from "@tabler/icons-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
 import {
-  Loadingoverlay,
   Textarea,
 } from "@nayeshdaggula/tailify";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Flatapi from "../api/Flatapi.jsx";
@@ -492,225 +493,207 @@ function Addflat() {
 
       <div className="relative bg-white p-6 rounded-[4px] border-[0.6px] border-[#979797]/40">
         <div className="space-y-4">
-          <div className="grid grid-cols-3 gap-3">
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Project <span className="text-red-500">*</span></label>
-              <Select value={selectedProject ? String(selectedProject) : undefined} onValueChange={handleProjectChange}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!selectedProject ? 'text-gray-400' : ''} ${selectedProjectError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select Project" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200 max-h-[200px]">
-                  {projects.map((item) => (
-                    <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {selectedProjectError && <p className="text-xs text-red-500">{selectedProjectError}</p>}
+          {isLoadingEffect && projects.length === 0 ? (
+            <div className="grid grid-cols-3 gap-6">
+              {[...Array(12)].map((_, i) => (
+                <div key={i} className="flex flex-col gap-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              ))}
             </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Flat No <span className="text-red-500">*</span></label>
-              <Input
-                placeholder="Enter Flat No"
-                value={flatNo}
-                onChange={updateFlatNo}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${flatNoError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {flatNoError && <p className="text-xs text-red-500">{flatNoError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Floor No <span className="text-red-500">*</span></label>
-              <Select value={FloorNo ? String(FloorNo) : undefined} onValueChange={updateFloorNo}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!FloorNo ? 'text-gray-400' : ''} ${FloorNoError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select Floor No" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200 max-h-[200px]">
-                  {Array.from({ length: 100 }, (_, i) => ({
-                    value: String(i + 1),
-                    label: ` ${i + 1}`,
-                  })).map((item) => (
-                    <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {FloorNoError && <p className="text-xs text-red-500">{FloorNoError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Block <span className="text-red-500">*</span></label>
-              <Select value={block ? String(block) : undefined} onValueChange={updateBlock}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!block ? 'text-gray-400' : ''} ${blockError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select Block" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200 max-h-[200px]">
-                  {blocks.map((item) => (
-                    <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {blockError && <p className="text-xs text-red-500">{blockError}</p>}
-            </div>
-
-            {/* <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Mortgage <span className="text-red-500">*</span></label>
-              <Select value={mortgage !== undefined ? String(mortgage) : undefined} onValueChange={(val) => updateMortgage(val === "true")}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${mortgageError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select Mortgage" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200">
-                  <SelectItem value="true">Yes</SelectItem>
-                  <SelectItem value="false">No</SelectItem>
-                </SelectContent>
-              </Select>
-              {mortgageError && <p className="text-xs text-red-500">{mortgageError}</p>}
-            </div> */}
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Area (Sq.ft.) <span className="text-red-500">*</span></label>
-              <Input
-                placeholder="Enter Square Feet"
-                value={squareFeet}
-                onChange={updateSquareFeet}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${squareFeetError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {squareFeetError && <p className="text-xs text-red-500">{squareFeetError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Flat Type <span className="text-red-500">*</span></label>
-              <Select value={flatType || undefined} onValueChange={updateFlatType}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!flatType ? 'text-gray-400' : ''} ${flatTypeError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select Type" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200">
-                  <SelectItem value="2 BHK">2 BHK</SelectItem>
-                  <SelectItem value="3 BHK">3 BHK</SelectItem>
-                </SelectContent>
-              </Select>
-              {flatTypeError && <p className="text-xs text-red-500">{flatTypeError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Facing</label>
-              <Select value={facing || undefined} onValueChange={updateFacing}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!facing ? 'text-gray-400' : ''} ${facingError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Select Facing" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200 max-h-[200px]">
-                  <SelectItem value="North">North</SelectItem>
-                  <SelectItem value="South">South</SelectItem>
-                  <SelectItem value="East">East</SelectItem>
-                  <SelectItem value="West">West</SelectItem>
-                  <SelectItem value="NorthEast">NorthEast</SelectItem>
-                  <SelectItem value="NorthWest">NorthWest</SelectItem>
-                  <SelectItem value="SouthEast">SouthEast</SelectItem>
-                  <SelectItem value="SouthWest">SouthWest</SelectItem>
-                </SelectContent>
-              </Select>
-              {facingError && <p className="text-xs text-red-500">{facingError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">East Facing View</label>
-              <Input
-                placeholder="Enter POV"
-                value={eastFace}
-                onChange={updateEastFace}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${eastFaceError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {eastFaceError && <p className="text-xs text-red-500">{eastFaceError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">West Facing View</label>
-              <Input
-                placeholder="Enter POV"
-                value={westFace}
-                onChange={updateWestFace}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${westFaceError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {westFaceError && <p className="text-xs text-red-500">{westFaceError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">North Facing View</label>
-              <Input
-                placeholder="Enter POV"
-                value={northFace}
-                onChange={updateNorthFace}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${northFaceError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {northFaceError && <p className="text-xs text-red-500">{northFaceError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">South Facing View</label>
-              <Input
-                placeholder="Enter POV"
-                value={southFace}
-                onChange={updateSouthFace}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${southFaceError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {southFaceError && <p className="text-xs text-red-500">{southFaceError}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Corner</label>
-              <Select value={corner !== undefined ? String(corner) : undefined} onValueChange={(val) => updateCorner(val === "true")}>
-                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${cornerError ? 'border-red-500' : 'border-gray-300'}`}>
-                  <SelectValue placeholder="Is Corner ?" />
-                </SelectTrigger>
-                <SelectContent className="border border-gray-200">
-                  <SelectItem value="true">Yes</SelectItem>
-                  <SelectItem value="false">No</SelectItem>
-                </SelectContent>
-              </Select>
-              {cornerError && <p className="text-xs text-red-500">{cornerError}</p>}
-            </div>
-
-            {rawProjects.find(p => p.id === selectedProject)?.project_rewards && (
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-600 mb-1">Flat Reward</label>
-                <Select value={flatReward !== undefined ? String(flatReward) : undefined} onValueChange={(val) => updateFlatReward(val)}>
-                  <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${flatRewardError ? 'border-red-500' : 'border-gray-300'}`}>
-                    <SelectValue placeholder="Flat Reward ?" />
-                  </SelectTrigger>
-                  <SelectContent className="border border-gray-200">
-                    <SelectItem value="true">Yes</SelectItem>
-                    <SelectItem value="false">No</SelectItem>
-                  </SelectContent>
-                </Select>
-                {flatRewardError && <p className="text-xs text-red-500">{flatRewardError}</p>}
-              </div>
-            )}
-
-            {/* <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-600 mb-1">Google Map Link</label>
-              <Input
-                placeholder="Enter Google Map Link"
-                value={googleMapLink}
-                onChange={updateGoogleMapLink}
-                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${googleMapLinkError ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {googleMapLinkError && <p className="text-xs text-red-500">{googleMapLinkError}</p>}
-            </div> */}
-          </div>
-          {isLoadingEffect ? (
-            isLoadingEffect && (
-              <div className="absolute inset-0 bg-[#2b2b2bcc] flex flex-row justify-center items-center  rounded">
-                <Loadingoverlay visible={isLoadingEffect} overlayBg="" />
-              </div>
-            )
           ) : (
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={handleSubmit}
-                className="px-4 py-2 text-[14px] text-white bg-[#0083bf] rounded cursor-pointer"
-              >
-                {customerUid ? "Add and Assign Flat" : "Add Flat"}
-              </button>
-            </div>
+            <>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Project <span className="text-red-500">*</span></label>
+                  <Select value={selectedProject ? String(selectedProject) : undefined} onValueChange={handleProjectChange}>
+                    <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!selectedProject ? 'text-gray-400' : ''} ${selectedProjectError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectValue placeholder="Select Project" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-gray-200 max-h-[200px]">
+                      {projects.map((item) => (
+                        <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {selectedProjectError && <p className="text-xs text-red-500">{selectedProjectError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Flat No <span className="text-red-500">*</span></label>
+                  <Input
+                    placeholder="Enter Flat No"
+                    value={flatNo}
+                    onChange={updateFlatNo}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${flatNoError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {flatNoError && <p className="text-xs text-red-500">{flatNoError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Floor No <span className="text-red-500">*</span></label>
+                  <Select value={FloorNo ? String(FloorNo) : undefined} onValueChange={updateFloorNo}>
+                    <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!FloorNo ? 'text-gray-400' : ''} ${FloorNoError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectValue placeholder="Select Floor No" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-gray-200 max-h-[200px]">
+                      {Array.from({ length: 100 }, (_, i) => ({
+                        value: String(i + 1),
+                        label: ` ${i + 1}`,
+                      })).map((item) => (
+                        <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {FloorNoError && <p className="text-xs text-red-500">{FloorNoError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Block <span className="text-red-500">*</span></label>
+                  <Select value={block ? String(block) : undefined} onValueChange={updateBlock}>
+                    <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!block ? 'text-gray-400' : ''} ${blockError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectValue placeholder="Select Block" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-gray-200 max-h-[200px]">
+                      {blocks.map((item) => (
+                        <SelectItem key={item.value} value={String(item.value)}>{item.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {blockError && <p className="text-xs text-red-500">{blockError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Area (Sq.ft.) <span className="text-red-500">*</span></label>
+                  <Input
+                    placeholder="Enter Square Feet"
+                    value={squareFeet}
+                    onChange={updateSquareFeet}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${squareFeetError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {squareFeetError && <p className="text-xs text-red-500">{squareFeetError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Flat Type <span className="text-red-500">*</span></label>
+                  <Select value={flatType || undefined} onValueChange={updateFlatType}>
+                    <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!flatType ? 'text-gray-400' : ''} ${flatTypeError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectValue placeholder="Select Type" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-gray-200">
+                      <SelectItem value="2 BHK">2 BHK</SelectItem>
+                      <SelectItem value="3 BHK">3 BHK</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {flatTypeError && <p className="text-xs text-red-500">{flatTypeError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Facing</label>
+                  <Select value={facing || undefined} onValueChange={updateFacing}>
+                    <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!facing ? 'text-gray-400' : ''} ${facingError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectValue placeholder="Select Facing" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-gray-200 max-h-[200px]">
+                      <SelectItem value="North">North</SelectItem>
+                      <SelectItem value="South">South</SelectItem>
+                      <SelectItem value="East">East</SelectItem>
+                      <SelectItem value="West">West</SelectItem>
+                      <SelectItem value="NorthEast">NorthEast</SelectItem>
+                      <SelectItem value="NorthWest">NorthWest</SelectItem>
+                      <SelectItem value="SouthEast">SouthEast</SelectItem>
+                      <SelectItem value="SouthWest">SouthWest</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {facingError && <p className="text-xs text-red-500">{facingError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">East Facing View</label>
+                  <Input
+                    placeholder="Enter POV"
+                    value={eastFace}
+                    onChange={updateEastFace}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${eastFaceError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {eastFaceError && <p className="text-xs text-red-500">{eastFaceError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">West Facing View</label>
+                  <Input
+                    placeholder="Enter POV"
+                    value={westFace}
+                    onChange={updateWestFace}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${westFaceError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {westFaceError && <p className="text-xs text-red-500">{westFaceError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">North Facing View</label>
+                  <Input
+                    placeholder="Enter POV"
+                    value={northFace}
+                    onChange={updateNorthFace}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${northFaceError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {northFaceError && <p className="text-xs text-red-500">{northFaceError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">South Facing View</label>
+                  <Input
+                    placeholder="Enter POV"
+                    value={southFace}
+                    onChange={updateSouthFace}
+                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${southFaceError ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {southFaceError && <p className="text-xs text-red-500">{southFaceError}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1">Corner</label>
+                  <Select value={corner !== undefined ? String(corner) : undefined} onValueChange={(val) => updateCorner(val === "true")}>
+                    <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${cornerError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectValue placeholder="Is Corner ?" />
+                    </SelectTrigger>
+                    <SelectContent className="border border-gray-200">
+                      <SelectItem value="true">Yes</SelectItem>
+                      <SelectItem value="false">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {cornerError && <p className="text-xs text-red-500">{cornerError}</p>}
+                </div>
+
+                {rawProjects.find(p => p.id === selectedProject)?.project_rewards && (
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-gray-600 mb-1">Flat Reward</label>
+                    <Select value={flatReward !== undefined ? String(flatReward) : undefined} onValueChange={(val) => updateFlatReward(val)}>
+                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${flatRewardError ? 'border-red-500' : 'border-gray-300'}`}>
+                        <SelectValue placeholder="Flat Reward ?" />
+                      </SelectTrigger>
+                      <SelectContent className="border border-gray-200">
+                        <SelectItem value="true">Yes</SelectItem>
+                        <SelectItem value="false">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {flatRewardError && <p className="text-xs text-red-500">{flatRewardError}</p>}
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={handleSubmit}
+                  disabled={isLoadingEffect}
+                  className="px-4 py-2 text-[14px] text-white bg-[#0083bf] rounded cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isLoadingEffect && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {customerUid ? "Add and Assign Flat" : "Add Flat"}
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>
