@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Toolbarwrapper from "./parts/Toolbarwrapper";
 import Errorpanel from "../../shared/Errorpanel";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
@@ -246,7 +246,7 @@ function Leadsdocumentswrapper() {
   }, []);
 
   return (
-    <>
+    <div className="pt-2">
       <Toolbarwrapper
         refreshFolderDeatils={refreshFolderDetails}
         currentFolderUuid={currentFolderUuid}
@@ -296,7 +296,7 @@ function Leadsdocumentswrapper() {
           setErrorMessages={setErrorMessage}
         />
       )}
-    </>
+    </div>
   );
 }
 

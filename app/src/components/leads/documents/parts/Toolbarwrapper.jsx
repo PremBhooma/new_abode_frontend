@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Modal } from "@nayeshdaggula/tailify"
 import Addfoldermodal from './Addfoldermodal'
 import UploadfileModal from './UploadfileModal'
@@ -7,6 +7,7 @@ import Leaddocumentsapi from '../../../api/Leaddocumentsapi'
 import { toast } from 'react-toastify'
 import Errorpanel from '../../../shared/Errorpanel'
 import DeleteModal from '../../../shared/DeleteModal'
+import { FileText, Plus, Upload, RefreshCw, FolderPlus } from 'lucide-react'
 
 function Toolbarwrapper({ refreshFolderDeatils, currentFolderUid, currentFolderId, folderPath, leadId }) {
 
@@ -98,24 +99,50 @@ function Toolbarwrapper({ refreshFolderDeatils, currentFolderUid, currentFolderI
 
     return (
         <>
-            <div className="flex max-sm:flex-col max-sm:gap-2 flex-row items-center justify-between test">
-                <p className='font-semibold '>File Manager</p>
-                <div className='flex felex-row gap-3'>
-                    <Button disabled={isLoadingEffect} onClick={openSyncDataModal} variant="default" size='xs' className='!px-4 !py-2'>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm transition-transform hover:scale-105">
+                        <FileText size={20} />
+                    </div>
+                    <div>
+                        <h2 className="text-lg font-bold text-slate-800 tracking-tight leading-none">
+                            Document Manager
+                        </h2>
+                        <p className="text-[11px] text-slate-500 font-medium mt-1 uppercase tracking-wider">
+                            Manage Lead Files & Folders
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                    {/* <button
+                        disabled={isLoadingEffect}
+                        onClick={openSyncDataModal}
+                        className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 cursor-pointer disabled:opacity-50"
+                    >
+                        <RefreshCw size={14} className={isLoadingEffect ? "animate-spin" : ""} />
                         Sync
-                    </Button>
+                    </button> */}
+
                     {permissions?.leads_page?.includes("add_folder_in_document_in_lead") && (
-                        <Button onClick={openFolderModal} variant="default" size='xs' className='!px-4 !py-2'>
+                        <button
+                            onClick={openFolderModal}
+                            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 cursor-pointer"
+                        >
+                            <FolderPlus size={14} />
                             Add folder
-                        </Button>
+                        </button>
                     )}
 
                     {permissions?.leads_page?.includes("upload_file_in_lead") && (
-                        <Button onClick={openUploadfileModal} size='xs' color='#0083bf' className='!px-4 !py-2'>
+                        <button
+                            onClick={openUploadfileModal}
+                            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-blue-500 border border-blue-700 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                        >
+                            <Upload size={14} />
                             Upload File
-                        </Button>
+                        </button>
                     )}
-
                 </div>
             </div>
             {/* add folder modal */}

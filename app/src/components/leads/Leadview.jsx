@@ -402,7 +402,7 @@ function Leadview() {
           </div>
         </div>
         <div className="min-h-screen">
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <div className="w-[22%] min-h-screen bg-white rounded-md shadow-md">
               <div className="relative mb-4 flex flex-col justify-center items-center">
                 <div className="w-full h-24 rounded-t-md bg-gradient-to-br from-pink-500 via-pink-700 to-blue-800 flex items-center justify-center"></div>
@@ -550,7 +550,7 @@ function Leadview() {
               </div>
 
 
-              <div className="flex-1 p-6 bg-white rounded-xl shadow-sm border border-slate-100 mt-4">
+              <div className="flex-1 p-4 bg-white rounded-md shadow-sm border border-slate-100 mt-4">
 
                 {activeTab === "overview" && (
                   <Leadinfo leadData={leadData} />
