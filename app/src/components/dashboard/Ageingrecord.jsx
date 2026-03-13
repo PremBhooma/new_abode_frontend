@@ -91,9 +91,9 @@ const Ageingrecord = () => {
     <>
       <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
         <div className="px-3 py-3 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
-          <h4 className="text-base font-semibold text-neutral-900 flex items-center gap-2">
+          <h4 className="flex items-center gap-2">
             <IconClock className="text-amber-600" size={18} />
-            <Link to="/ageing-records" className="hover:text-amber-600 transition-colors">
+            <Link to="/ageing-records" className="text-neutral-900 !text-[13px] font-semibold hover:text-amber-600 transition-colors">
               Sales Reports
             </Link>
           </h4>
