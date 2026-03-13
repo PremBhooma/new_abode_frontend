@@ -14,7 +14,6 @@ function Flatdocumentswrapper() {
   const access_token = useEmployeeDetails(state => state.access_token);
   const params = useParams();
   const flat_uid = params.id;
-  const permissions = useEmployeeDetails(state => state.permissions);
 
   const [isLoadingEffect, setIsLoadingEffect] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
@@ -195,12 +194,12 @@ function Flatdocumentswrapper() {
           setErrorMessage(finalresponse);
           closeDeleteFile()
           setIsLoadingEffect(false);
-          toast.success("File deleted successfully");
           return false;
         }
         refreshFolderDetails(currentFolderId)
         closeDeleteFile()
         setIsLoadingEffect(false);
+        toast.success("File deleted successfully");
         return false
       })
       .catch((error) => {
@@ -231,11 +230,11 @@ function Flatdocumentswrapper() {
 
   useEffect(() => {
     setIsLoadingEffect(true)
-    fetchfoldersdetails();
+    fetchfoldersdetails(null);
   }, []);
 
   return (
-    <>
+    <div className="pt-2">
       <Toolbarwrapper
         refreshFolderDeatils={refreshFolderDetails}
         currentFolderUuid={currentFolderUuid}
@@ -285,7 +284,7 @@ function Flatdocumentswrapper() {
           errorMessages={errorMessage} setErrorMessages={setErrorMessage}
         />
       }
-    </>
+    </div>
   );
 }
 
