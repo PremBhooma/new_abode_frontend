@@ -208,7 +208,7 @@ function Customeractivitiestab({ customerId }) {
                   {/* Content Column */}
                   <div className="flex-1 pt-0.5 pb-2">
                     <div className="flex flex-col gap-1.5">
-                      <p className="text-[14px] text-left leading-relaxed text-gray-700">
+                      <p className="text-[12px] text-left leading-relaxed text-gray-700">
                         {/* Simple bolding for key words - usually product or agent names */}
                         {activity.ca_message.split(" ").map((word, i) => {
                           const isSpecial =
@@ -229,12 +229,12 @@ function Customeractivitiestab({ customerId }) {
                       </p>
 
                       <div className="flex items-center gap-3">
-                        <span className="text-[11px] text-gray-400 font-medium">
+                        <span className="text-[10px] text-gray-400 font-medium">
                           {formatTime(activity.created_at)}
                         </span>
                         <div className="flex items-center gap-1.5">
                           <span className="w-1 h-1 rounded-full bg-gray-300"></span>
-                          <span className="text-[11px] text-gray-500 font-semibold hover:text-primary cursor-default">
+                          <span className="text-[10px] text-gray-500 font-semibold hover:text-primary cursor-default">
                             {activity.employee?.name}
                           </span>
                         </div>
