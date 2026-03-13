@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
 import {
     IconLayoutDashboard,
@@ -11,13 +11,20 @@ import {
     IconChevronDown,
     IconCurrencyRupee,
     IconFolder,
-    IconGift
+    IconGift,
+    IconLogout
 } from "@tabler/icons-react";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
     const location = useLocation();
-    const { employeeInfo, permissions } = useEmployeeDetails();
+    const navigate = useNavigate();
+    const { employeeInfo, permissions, resetEmployeeAuthdetails } = useEmployeeDetails();
     const [openSubmenu, setOpenSubmenu] = useState(null);
+
+    const handleLogout = () => {
+        resetEmployeeAuthdetails();
+        navigate("/");
+    };
 
     // Auto-expand submenu if current path matches
     useEffect(() => {
@@ -238,32 +245,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                         )}
                     </div>
 
-                    {/* User Profile (Sidebar Footer) */}
+                    {/* Logout Button (Sidebar Footer) */}
                     <div className="p-3 border-t border-white/20">
-                        <NavLink
-                            to={`/single-employee-view/${employeeInfo?.id}`}
-                            className={({ isActive }) =>
-                                `flex items-center gap-3 p-2.5 rounded-md transition-all duration-200 border ${isActive
-                                    ? "bg-white/20 border-white/30"
-                                    : "bg-white/10 hover:bg-white/15 border-white/20"
-                                }`
-                            }
+                        <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-[13px] font-bold text-white bg-white/10 hover:bg-red-500/20 border border-white/20 hover:border-red-500/40 transition-all duration-200 group/logout"
                         >
-                            <img
-                                src={employeeInfo?.profile_pic_url || './assets/dashboard/user.png'}
-                                crossOrigin="anonymous"
-                                alt="User"
-                                className="w-9 h-9 rounded-full object-cover border border-white/30"
-                            />
-                            <div className="flex-1 min-w-0">
-                                <p className="text-[12px] font-medium text-white truncate">
-                                    {employeeInfo?.name}
-                                </p>
-                                <p className="text-[11px] text-white/70 truncate">
-                                    {employeeInfo?.role_name}
-                                </p>
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/10 group-hover/logout:bg-red-500/20 transition-colors">
+                                <IconLogout size={20} stroke={2} className="text-red-400 group-hover/logout:text-red-300" />
                             </div>
-                        </NavLink>
+                            <span className="tracking-wide">LOGOUT</span>
+                        </button>
                     </div>
                 </div>
             </aside>
