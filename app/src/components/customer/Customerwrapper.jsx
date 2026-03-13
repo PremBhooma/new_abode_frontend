@@ -589,7 +589,7 @@ function Customerwrapper() {
                     </th>
                   )}
                   {visibleColumns.email && (
-                    <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[200px] border-r border-neutral-200">
+                    <th className="px-3 py-2 text-neutral-700 uppercase tracking-wider text-[12px] font-bold leading-[18px] w-[180px] border-r border-neutral-200">
                       Email
                     </th>
                   )}
@@ -693,7 +693,7 @@ function Customerwrapper() {
                           </td>
                         )}
                         {visibleColumns.email && (
-                          <td className="px-3 py-2 whitespace-normal break-words w-[200px] border-r border-neutral-200">
+                          <td className="px-3 py-2 whitespace-normal break-words w-[180px] border-r border-neutral-200">
                             <NavLink to={`mailto:${customer.email}`}>
                               <p className="text-neutral-600 text-xs font-medium leading-[18px] hover:text-[#0083bf]">
                                 {customer?.email || "----"}
