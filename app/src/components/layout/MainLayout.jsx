@@ -50,7 +50,7 @@ const MainLayout = ({ children }) => {
 
                 {/* Main Content Area */}
                 <div className="flex-1 min-w-0 h-full">
-                    <main className="h-full overflow-y-auto overflow-x-hidden p-3 md:py-3 md:pl-0">
+                    <main className="h-full overflow-y-auto overflow-x-hidden no-scrollbar p-3 md:py-3 md:pl-0">
                         <div className="mx-auto w-full">
                             {children}
                         </div>

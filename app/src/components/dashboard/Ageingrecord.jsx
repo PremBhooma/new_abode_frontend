@@ -86,7 +86,6 @@ const Ageingrecord = () => {
     );
   }
 
-  console.log("records", records);
 
   return (
     <>

@@ -384,7 +384,7 @@ function DashboardWrapper() {
 
   return (
     <>
-      <div className="w-full space-y-4">
+      <div className="w-full space-y-3">
         {errorMessage && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
             <XCircle size={18} />
@@ -449,10 +449,9 @@ function DashboardWrapper() {
           <Ageingrecord />
         )}
         {/* Divide Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        {/* <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
-          {/* Charts Section */}
-          {/* <div className="lg:col-span-3">
+          <div className="lg:col-span-3">
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
 
               {permissions?.main_page?.includes("flats_page") && (
@@ -461,9 +460,9 @@ function DashboardWrapper() {
                 </div>
               )}
             </div>
-          </div> */}
+          </div>
 
-          {/* <div className="lg:col-span-full bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
+          <div className="lg:col-span-full bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
             <div className="px-3 py-3 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
               <h4 className="text-base font-semibold text-neutral-900 flex items-center gap-2">
                 <Home className="text-purple-600" size={18} />
@@ -520,10 +519,8 @@ function DashboardWrapper() {
                 <div className="py-8 text-center text-neutral-400 text-sm">No recent unsold flats</div>
               )}
             </div>
-          </div> */}
-
-          {/* Right Side Section */}
-          {/* <div className="lg:col-span-1 bg-white border border-neutral-200 shadow-sm rounded-xl p-3 h-full">
+          </div> 
+         <div className="lg:col-span-1 bg-white border border-neutral-200 shadow-sm rounded-xl p-3 h-full">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-base font-semibold text-neutral-900 ">Recent Lead</h3>
             </div>
@@ -558,9 +555,9 @@ function DashboardWrapper() {
                 </div>
               )}
             </div>
-          </div> */}
+          </div> 
 
-        </div>
+        </div> */}
 
 
         {/* Charts Section */}
@@ -642,7 +639,7 @@ function DashboardWrapper() {
         </div>
          )}  */}
 
-        <div className={`grid grid-cols-1 ${permissions?.main_page?.includes("customers_page") && permissions?.main_page?.includes("payments_page") ? 'xl:grid-cols-2' : 'xl:grid-cols-1'} gap-6`}>
+        <div className={`grid grid-cols-1 ${permissions?.main_page?.includes("customers_page") && permissions?.main_page?.includes("payments_page") ? 'xl:grid-cols-2' : 'xl:grid-cols-1'} gap-3`}>
           {/* Customers Table */}
           {permissions?.main_page?.includes("customers_page") && (
             <div className="bg-white rounded-md border border-neutral-200 shadow-sm overflow-hidden">
