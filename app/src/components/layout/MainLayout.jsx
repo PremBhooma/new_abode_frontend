@@ -38,22 +38,24 @@ const MainLayout = ({ children }) => {
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
     return (
-        <div className="flex h-screen w-full overflow-hidden bg-slate-100">
-            {/* Sidebar - Persistent on Desktop, Toggable on Mobile */}
-            <Sidebar
-                isOpen={isSidebarOpen}
-                toggleSidebar={toggleSidebar}
-            />
+        <div className="flex h-screen w-full overflow-hidden bg-slate-100 flex-col">
+            <Header toggleSidebar={toggleSidebar} />
 
-            {/* Main Content Area */}
-            <div className="flex-1 flex flex-col h-full w-full min-w-0 relative">
-                <Header toggleSidebar={toggleSidebar} />
+            <div className="flex flex-1 min-h-0 w-full">
+                {/* Sidebar - Persistent on Desktop, Toggable on Mobile */}
+                <Sidebar
+                    isOpen={isSidebarOpen}
+                    toggleSidebar={toggleSidebar}
+                />
 
-                <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 md:py-3 md:pr-3 md:pl-0">
-                    <div className="mx-auto w-full">
-                        {children}
-                    </div>
-                </main>
+                {/* Main Content Area */}
+                <div className="flex-1 min-w-0 h-full">
+                    <main className="h-full overflow-y-auto overflow-x-hidden p-3 md:py-3 md:pl-0">
+                        <div className="mx-auto w-full">
+                            {children}
+                        </div>
+                    </main>
+                </div>
             </div>
         </div>
     );

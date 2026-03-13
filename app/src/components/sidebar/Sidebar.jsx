@@ -60,19 +60,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             {/* Mobile Overlay */}
             {isOpen && (
                 <div
-                    className="lg:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-[1px] z-40 transition-opacity"
+                    className="lg:hidden fixed top-16 left-0 right-0 bottom-0 bg-slate-900/40 backdrop-blur-[1px] z-40 transition-opacity"
                     onClick={toggleSidebar}
                 />
             )}
 
             {/* Sidebar Container */}
             <aside
-                className={`m-3 fixed lg:static top-0 left-0 w-[210px] bg-white rounded-md shadow-sm border-r border-slate-200 z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                className={`m-3 rounded-md fixed lg:static top-16 lg:top-0 left-0 w-[220px]  bg-white shadow-sm border-r border-slate-200 z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                     }`}
             >
                 <div className="flex flex-col h-full">
                     {/* Logo Area */}
-                    <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200">
+                    {/* <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200">
                         <Link to="/dashboard" className="flex items-center gap-2">
                             <img
                                 crossOrigin="anonymous"
@@ -87,7 +87,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                         >
                             <IconX size={20} />
                         </button>
-                    </div>
+                    </div> */}
 
                     {/* Navigation Links */}
                     <div className="flex-1 overflow-y-auto py-5 px-3 space-y-1">

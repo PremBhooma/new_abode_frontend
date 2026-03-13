@@ -1,6 +1,6 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { IconMenu2, IconLogout } from "@tabler/icons-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { IconLogout, IconX } from "@tabler/icons-react";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
 
 const Header = ({ toggleSidebar }) => {
@@ -24,24 +24,34 @@ const Header = ({ toggleSidebar }) => {
     };
 
     return (
-        <header className="mt-3 mr-3 sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 h-16 px-4 md:px-5 flex items-center justify-between shadow-sm rounded-md">
+        <header className="mt-3 w-[98%] mx-auto shrink-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 h-16 px-4 md:px-5 flex items-center justify-between shadow-sm rounded-md">
             {/* Left: Sidebar Toggle & Title (Mobile) */}
             <div className="flex items-center gap-3">
-                <button
-                    onClick={toggleSidebar}
-                    className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
-                >
-                    <IconMenu2 size={20} />
-                </button>
+                <div className="h-16 flex items-center justify-between border-b border-slate-200">
+                    <Link to="/dashboard" className="flex items-center gap-2">
+                        <img
+                            crossOrigin="anonymous"
+                            src="./assets/dashboard/logo.png"
+                            alt="Logo"
+                            className="h-10 w-auto object-contain"
+                        />
+                    </Link>
+                    <button
+                        onClick={toggleSidebar}
+                        className="lg:hidden p-1 text-slate-500 hover:bg-slate-100 rounded-md"
+                    >
+                        <IconX size={20} />
+                    </button>
+                </div>
 
-                <div>
+                {/* <div>
                     <p className="text-[13px] font-semibold text-slate-900">
                         {pageName}
                     </p>
                     <p className="text-[11px] text-slate-500 hidden sm:block">
                         Welcome back, {employeeInfo?.name || "User"}
                     </p>
-                </div>
+                </div> */}
             </div>
 
             {/* Right: Search & Actions */}
