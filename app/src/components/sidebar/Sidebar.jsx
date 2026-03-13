@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useLocation, Link } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useEmployeeDetails } from "../zustand/useEmployeeDetails";
 import {
     IconLayoutDashboard,
@@ -9,7 +9,6 @@ import {
     IconSettings,
     IconUsersGroup,
     IconChevronDown,
-    IconX,
     IconCurrencyRupee,
     IconFolder,
     IconGift
@@ -45,14 +44,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
     const navItemClass = ({ isActive }) =>
         `flex items-center gap-3 px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 ${isActive
-            ? "bg-[#0083bf]/12 text-[#0078af] border border-[#0083bf]/15"
-            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-transparent"
+            ? "bg-white/20 text-white border border-white/30"
+            : "text-white/85 hover:bg-white/10 hover:text-white border border-transparent"
         }`;
 
     const subItemClass = ({ isActive }) =>
         `block pl-10 pr-3 py-1.5 text-[12px] rounded-md transition-colors duration-200 ${isActive
-            ? "text-[#0078af] bg-[#0083bf]/8 font-medium"
-            : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/70"
+            ? "text-white bg-white/20 font-medium"
+            : "text-white/70 hover:text-white hover:bg-white/10"
         }`;
 
     return (
@@ -67,10 +66,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
             {/* Sidebar Container */}
             <aside
-                className={`m-3 rounded-md fixed lg:static top-16 lg:top-0 left-0 w-[220px]  bg-white shadow-sm border-r border-slate-200 z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+                className={`m-3 rounded-md fixed lg:static top-16 lg:top-0 left-0 w-[220px] shadow-sm border border-[#0083bf]/20 z-50 transform transition-transform duration-300 ease-in-out relative overflow-hidden ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                     }`}
             >
-                <div className="flex flex-col h-full">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-500 via-pink-700/50 to-blue-800/60" />
+                <div className="absolute inset-0 bg-[url('/assets/auth_build.jpg')] bg-cover bg-center opacity-15 mix-blend-soft-light" />
+                <div className="absolute inset-0 bg-[#0083bf]/10" />
+
+                <div className="flex flex-col h-full relative z-10">
                     {/* Logo Area */}
                     {/* <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200">
                         <Link to="/dashboard" className="flex items-center gap-2">
@@ -90,8 +93,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     </div> */}
 
                     {/* Navigation Links */}
-                    <div className="flex-1 overflow-y-auto py-5 px-3 space-y-1">
-                        <p className="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-[0.12em] mb-2">
+                    <div className="flex-1 overflow-y-auto no-scrollbar py-5 px-3 space-y-1">
+                        <p className="px-3 text-[10px] font-semibold text-white/60 uppercase tracking-[0.12em] mb-2">
                             Main Menu
                         </p>
 
@@ -106,8 +109,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                 <button
                                     onClick={() => toggleSubmenu("employee")}
                                     className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 ${openSubmenu === "employee" || location.pathname.startsWith("/single-employee-view")
-                                        ? "text-slate-900 bg-slate-100 border-slate-200"
-                                        : "text-slate-600 hover:text-slate-900 border-transparent"
+                                        ? "text-white bg-white/15 border-white/25"
+                                        : "text-white/85 hover:text-white border-transparent"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -186,8 +189,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                 <button
                                     onClick={() => toggleSubmenu("records")}
                                     className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-[12px] font-medium transition-all duration-200 border ${openSubmenu === "records"
-                                        ? "text-slate-900 bg-slate-100 border-slate-200"
-                                        : "text-slate-600 hover:text-slate-900 border-transparent"
+                                        ? "text-white bg-white/15 border-white/25"
+                                        : "text-white/85 hover:text-white border-transparent"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -236,13 +239,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     </div>
 
                     {/* User Profile (Sidebar Footer) */}
-                    <div className="p-3 border-t border-slate-200">
+                    <div className="p-3 border-t border-white/20">
                         <NavLink
                             to={`/single-employee-view/${employeeInfo?.id}`}
                             className={({ isActive }) =>
                                 `flex items-center gap-3 p-2.5 rounded-md transition-all duration-200 border ${isActive
-                                    ? "bg-[#0083bf]/10 border-[#0083bf]/20"
-                                    : "bg-slate-50 hover:bg-slate-100 border-slate-200"
+                                    ? "bg-white/20 border-white/30"
+                                    : "bg-white/10 hover:bg-white/15 border-white/20"
                                 }`
                             }
                         >
@@ -250,13 +253,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                 src={employeeInfo?.profile_pic_url || './assets/dashboard/user.png'}
                                 crossOrigin="anonymous"
                                 alt="User"
-                                className="w-9 h-9 rounded-full object-cover border border-slate-200"
+                                className="w-9 h-9 rounded-full object-cover border border-white/30"
                             />
                             <div className="flex-1 min-w-0">
-                                <p className="text-[12px] font-medium text-slate-900 truncate">
+                                <p className="text-[12px] font-medium text-white truncate">
                                     {employeeInfo?.name}
                                 </p>
-                                <p className="text-[11px] text-slate-500 truncate">
+                                <p className="text-[11px] text-white/70 truncate">
                                     {employeeInfo?.role_name}
                                 </p>
                             </div>
