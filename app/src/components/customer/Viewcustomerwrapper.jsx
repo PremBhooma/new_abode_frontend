@@ -315,7 +315,7 @@ function Viewcustomerwrapper() {
                 ))}
               </div>
 
-              <div className="flex-1 p-8 bg-white rounded-2xl shadow-[0_2px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100">
+              <div className="flex-1 p-6 bg-white rounded-2xl shadow-[0_2px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100">
                 {activeTab === "other-info" && (
                   <>
                     {permissions?.customers_page?.includes(

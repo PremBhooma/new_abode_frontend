@@ -1,45 +1,45 @@
-
-import { Textinput } from '@nayeshdaggula/tailify'
-import { IconArrowUp, IconFolder, IconHome, IconSearch } from '@tabler/icons-react'
+import { IconHome, IconChevronRight, IconArrowUp } from '@tabler/icons-react'
+import { Folder } from 'lucide-react'
 import React from 'react'
 
 function SearchAndPath({ folderPath, folderBack, mainFolder, currentFolderParentId }) {
+    const pathParts = folderPath.split('/').filter(part => part !== "");
+
     return (
-        <div className="flex flex-row gap-3 border-y border-slate-300 py-2 max-sm:px-3 mt-5">
-            <div className="basis-[10%] flex flex-row items-center justify-start gap-2">
-                <div className='flex flex-row items-center justify-start gap-1 cursor-pointer border-2 border-slate-100 rounded-md p-1' onClick={mainFolder}>
-                    <IconHome size={14} color="#00000099" />
-                    <p className='text-xs font-medium'>Main</p>
-                </div>
-                <div className='flex flex-row items-center gap-[5px]'>
-                    <div className='cursor-pointer border-2 border-slate-100 p-1 rounded-md' onClick={() => folderBack(currentFolderParentId)}>
-                        <IconArrowUp size={15} />
-                    </div>
-                </div>
+        <div className="bg-slate-50/80 backdrop-blur-sm border border-slate-100 rounded-xl px-4 py-2 mb-4 flex items-center justify-between">
+            <nav className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+                <button
+                    onClick={mainFolder}
+                    className="flex items-center gap-1.5 text-slate-400 hover:text-blue-600 transition-colors p-1.5 rounded-md hover:bg-blue-50/50"
+                    title="Home"
+                >
+                    <IconHome size={16} />
+                </button>
+
+                {pathParts.map((part, index) => (
+                    <React.Fragment key={index}>
+                        <IconChevronRight size={14} className="text-slate-300 shrink-0" />
+                        <div className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap
+                            ${index === pathParts.length - 1
+                                ? "bg-white text-blue-700 shadow-sm border border-blue-100"
+                                : "text-slate-500 hover:text-slate-800"
+                            }`}>
+                            {index === 0 && <Folder size={14} className={index === pathParts.length - 1 ? "text-blue-500" : "text-slate-400"} />}
+                            {part === "filemanager" ? "Main Storage" : part}
+                        </div>
+                    </React.Fragment>
+                ))}
+            </nav>
+
+            <div className="flex items-center pl-4 border-l border-slate-200 ml-4">
+                <button
+                    onClick={() => folderBack(currentFolderParentId)}
+                    className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                    title="Go Back"
+                >
+                    <IconArrowUp size={18} />
+                </button>
             </div>
-            <div className="basis-[90%]">
-                <Textinput
-                    placeholder='Path...'
-                    className='w-full'
-                    size="xs"
-                    value={folderPath}
-                    readOnly
-                    onChange={() => { }}
-                    rightIcon={<IconFolder size={15} />}
-                />
-            </div>
-            {/* <div className="basis-[35%] max-sm:hidden">
-                <div className="flex flex-col justify-start items-start gap-2.5 pl-2 pr-[20px] rounded bg-white border-2 border-slate-100">
-                    <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative opacity-70 gap-1.5">
-                        <IconSearch size={15} />
-                        <input
-                            type="text"
-                            placeholder="Search here...."
-                            className="flex-grow text-sm bg-transparent border-none text-black placeholder-black pl-4 pr-1 py-[4px] rounded outline-none"
-                        />
-                    </div>
-                </div>
-            </div> */}
         </div>
     )
 }

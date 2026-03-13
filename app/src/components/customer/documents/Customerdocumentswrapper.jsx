@@ -241,11 +241,11 @@ function Customerdocumentswrapper() {
 
   useEffect(() => {
     setIsLoadingEffect(true);
-    fetchfoldersdetails();
+    fetchfoldersdetails(null);
   }, []);
 
   return (
-    <>
+    <div className="pt-2">
       <Toolbarwrapper
         refreshFolderDeatils={refreshFolderDetails}
         currentFolderUuid={currentFolderUuid}
@@ -295,7 +295,7 @@ function Customerdocumentswrapper() {
           setErrorMessages={setErrorMessage}
         />
       )}
-    </>
+    </div>
   );
 }
 
