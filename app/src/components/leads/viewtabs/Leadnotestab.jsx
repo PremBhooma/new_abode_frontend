@@ -115,7 +115,7 @@ function Leadnotestab() {
                                     ) : (
                                         <>
                                             Save Note
-                                            <IconSend size={16} />
+                                            <IconSend size={14} />
                                         </>
                                     )}
                                 </Button>
