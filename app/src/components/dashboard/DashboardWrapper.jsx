@@ -671,7 +671,7 @@ function DashboardWrapper() {
                               </div>
                               <div>
                                 <p className="text-neutral-900 text-xs font-semibold leading-[18px]">{customer.prefixes} {customer.first_name}</p>
-                                <p className="text-neutral-500 text-[10px] leading-[18px]">{customer.id}</p>
+                                {/* <p className="text-neutral-500 text-[10px] leading-[18px]">{customer.id}</p> */}
                               </div>
                             </div>
                           </td>
@@ -731,7 +731,7 @@ function DashboardWrapper() {
                               </div>
                               <div>
                                 <p className="text-neutral-900 text-xs font-semibold leading-[18px]s">{payment.customer_prefixes} {payment.customer_name}</p>
-                                <p className="text-neutral-500 text-[10px] leading-[18px]">{payment.id}</p>
+                                {/* <p className="text-neutral-500 text-[10px] leading-[18px]">{payment.id}</p> */}
                               </div>
                             </div>
                           </td>
