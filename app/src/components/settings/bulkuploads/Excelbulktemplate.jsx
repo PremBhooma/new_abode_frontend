@@ -271,22 +271,23 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
             'Manjeera Connection (₹)',
             'Manjeera Meter (₹)',
             'Grand Total (₹)',
+            'Validation Status',
         ]);
         assignFlatSheet.getRow(1).font = { bold: true };
         assignFlatSheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFF2CC' } };
         assignFlatSheet.columns.forEach(col => (col.width = 28));
         assignFlatSheet.getColumn(5).numFmt = '@'; // Booking Date as text
 
-        // Sample row (project charges auto-fill via formulas in data rows below)
-        assignFlatSheet.addRow([
+        // Row 2 sample with formulas (using row index 2)
+        const sampleRow = assignFlatSheet.addRow([
             projectsData[0]?.project_name || '',
             '101', blocksData[0]?.name || '',
             '9876543210',
             dayjs(new Date()).format('DD-MM-YYYY'),
-            1200, // F: Saleable Area
+            null, // F: Formula
             4500, // G: Rate Per Sq.ft
             0,    // H: Discount
-            null, null, null, null, null, null, null, // I–O (formulas below for row 2)
+            null, null, null, null, null, null, null, // I–O
             0,    // P: Amenities
             null, null, null, null, null, null, null, null, null, null, // Q–Z
         ]);
@@ -308,23 +309,35 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
             // Booking Date as text
             assignFlatSheet.getCell(`E${i}`).numFmt = '@';
 
-            // I: Base Cost = F*G - F*H
-            assignFlatSheet.getCell(`I${i}`).value = { formula: `IF(${cond},F${i}*G${i}-(F${i}*H${i}),"")` };
+            const floorNoLookup = `SUMIFS('Flat Template'!$C:$C, 'Flat Template'!$A:$A, $A${i}, 'Flat Template'!$B:$B, $B${i}, 'Flat Template'!$D:$D, $C${i})`;
+            const areaLookup = `SUMIFS('Flat Template'!$E:$E, 'Flat Template'!$A:$A, $A${i}, 'Flat Template'!$B:$B, $B${i}, 'Flat Template'!$D:$D, $C${i})`;
+            const phoneValid = `COUNTIFS('Customer Template'!$G:$G, $D${i}, 'Customer Template'!$A:$A, $A${i})`;
 
-            // J: Floor Rise Per Sqft (VLOOKUP col B → project_six_floor_onwards_price)
-            assignFlatSheet.getCell(`J${i}`).value = { formula: `IF(A${i}<>"",${vlookup(2)},"")` };
+            // F: Saleable Area = Lookup from Flat Template
+            assignFlatSheet.getCell(`F${i}`).value = { formula: `IF(${cond}, ${areaLookup}, "")` };
+
+            // I: Base Cost = F*G - F*H
+            assignFlatSheet.getCell(`I${i}`).value = { formula: `IF(${cond}, F${i}*G${i}-(F${i}*H${i}), "")` };
+
+            // J: Floor Rise Per Sqft = BaseRate * MAX(0, FloorNo - 5)
+            const baseFloorRise = vlookup(2);
+            assignFlatSheet.getCell(`J${i}`).value = { formula: `IF(AND(${cond}, ${floorNoLookup}>=6), ${baseFloorRise} * (${floorNoLookup} - 5), 0)` };
 
             // K: Total Floor Rise = J * F
             assignFlatSheet.getCell(`K${i}`).value = { formula: `IF(${cond},J${i}*F${i},"")` };
 
-            // L: East Facing Per Sqft (VLOOKUP col C → project_east_price)
-            assignFlatSheet.getCell(`L${i}`).value = { formula: `IF(A${i}<>"",${vlookup(3)},"")` };
+            // L: East Facing Per Sqft (Check if Facing='East' in Flat Template)
+            const isEastFormula = `COUNTIFS('Flat Template'!$G:$G, "East", 'Flat Template'!$A:$A, $A${i}, 'Flat Template'!$B:$B, $B${i}, 'Flat Template'!$D:$D, $C${i})`;
+            const baseEastRate = vlookup(3);
+            assignFlatSheet.getCell(`L${i}`).value = { formula: `IF(AND(${cond}, ${isEastFormula}>0), ${baseEastRate}, 0)` };
 
             // M: Total East Facing = L * F
             assignFlatSheet.getCell(`M${i}`).value = { formula: `IF(${cond},L${i}*F${i},"")` };
 
-            // N: Corner Per Sqft (VLOOKUP col D → project_corner_price)
-            assignFlatSheet.getCell(`N${i}`).value = { formula: `IF(A${i}<>"",${vlookup(4)},"")` };
+            // N: Corner Per Sqft (Check if Corner='Yes' in Flat Template)
+            const isCornerFormula = `COUNTIFS('Flat Template'!$L:$L, "Yes", 'Flat Template'!$A:$A, $A${i}, 'Flat Template'!$B:$B, $B${i}, 'Flat Template'!$D:$D, $C${i})`;
+            const baseCornerRate = vlookup(4);
+            assignFlatSheet.getCell(`N${i}`).value = { formula: `IF(AND(${cond}, ${isCornerFormula}>0), ${baseCornerRate}, 0)` };
 
             // O: Total Corner = N * F
             assignFlatSheet.getCell(`O${i}`).value = { formula: `IF(${cond},N${i}*F${i},"")` };
@@ -358,6 +371,13 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
 
             // Z: Grand Total = Q + R + T + U + V + W + X + Y
             assignFlatSheet.getCell(`Z${i}`).value = { formula: `IF(${cond},Q${i}+R${i}+T${i}+U${i}+V${i}+W${i}+X${i}+Y${i},"")` };
+
+            // AA: Validation Status
+            const flatValid = `${areaLookup}>0`;
+            const custValid = `${phoneValid}>0`;
+            assignFlatSheet.getCell(`AA${i}`).value = { 
+                formula: `IF(A${i}="","",IF(AND(${flatValid},${custValid}),"✓ Valid",IF(NOT(${flatValid}),"✗ Flat Not Found",IF(NOT(${custValid}),"✗ Customer Not Found",""))))` 
+            };
         }
 
         // ══════════════════════════════════════════════════════════════
@@ -447,7 +467,7 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
             <ul className="text-xs text-neutral-500 list-disc list-inside space-y-1">
                 <li><b>Flat Template</b> — Project, Flat No, Floor No, Block, Area, Type, Facing, Views, Corner, Reward</li>
                 <li><b>Customer Template</b> — Project, personal details, address &amp; work info</li>
-                <li><b>Assign Flat Template</b> — Select a Project and pricing (Floor Rise, East Facing, Corner, GST, Registration, etc.) <b>auto-fills</b> based on that project's rates</li>
+                <li><b>Assign Flat Template</b> — Select a Project and pricing <b>auto-fills</b> based on that project's rates. It also <b>validates</b> against the Flat and Customer sheets.</li>
                 <li><b>Payment Template</b> — Amount, Type, Method, Bank, Date, Flat, Block, Project</li>
             </ul>
 
