@@ -20,6 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "../ui/textarea";
 
 function capitalize(str) {
     if (!str) return '';
@@ -934,12 +935,12 @@ function Flattocustomer() {
     console.log("permissions", permissions);
 
     return (
-        <div className="h-full flex flex-col gap-3 justify-start bg-gray-50 overflow-y-auto">
+        <div className="h-full flex flex-col gap-3 justify-start overflow-y-auto">
             {/* Header */}
             <div className="flex justify-between items-center">
-                <div className="font-semibold text-xl text-gray-800">Assign Flat to Customer</div>
+                <div className="text-xl font-bold text-slate-800 tracking-tight leading-none">Assign Flat to Customer</div>
             </div>
-            <div className="w-full max-w-7xl bg-white overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()} >
+            <div className="w-full max-w-7xl bg-white rounded-md overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()} >
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-4 bg-white">
                     <div className="flex flex-col lg:flex-row gap-6">
@@ -1058,7 +1059,7 @@ function Flattocustomer() {
 
                             <div className="space-y-2 md:col-span-2">
                                 <Label>Custom Note</Label>
-                                <textarea
+                                <Textarea
                                     value={customNote}
                                     onChange={updateCustomNote}
                                     placeholder="Enter any additional requirements need for this flat..."

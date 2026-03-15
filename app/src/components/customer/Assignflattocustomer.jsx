@@ -10,6 +10,7 @@ import CustomDateFilter from "../shared/CustomDateFilter";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IconX } from "@tabler/icons-react";
+import { Textarea } from "../ui/textarea";
 
 function Assignflattocustomer({ closeAssignFlatToCustomer, customerId, refreshFlats, projectId }) {
 
@@ -824,7 +825,7 @@ function Assignflattocustomer({ closeAssignFlatToCustomer, customerId, refreshFl
             >
                 {/* Header */}
                 <div className="flex justify-between items-center px-6 py-4 border-b border-gray-300 bg-white z-10">
-                    <div className="font-semibold text-xl text-gray-800">Assign Flat to Customer</div>
+                    <div className="text-xl font-bold text-slate-800 tracking-tight leading-none">Assign Flat to Customer</div>
                     <button
                         onClick={closeAssignFlatToCustomer}
                         className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -888,11 +889,11 @@ function Assignflattocustomer({ closeAssignFlatToCustomer, customerId, refreshFl
 
                             <div className="space-y-2 md:col-span-2">
                                 <Label>Custom Note</Label>
-                                <textarea
+                                <Textarea
                                     value={customNote}
                                     onChange={updateCustomNote}
                                     placeholder="Enter any additional requirements need for this flat..."
-                                    rows={3}
+                                    rows={4}
                                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-[4px] focus:outline-none focus:border-black resize-none text-sm"
                                 />
                             </div>
