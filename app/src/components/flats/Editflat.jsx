@@ -408,13 +408,13 @@ function Editflat() {
 
 
   const proceedWithSubmit = () => {
+    setIsLoadingEffect(true);
+
     if (!selectedProject) {
       setIsLoadingEffect(false);
       setSelectedProjectError("Select Project");
       return false;
     }
-
-    setIsLoadingEffect(true);
 
     if (flatNo === "" || !flatNo) {
       setIsLoadingEffect(false);
@@ -434,21 +434,21 @@ function Editflat() {
       return false;
     }
 
-    // if (selectedOwner === "" || !selectedOwner) {
-    //   setIsLoadingEffect(false);
-    //   setGroupOwnersError("Enter Group/Owner");
-    //   return false;
-    // }
-
-    // if (mortgage === "" || !mortgage) {
-    //   setIsLoadingEffect(false);
-    //   setMortgageError("Enter Mortgage ?");
-    //   return false;
-    // }
-
     if (squareFeet === "" || !squareFeet) {
       setIsLoadingEffect(false);
       setSquareFeetError("Enter Square Feet");
+      return false;
+    }
+
+    if (flatType === "" || !flatType) {
+      setIsLoadingEffect(false);
+      setFlatTypeError("Select Flat Type");
+      return false;
+    }
+
+    if (facing === "" || !facing) {
+      setIsLoadingEffect(false);
+      setFacingError("Select Facing");
       return false;
     }
 
@@ -650,7 +650,7 @@ function Editflat() {
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-600 mb-1">Flat Type</label>
+                    <label className="text-sm font-medium text-gray-600 mb-1">Flat Type <span className="text-red-500">*</span></label>
                     <Select value={flatType || undefined} onValueChange={updateFlatType}>
                       <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!flatType ? 'text-gray-400' : ''} ${flatTypeError ? 'border-red-500' : 'border-gray-300'}`}>
                         <SelectValue placeholder="Select flat type" />
@@ -664,7 +664,7 @@ function Editflat() {
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-600 mb-1">Facing</label>
+                    <label className="text-sm font-medium text-gray-600 mb-1">Facing <span className="text-red-500">*</span></label>
                     <Select value={facing || undefined} onValueChange={updateFacing}>
                       <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!facing ? 'text-gray-400' : ''} ${facingError ? 'border-red-500' : 'border-gray-300'}`}>
                         <SelectValue placeholder="Select Facing" />

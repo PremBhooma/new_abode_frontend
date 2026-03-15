@@ -296,6 +296,12 @@ function Addflat() {
   const handleSubmit = () => {
     setIsLoadingEffect(true);
 
+    if (!selectedProject) {
+      setIsLoadingEffect(false);
+      setSelectedProjectError("Select Project");
+      return false;
+    }
+
     if (flatNo === "" || !flatNo) {
       setIsLoadingEffect(false);
       setFlatNoError("Enter Flat No");
@@ -338,6 +344,12 @@ function Addflat() {
       return false;
     }
 
+    if (facing === "" || !facing) {
+      setIsLoadingEffect(false);
+      setFacingError("Select Facing");
+      return false;
+    }
+
     if (googleMapLink && !googleMapLink.startsWith("https://")) {
       setIsLoadingEffect(false);
       setGoogleMapLinkError("Invalid google map link");
@@ -349,12 +361,6 @@ function Addflat() {
     if (googleMapLink && !googleMapRegex.test(googleMapLink)) {
       setIsLoadingEffect(false);
       setGoogleMapLinkError("Enter a valid Google Map link");
-      return false;
-    }
-
-    if (!selectedProject) {
-      setIsLoadingEffect(false);
-      setSelectedProjectError("Select Project");
       return false;
     }
 
@@ -590,7 +596,7 @@ function Addflat() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-gray-600 mb-1">Facing</label>
+                  <label className="text-sm font-medium text-gray-600 mb-1">Facing <span className="text-red-500">*</span></label>
                   <Select value={facing || undefined} onValueChange={updateFacing}>
                     <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!facing ? 'text-gray-400' : ''} ${facingError ? 'border-red-500' : 'border-gray-300'}`}>
                       <SelectValue placeholder="Select Facing" />
