@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IconX } from "@tabler/icons-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "../ui/textarea";
 
 const Customersteptwo = forwardRef((props, ref) => {
 
@@ -929,11 +930,11 @@ const Customersteptwo = forwardRef((props, ref) => {
 
                         <div className="space-y-2 md:col-span-2">
                             <Label>Custom Note</Label>
-                            <textarea
+                            <Textarea
                                 value={customNote}
                                 onChange={updateCustomNote}
                                 placeholder="Enter any additional requirements need for this flat..."
-                                rows={3}
+                                rows={4}
                                 className="w-full px-3 py-2 bg-white border border-gray-300 rounded-[4px] focus:outline-none focus:border-black resize-none text-sm"
                             />
                         </div>
