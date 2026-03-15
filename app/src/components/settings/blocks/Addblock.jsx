@@ -74,31 +74,29 @@ function Addblock({ refreshBlocks }) {
     }
 
     return (
-        <div className="px-3 rounded-md bg-transparent border border-[#ebecef] relative">
-            <div className="py-2">
-                <div className="flex flex-col gap-4">
-                    <Textinput
-                        label='Add Block'
-                        labelClassName='!font-medium !text-[16px]'
-                        placeholder="Enter Block Name"
-                        inputClassName='!bg-white !border-[#ebecef]'
-                        value={blockName}
-                        onChange={updatetBlockName}
-                        error={blockNameError}
-                    />
+        <div className="p-4 rounded-md bg-transparent border border-[#ebecef] relative">
+            <div className="flex flex-col gap-4">
+                <Textinput
+                    label='Add Block'
+                    labelClassName='!font-medium !text-sm'
+                    placeholder="Enter Block Name"
+                    inputClassName='!bg-white !border-[#ebecef]'
+                    value={blockName}
+                    onChange={updatetBlockName}
+                    error={blockNameError}
+                />
 
-                </div>
-            </div>
-
-            <div className="py-2">
                 <button
                     onClick={handleSubmit}
                     disabled={isLoading}
                     className="cursor-pointer flex justify-center w-full items-center gap-2 px-4 py-2.5 rounded-md hover:bg-[#0083bf] hover:text-white text-[#0083bf] border-[0.8px] border-[#0083bf]"
                 >
-                    <p className="text-sm font-medium">Submit</p>
+                    <p className="text-[12px] font-medium">Submit</p>
                 </button>
+
             </div>
+
+
             {
                 isLoading &&
                 <div className='absolute top-0 left-0 w-full h-full bg-[#2b2b2bcc] flex flex-row justify-center items-center z-50'>
