@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import dayjs from "dayjs";
 import Flatapi from "../../../api/Flatapi";
 import Addflatpayment from "./Addflatpayment";
@@ -34,9 +34,11 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
     const [paymentsData, setPaymentsData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [dateRange, setDateRange] = useState({
-        startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
+        startDate: "",
+        endDate: "",
     });
+
+    console.log("flat_id:", flat_id);
 
     async function GetAllPayments(flat_id, newPage, newLimit, newSearchQuery) {
         const params = {
@@ -49,7 +51,7 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
         if (dateRange.startDate) params.startDate = dateRange.startDate;
         if (dateRange.endDate) params.endDate = dateRange.endDate;
 
-        await Flatapi.get("/get-payments-of-flats", {
+        await Flatapi.get("get-payments-of-flats", {
             params,
             headers: {
                 "Content-Type": "application/json",
@@ -94,34 +96,29 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
 
     const handlePageChange = useCallback((value) => {
         setPage(value);
-        if (flat_id) GetAllPayments(flat_id, value, limit);
         setIsLoading(true);
-    }, [flat_id, limit]);
+    }, [flat_id, limit, searchQuery]);
 
     const updateSearchQuery = useCallback(
         (e) => {
             setSearchQuery(e.target.value);
-            GetAllPayments(flat_id, page, limit, e.target.value);
+            setPage(1);
         },
-        [flat_id, page, limit]
+        [flat_id, limit]
     );
 
     const updateLimit = useCallback(
         (data) => {
-            let newpage = 1;
             setLimit(data);
-            setPage(newpage);
-            if (flat_id) GetAllPayments(flat_id, newpage, data, searchQuery);
+            setPage(1);
         },
-        [flat_id, page, searchQuery]
+        [flat_id, searchQuery]
     );
 
     const handleDateFilterChange = (newDateRange) => {
         setDateRange(newDateRange);
         setPage(1);
         setIsLoading(true);
-        GetAllPayments(flat_id, page, limit, searchQuery);
-        // GetAllPayments(page, limit, searchQuery, selectedCustomer);
     };
 
     const handleDownload = async (searchQuery) => {
@@ -312,7 +309,7 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
             }
             const enabledCount = Object.values(visibleColumns).filter(Boolean).length;
             const isLandscape = enabledCount > 5;
-            const paymentsData = data?.allpayments || [];
+            const paymentsData = data?.data || [];
             const printContent = `
                 <html>
                     <head>
@@ -471,7 +468,7 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                 <h2>Payment Receipt</h2>
                 <div class="container">
                     <div class="field"><div class="label">Transaction Id:</div><div class="value">${payment.transaction_id || "---"}</div></div>
-                    <div class="field"><div class="label">Amount:</div><div class="value">₹ ${(parseInt(payment.amount) || 0).toFixed(2)}</div></div>
+                    <div class="field"><div class="label">Amount:</div><div class="value">₹ ${(parseFloat(payment.amount) || 0).toFixed(2)}</div></div>
                     <div class="field"><div class="label">Date of Payment:</div><div class="value">${payment.paymet_date ? dayjs(payment.paymet_date).format("DD/MM/YYYY") : "---"}</div></div>
                     <div class="field"><div class="label">Payment Type:</div><div class="value">${payment.payment_type || "---"}</div></div>
                     <div class="field"><div class="label">Payment Towards:</div><div class="value">${payment.payment_towards || "---"}</div></div>
@@ -570,7 +567,7 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                                 onClick={() => setShowColumnToggle(!showColumnToggle)}
                                 className="cursor-pointer whitespace-nowrap flex items-center gap-1 px-2 py-2 h-9 text-sm border border-[#ebecef] rounded-sm bg-white hover:bg-gray-50"
                             >
-                  <IconSettings size={16} className="mr-1" /> Columns
+                                <IconSettings size={16} className="mr-1" /> Columns
                             </button>
 
                             {showColumnToggle && (
@@ -604,64 +601,64 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                     <thead className="border-b-[0.6px] border-b-[#ebecef] bg-white">
                         <tr className="w-full">
                             {/* {visibleColumns.reference && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[16px] font-[500] leading-[18px] w-[140px] sticky left-0 z-20 bg-white border-r border-[#ebecef]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[16px] font-[500] leading-[18px] w-[140px] sticky left-0 z-20 bg-white border-r border-[#ebecef]">
                                     Ref ID
                                 </th>
                             )} */}
                             {visibleColumns.transactionId && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[160px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[160px]">
                                     Transaction Id
                                 </th>
                             )}
                             {visibleColumns.flat && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[120px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[120px]">
                                     Flat
                                 </th>
                             )}
                             {visibleColumns.block && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[120px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[120px]">
                                     Block
                                 </th>
                             )}
                             {visibleColumns.customer && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[160px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[160px]">
                                     Customer
                                 </th>
                             )}
                             {visibleColumns.amount && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[140px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[140px]">
                                     Amount
                                 </th>
                             )}
                             {visibleColumns.date && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[160px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[160px]">
                                     Date of Payment
                                 </th>
                             )}
                             {visibleColumns.paymentType && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[160px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[160px]">
                                     Payment Type
                                 </th>
                             )}
                             {visibleColumns.paymentTowards && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[160px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[160px]">
                                     Payment Towards
                                 </th>
                             )}
                             {visibleColumns.paymentMethod && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[160px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[160px]">
                                     Payment Method
                                 </th>
                             )}
                             {visibleColumns.bank && (
-                                <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[160px]">
+                                <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[160px]">
                                     Bank
                                 </th>
                             )}
                             {permissions?.payments_page?.some(p =>
                                 ["view_payment", "edit_payment", "delete_payment"].includes(p)
                             ) && (
-                                    <th scope="col" className="px-4 py-3 text-[#2B2B2B] text-[13px] font-[500] leading-[18px] w-[120px] sticky right-0 z-20 bg-white border-l border-[#ebecef]">
+                                    <th scope="col" className="px-4 py-2 text-[#2B2B2B] text-[11px] font-[500] leading-[18px] w-[120px] sticky right-0 z-20 bg-white border-l border-[#ebecef]">
                                         Actions
                                     </th>
                                 )}
@@ -673,44 +670,44 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                                 paymentsData.map((payment, index) => (
                                     <tr key={index} className="border-b-[0.6px] border-b-[#ebecef] align-top bg-white">
                                         {/* {visibleColumns.reference && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[140px] sticky left-0 z-10 bg-white border-r border-[#ebecef]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[140px] sticky left-0 z-10 bg-white border-r border-[#ebecef]">
                                                 <NavLink to={`/singlepaymentview/${payment.id}`}>
-                                                    <p className="text-[#4b5563] text-[13px] font-normal leading-[18px]">{payment?.id}</p>
+                                                    <p className="text-[#4b5563] text-[11px] font-normal leading-[18px]">{payment?.id}</p>
                                                 </NavLink>
                                             </td>
                                         )} */}
                                         {visibleColumns.transactionId && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[160px]">
                                                 {permissions?.payments_page?.includes("view_payment") ? (
                                                     // <NavLink to={`/singlepaymentview/${payment?.id}`}>
-                                                    <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                                    <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                         {payment?.transaction_id}
                                                     </p>
                                                     // </NavLink>
                                                 ) : (
-                                                    <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                                    <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                         {payment?.transaction_id}
                                                     </p>
                                                 )}
                                             </td>
                                         )}
                                         {visibleColumns.flat && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[120px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[120px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                     {payment?.flat_number || "----"}
                                                 </p>
                                             </td>
                                         )}
                                         {visibleColumns.block && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[120px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[120px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                     {payment?.block_name || "----"}
                                                 </p>
                                             </td>
                                         )}
                                         {visibleColumns.customer && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px] capitalize">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[160px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px] capitalize">
                                                     {/* <NavLink to={`/customers/${payment?.customerId}`}> */}
                                                     {payment.customer_prefixes || ""} {payment.customer_first_name || "----"} {payment.customer_last_name}
                                                     {/* </NavLink> */}
@@ -718,48 +715,48 @@ function Allpaymentslist({ flat_id, customerId, project_id }) {
                                             </td>
                                         )}
                                         {visibleColumns.amount && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[140px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
-                                                    ₹ {parseInt(payment?.amount).toFixed(2) || "----"}
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[140px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
+                                                    ₹ {parseFloat(payment?.amount || 0).toFixed(2)}
                                                 </p>
                                             </td>
                                         )}
                                         {visibleColumns.date && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[160px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                     {payment?.paymet_date ? dayjs(payment?.paymet_date).format("DD/MM/YYYY") : '---'}
                                                 </p>
                                             </td>
                                         )}
                                         {visibleColumns.paymentType && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[160px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                     {payment?.payment_type || "---"}
                                                 </p>
                                             </td>
                                         )}
                                         {visibleColumns.paymentTowards && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[160px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                     {payment?.payment_towards || "---"}
                                                 </p>
                                             </td>
                                         )}
                                         {visibleColumns.paymentMethod && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[160px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                     {payment?.payment_method}
                                                 </p>
                                             </td>
                                         )}
                                         {visibleColumns.bank && (
-                                            <td className="px-4 py-3 whitespace-normal break-words w-[160px]">
-                                                <p className="text-[#4b5563] text-[13px] not-italic font-normal leading-[18px]">
+                                            <td className="px-4 py-2 whitespace-normal break-words w-[160px]">
+                                                <p className="text-[#4b5563] text-[11px] not-italic font-normal leading-[18px]">
                                                     {payment?.bank || "----"}
                                                 </p>
                                             </td>
                                         )}
-                                        <td className="px-4 py-3 text-center whitespace-normal break-words w-[120px] sticky right-0 z-10 bg-white border-l border-[#ebecef]">
+                                        <td className="px-4 py-2 text-center whitespace-normal break-words w-[120px] sticky right-0 z-10 bg-white border-l border-[#ebecef]">
                                             <div className="flex flex-row items-center gap-1">
                                                 {permissions?.payments_page?.includes("view_payment") && (
                                                     <Link
