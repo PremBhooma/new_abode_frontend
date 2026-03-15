@@ -1,5 +1,5 @@
 import react, { useEffect, useState } from "react";
-import { Link, NavLink, useParams } from 'react-router-dom';
+import { Link, NavLink, useParams, useNavigate } from 'react-router-dom';
 import Paymentapi from "../api/Paymentapi";
 import dayjs from "dayjs";
 import pdficon from "@/assets/pdficon.png";
@@ -34,6 +34,7 @@ const getFileInfo = (url) => {
 function Singlepaymentwrapper() {
     const params = useParams();
     const payment_uid = params.payment_uid;
+    const navigate = useNavigate();
     const permissions = useEmployeeDetails((state) => state.permissions);
 
     const [errorMessage, setErrorMessage] = useState('');
@@ -126,10 +127,13 @@ function Singlepaymentwrapper() {
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <Link to={'/payments'} className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#0083bf] bg-[#0083bf]/5 border border-[#0083bf]/20 rounded-lg shadow-sm hover:bg-[#0083bf]/10 hover:border-[#0083bf]/40 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
+                            <div 
+                                onClick={() => navigate(-1)} 
+                                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#0083bf] bg-[#0083bf]/5 border border-[#0083bf]/20 rounded-lg shadow-sm hover:bg-[#0083bf]/10 hover:border-[#0083bf]/40 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                            >
                                 <ArrowLeft size={14} />
                                 Back
-                            </Link>
+                            </div>
                         </div>
                     </div>
 

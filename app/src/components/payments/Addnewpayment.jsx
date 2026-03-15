@@ -1,4 +1,4 @@
-﻿
+
 import React, { useEffect, useState } from 'react';
 import dayjs from "dayjs";
 import Flatapi from '../api/Flatapi';
@@ -475,9 +475,9 @@ function Addnewpayment() {
             <div className="border-b border-gray-200 pb-4 mb-2">
                 <div className="flex justify-between items-center">
                     <h1 className="text-gray-800 text-lg font-semibold max-sm:text-xl">Add New Payment</h1>
-                    <Link to={'/payments'} className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200">
+                    <div onClick={() => navigate(-1)} className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200 cursor-pointer">
                         <IconArrowLeft className='mt-0.5' size={18} color="#0083bf" />Back
-                    </Link>
+                    </div>
                 </div>
             </div>
             <div className=' relative flex flex-col justify-between gap-8 border border-[#ebecef] rounded-xl bg-white p-6'>
