@@ -319,7 +319,7 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
 
             // J: Floor Rise Per Sqft = BaseRate * MAX(0, FloorNo - 5)
             const baseFloorRise = vlookup(2);
-            assignFlatSheet.getCell(`J${i}`).value = { formula: `IF(AND(${cond}, ${floorNoLookup}>=6), ${baseFloorRise} * (${floorNoLookup} - 5), "")` };
+            assignFlatSheet.getCell(`J${i}`).value = { formula: `IF(${cond}, IF(${floorNoLookup}>=6, ${baseFloorRise} * (${floorNoLookup} - 5), 0), "")` };
 
             // K: Total Floor Rise = J * F
             assignFlatSheet.getCell(`K${i}`).value = { formula: `IF(${cond},J${i}*F${i},"")` };
