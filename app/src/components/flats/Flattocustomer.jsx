@@ -20,6 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "../ui/textarea";
 
 function capitalize(str) {
     if (!str) return '';
@@ -1111,11 +1112,11 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
 
                             <div className="space-y-2 md:col-span-2">
                                 <Label>Custom Note</Label>
-                                <textarea
+                                <Textarea
                                     value={customNote}
                                     onChange={updateCustomNote}
                                     placeholder="Enter any additional requirements need for this flat..."
-                                    rows={3}
+                                    rows={4}
                                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-[4px] focus:outline-none focus:border-black resize-none text-sm"
                                 />
                             </div>
@@ -1330,7 +1331,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Months (₹)</Label>
+                                    <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Mos (₹)</Label>
                                     <Input
                                         value={maintenceCharge ? parseFloat(maintenceCharge).toLocaleString('en-IN') : ''}
                                         readOnly

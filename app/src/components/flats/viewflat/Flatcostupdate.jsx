@@ -11,6 +11,7 @@ import CustomDateFilter from "../../shared/CustomDateFilter";
 import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 function capitalize(str) {
     if (!str) return '';
@@ -1024,11 +1025,11 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
                         </div>
                         <div className="col-span-3">
                             <label className="text-sm font-medium text-gray-600 mb-1 block">Custom Note</label>
-                            <textarea
+                            <Textarea
                                 value={customNote}
                                 onChange={updateCustomNote}
                                 placeholder="Enter any additional requirements need for this flat..."
-                                rows={3}
+                                rows={4}
                                 className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:border-[#044093] focus:outline-none transition-colors duration-200 placeholder-gray-400 resize-none text-sm"
                             />
                         </div>
