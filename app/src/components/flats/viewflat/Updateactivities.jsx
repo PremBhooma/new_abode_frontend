@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import React, { useState, useEffect } from 'react'
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 import { Text } from '@nayeshdaggula/tailify';
@@ -140,11 +140,11 @@ function Updateactivities({ customerflat_id }) {
                                 <div className="flex flex-col justify-start relative gap-1">
                                     <p className="text-xs text-left text-[#2b2b2b] flex flex-col gap-2">
                                         {taskActivity?.message
-                                            ?.split("â€¢")
+                                            ?.split("\n")
                                             .filter(Boolean) // remove empty strings
                                             .map((line, idx) => (
                                                 <p key={idx} className="flex items-center gap-2">
-                                                    â€¢ {line.trim()}
+                                                    • {line.trim().startsWith('-') || line.trim().startsWith('â€¢') || line.trim().startsWith('•') ? line.trim().substring(1).trim() : line.trim()}
                                                 </p>
                                             ))}
                                     </p>
