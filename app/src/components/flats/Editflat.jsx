@@ -409,46 +409,54 @@ function Editflat() {
 
   const proceedWithSubmit = () => {
     setIsLoadingEffect(true);
+    let hasError = false;
+
+    // Reset error states
+    setSelectedProjectError("");
+    setFlatNoError("");
+    setFloorNoError("");
+    setBlockError("");
+    setSquareFeetError("");
+    setFlatTypeError("");
+    setFacingError("");
 
     if (!selectedProject) {
-      setIsLoadingEffect(false);
       setSelectedProjectError("Select Project");
-      return false;
+      hasError = true;
     }
 
     if (flatNo === "" || !flatNo) {
-      setIsLoadingEffect(false);
       setFlatNoError("Enter Flat No");
-      return false;
+      hasError = true;
     }
 
     if (FloorNo === "" || !FloorNo) {
-      setIsLoadingEffect(false);
       setFloorNoError("Enter Floor No");
-      return false;
+      hasError = true;
     }
 
     if (block === "" || !block) {
-      setIsLoadingEffect(false);
       setBlockError("Enter Block");
-      return false;
+      hasError = true;
     }
 
     if (squareFeet === "" || !squareFeet) {
-      setIsLoadingEffect(false);
       setSquareFeetError("Enter Square Feet");
-      return false;
+      hasError = true;
     }
 
     if (flatType === "" || !flatType) {
-      setIsLoadingEffect(false);
       setFlatTypeError("Select Flat Type");
-      return false;
+      hasError = true;
     }
 
     if (facing === "" || !facing) {
-      setIsLoadingEffect(false);
       setFacingError("Select Facing");
+      hasError = true;
+    }
+
+    if (hasError) {
+      setIsLoadingEffect(false);
       return false;
     }
 
@@ -554,8 +562,8 @@ function Editflat() {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between">
-          <h1 className="text-[22px] font-semibold">Update Flat</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">Update Flat</h1>
           <div
             onClick={() => navigate(-1)}
             className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200 cursor-pointer"
@@ -582,7 +590,7 @@ function Editflat() {
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-gray-600 mb-1">Project <span className="text-red-500">*</span></label>
                     <Select value={selectedProject ? String(selectedProject) : undefined} onValueChange={handleProjectChange}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!selectedProject ? 'text-gray-400' : ''} ${selectedProjectError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!selectedProject ? 'text-gray-400' : ''} ${selectedProjectError ? 'border-red-500' : 'border-gray-300'}`}>
                         <SelectValue placeholder="Select Project" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200 max-h-[200px]">
@@ -600,7 +608,7 @@ function Editflat() {
                       placeholder="Enter Flat No"
                       value={flatNo}
                       onChange={updateFlatNo}
-                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${flatNoError ? 'border-red-500' : 'border-gray-300'}`}
+                      className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${flatNoError ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {flatNoError && <p className="text-xs text-red-500">{flatNoError}</p>}
                   </div>
@@ -608,7 +616,7 @@ function Editflat() {
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-gray-600 mb-1">Floor No <span className="text-red-500">*</span></label>
                     <Select value={FloorNo ? String(FloorNo) : undefined} onValueChange={updateFloorNo}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!FloorNo ? 'text-gray-400' : ''} ${FloorNoError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!FloorNo ? 'text-gray-400' : ''} ${FloorNoError ? 'border-red-500' : 'border-gray-300'}`}>
                         <SelectValue placeholder="Select Floor No" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200 max-h-[200px]">
@@ -626,7 +634,7 @@ function Editflat() {
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-gray-600 mb-1">Block <span className="text-red-500">*</span></label>
                     <Select value={block ? String(block) : undefined} onValueChange={updateBlock}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!block ? 'text-gray-400' : ''} ${blockError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!block ? 'text-gray-400' : ''} ${blockError ? 'border-red-500' : 'border-gray-300'}`}>
                         <SelectValue placeholder="Select Block" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200 max-h-[200px]">
@@ -644,7 +652,7 @@ function Editflat() {
                       placeholder="Enter Square Feet"
                       value={squareFeet}
                       onChange={updateSquareFeet}
-                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${squareFeetError ? 'border-red-500' : 'border-gray-300'}`}
+                      className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${squareFeetError ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {squareFeetError && <p className="text-xs text-red-500">{squareFeetError}</p>}
                   </div>
@@ -652,7 +660,7 @@ function Editflat() {
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-gray-600 mb-1">Flat Type <span className="text-red-500">*</span></label>
                     <Select value={flatType || undefined} onValueChange={updateFlatType}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!flatType ? 'text-gray-400' : ''} ${flatTypeError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!flatType ? 'text-gray-400' : ''} ${flatTypeError ? 'border-red-500' : 'border-gray-300'}`}>
                         <SelectValue placeholder="Select flat type" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200">
@@ -666,7 +674,7 @@ function Editflat() {
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-gray-600 mb-1">Facing <span className="text-red-500">*</span></label>
                     <Select value={facing || undefined} onValueChange={updateFacing}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!facing ? 'text-gray-400' : ''} ${facingError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!facing ? 'text-gray-400' : ''} ${facingError ? 'border-red-500' : 'border-gray-300'}`}>
                         <SelectValue placeholder="Select Facing" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200 max-h-[200px]">
@@ -689,7 +697,7 @@ function Editflat() {
                       placeholder="Enter POV"
                       value={eastFace}
                       onChange={updateEastFace}
-                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${eastFaceError ? 'border-red-500' : 'border-gray-300'}`}
+                      className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${eastFaceError ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {eastFaceError && <p className="text-xs text-red-500">{eastFaceError}</p>}
                   </div>
@@ -700,7 +708,7 @@ function Editflat() {
                       placeholder="Enter POV"
                       value={westFace}
                       onChange={updateWestFace}
-                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${westFaceError ? 'border-red-500' : 'border-gray-300'}`}
+                      className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${westFaceError ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {westFaceError && <p className="text-xs text-red-500">{westFaceError}</p>}
                   </div>
@@ -711,7 +719,7 @@ function Editflat() {
                       placeholder="Enter POV"
                       value={northFace}
                       onChange={updateNorthFace}
-                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${northFaceError ? 'border-red-500' : 'border-gray-300'}`}
+                      className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${northFaceError ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {northFaceError && <p className="text-xs text-red-500">{northFaceError}</p>}
                   </div>
@@ -722,7 +730,7 @@ function Editflat() {
                       placeholder="Enter POV"
                       value={southFace}
                       onChange={updateSouthFace}
-                      className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${southFaceError ? 'border-red-500' : 'border-gray-300'}`}
+                      className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${southFaceError ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {southFaceError && <p className="text-xs text-red-500">{southFaceError}</p>}
                   </div>
@@ -730,7 +738,7 @@ function Editflat() {
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-gray-600 mb-1">Corner</label>
                     <Select value={corner !== undefined ? String(corner) : undefined} onValueChange={updateCorner}>
-                      <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${cornerError ? 'border-red-500' : 'border-gray-300'}`}>
+                      <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${cornerError ? 'border-red-500' : 'border-gray-300'}`}>
                         <SelectValue placeholder="Is Corner ?" />
                       </SelectTrigger>
                       <SelectContent className="border border-gray-200">
@@ -745,7 +753,7 @@ function Editflat() {
                     <div className="flex flex-col gap-1">
                       <label className="text-sm font-medium text-gray-600 mb-1">Flat Reward</label>
                       <Select value={flatReward !== undefined ? String(flatReward) : undefined} onValueChange={updateFlatReward}>
-                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${flatRewardError ? 'border-red-500' : 'border-gray-300'}`}>
+                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${flatRewardError ? 'border-red-500' : 'border-gray-300'}`}>
                           <SelectValue placeholder="Flat Reward ?" />
                         </SelectTrigger>
                         <SelectContent className="border border-gray-200">

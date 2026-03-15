@@ -984,7 +984,7 @@ function Flattocustomer({ closeFlatToCustomer, refreshGetAllFlats, prefilledData
             >
                 {/* Header */}
                 <div className="flex justify-between items-center px-6 py-4 border-b border-gray-300 bg-white z-10">
-                    <div className="font-semibold text-xl text-gray-800">Assign Flat to Customer</div>
+                    <div className="text-xl font-bold text-slate-800 tracking-tight leading-none">Assign Flat to Customer</div>
                     <button
                         onClick={closeFlatToCustomer}
                         className="p-2 hover:bg-gray-100 rounded-full transition-colors"

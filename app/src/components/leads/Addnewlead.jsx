@@ -962,8 +962,8 @@ const Addnewlead = () => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-[20px] font-semibold">Add Lead</h1>
-        <div onClick={() => navigate(-1)} className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-2 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200 cursor-pointer">
+        <h1 className="text-xl font-bold text-slate-800 tracking-tight leading-none">Add Lead</h1>
+        <div onClick={() => navigate(-1)} className="text-[#0083bf] px-3 gap-1 flex items-center justify-center py-1.5 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200 cursor-pointer">
           <IconArrowLeft className="mt-0.5" size={18} color="#0083bf" />
           Back
         </div>
@@ -1040,7 +1040,7 @@ const Addnewlead = () => {
                     placeholder="Enter Full Name"
                     value={fullName}
                     onChange={updateFullName}
-                    className={fullNameError ? "border-red-500" : ""}
+                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${fullNameError ? 'border-red-500' : 'border-gray-300'}`}
                   />
                   {fullNameError && <p className="text-red-500 text-xs">{fullNameError}</p>}
                 </div>
@@ -1051,7 +1051,7 @@ const Addnewlead = () => {
                     placeholder="Enter Email Address"
                     value={email}
                     onChange={updateEmail}
-                    className={emailError ? "border-red-500" : ""}
+                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError ? 'border-red-500' : 'border-gray-300'}`}
                   />
                   {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
                 </div>
@@ -1076,7 +1076,7 @@ const Addnewlead = () => {
                         placeholder="Enter Phone Number"
                         value={phoneNumber}
                         onChange={updatePhoneNumber}
-                        className={phoneNumberError ? "border-red-500" : ""}
+                        className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${phoneNumberError ? 'border-red-500' : 'border-gray-300'}`}
                       />
                     </div>
                   </div>
@@ -1340,6 +1340,7 @@ const Addnewlead = () => {
                     placeholder="Enter min budget"
                     value={minBudget}
                     onChange={updateMinBudget}
+                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 border-gray-300`}
                   />
                 </div>
 
@@ -1350,6 +1351,7 @@ const Addnewlead = () => {
                     placeholder="Enter max budget"
                     value={maxBudget}
                     onChange={updateMaxBudget}
+                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 border-gray-300`}
                   />
                 </div>
 
@@ -1386,6 +1388,7 @@ const Addnewlead = () => {
                     placeholder="Enter lead age in days"
                     value={leadAge}
                     onChange={updateLeadAge}
+                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 border-gray-300`}
                   />
                 </div>
 
@@ -1495,7 +1498,7 @@ const Addnewlead = () => {
                         placeholder="Enter correspondence address"
                         value={correspondenceAddress}
                         onChange={updateCorrespondenceAddress}
-                        className="min-h-[80px]"
+                        className="min-h-[80px] shadow-sm"
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">
@@ -1504,6 +1507,7 @@ const Addnewlead = () => {
                         placeholder="Enter pin code"
                         value={correspondencePincode}
                         onChange={updateCorrespondencePincode}
+                        className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 border-gray-300`}
                       />
                     </div>
                   </div>
@@ -1572,7 +1576,7 @@ const Addnewlead = () => {
                           placeholder="Enter permanent address"
                           value={permanentAddress}
                           onChange={updatePermanentAddress}
-                          className="min-h-[80px]"
+                          className="min-h-[80px] shadow-sm"
                         />
                       </div>
                       <div className="flex flex-col gap-1.5">
@@ -1581,6 +1585,7 @@ const Addnewlead = () => {
                           placeholder="Enter pin code"
                           value={permanentPincode}
                           onChange={updatePermanentPincode}
+                          className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 border-gray-300`}
                         />
                       </div>
                     </div>
