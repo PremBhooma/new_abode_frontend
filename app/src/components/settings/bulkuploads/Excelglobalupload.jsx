@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Settingsapi from '../../api/Settingsapi';
-import Projectapi from '../../api/Projectapi';
 import { Button, Fileinput, Loadingoverlay } from '@nayeshdaggula/tailify';
 import { useEmployeeDetails } from '../../zustand/useEmployeeDetails';
 import { AlertCircle } from 'lucide-react';
@@ -70,10 +69,11 @@ const Excelglobalupload = ({ closeUploadGlobalExcel, setReqData }) => {
     };
 
     return (
-        <div className="text-sm space-y-4 pt-6 p-4">
+        <div className="relative text-sm space-y-4 pt-6 p-4">
+            <Loadingoverlay visible={isLoadingEffect} overlayBg="bg-white/60" />
             <div className="w-full flex justify-between items-center">
                 <div className="font-semibold text-[15px]">Upload Global Bulk File</div>
-                <Button onClick={closeUploadGlobalExcel} size="sm" variant="default">
+                <Button onClick={closeUploadGlobalExcel} size="sm" variant="default" disabled={isLoadingEffect}>
                     Close
                 </Button>
             </div>
@@ -101,26 +101,28 @@ const Excelglobalupload = ({ closeUploadGlobalExcel, setReqData }) => {
                 </div>
             )}
 
-            {isLoadingEffect ? (
-                <div className="relative h-10 flex justify-center items-center">
-                    <Loadingoverlay visible={isLoadingEffect} overlayBg="" />
-                </div>
-            ) : (
-                <div className="flex justify-end gap-2 pt-1">
-                    <button
-                        onClick={closeUploadGlobalExcel}
-                        className="px-4 py-2 text-[13px] rounded-md border border-neutral-300 text-neutral-600 hover:bg-neutral-50 cursor-pointer"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={handleSubmit}
-                        className="px-4 py-2 text-[13px] text-white bg-[#0083bf] hover:bg-[#026d9f] rounded-md cursor-pointer"
-                    >
-                        Upload File
-                    </button>
+            {isLoadingEffect && (
+                <div className="rounded-md border border-sky-100 bg-sky-50 px-3 py-2 text-xs text-sky-700">
+                    Uploading file, please wait...
                 </div>
             )}
+
+            <div className="flex justify-end gap-2 pt-1">
+                <button
+                    onClick={closeUploadGlobalExcel}
+                    disabled={isLoadingEffect}
+                    className="px-4 py-2 text-[13px] rounded-md border border-neutral-300 text-neutral-600 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                >
+                    Cancel
+                </button>
+                <button
+                    onClick={handleSubmit}
+                    disabled={isLoadingEffect}
+                    className="px-4 py-2 text-[13px] text-white bg-[#0083bf] hover:bg-[#026d9f] rounded-md disabled:cursor-not-allowed disabled:bg-[#6aaecf] cursor-pointer"
+                >
+                    {isLoadingEffect ? 'Uploading...' : 'Upload File'}
+                </button>
+            </div>
         </div>
     );
 };
