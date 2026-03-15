@@ -189,7 +189,7 @@ function Viewflat() {
     "flat-info",
     // ...(customerFlatDetails ? ["customer-info-tab"] : []),
     "documents-tab",
-    "payments-tab",
+    ...(flatDetails?.status !== 'Unsold' ? ["payments-tab"] : []),
     "notes-tab",
     "activities-tab",
   ];
