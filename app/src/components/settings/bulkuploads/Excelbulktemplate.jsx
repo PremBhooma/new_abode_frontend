@@ -293,6 +293,7 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
         ]);
 
         for (let i = 2; i <= 5000; i++) {
+            const inputCond = `AND($A${i}<>"",$B${i}<>"",$C${i}<>"")`;
             const cond = `AND($A${i}<>"",$F${i}<>"")`;
             const vlookup = (col) => `IFERROR(VLOOKUP(A${i},ProjectRates!$A:$M,${col},FALSE),0)`;
 
@@ -314,7 +315,7 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
             const phoneValid = `COUNTIFS('Customer Template'!$G:$G, $D${i}, 'Customer Template'!$A:$A, $A${i})`;
 
             // F: Saleable Area = Lookup from Flat Template
-            assignFlatSheet.getCell(`F${i}`).value = { formula: `IF(${cond}, ${areaLookup}, "")` };
+            assignFlatSheet.getCell(`F${i}`).value = { formula: `IF(${inputCond}, ${areaLookup}, "")` };
 
             // I: Base Cost = F*G - F*H
             assignFlatSheet.getCell(`I${i}`).value = { formula: `IF(${cond}, F${i}*G${i}-(F${i}*H${i}), "")` };
