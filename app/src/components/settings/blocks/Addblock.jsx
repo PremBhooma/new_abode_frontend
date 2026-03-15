@@ -77,7 +77,7 @@ function Addblock({ refreshBlocks }) {
         <div className="p-4 rounded-md bg-transparent border border-[#ebecef] relative">
             <div className="flex flex-col gap-4">
                 <Textinput
-                    label='Add Block'
+                    label='Block Name'
                     labelClassName='!font-medium !text-sm'
                     placeholder="Enter Block Name"
                     inputClassName='!bg-white !border-[#ebecef]'
