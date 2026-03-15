@@ -633,7 +633,7 @@ function Viewflat() {
               <div className="flex flex-col gap-2 px-3 pb-3">
                 <div className="space-y-3 text-sm">
                   {customerFlatDetails && (
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <h3 className="text-lg font-semibold text-gray-900">
                         Flat Owned (Customer) By
                       </h3>
@@ -649,14 +649,14 @@ function Viewflat() {
                           {customerFlatDetails?.customer?.phone_number || '---'}
                         </div>
                       </div>
-                      {customerFlatDetails?.customer?.email && (
+                      {/* {customerFlatDetails?.customer?.email && (
                         <div className="flex flex-row items-center w-full">
                           <div className="text-gray-600 shrink-0 w-[55%]">Email</div>
                           <div className="text-gray-900 font-semibold break-all capitalize w-[45%]">
                             {customerFlatDetails?.customer?.email || '---'}
                           </div>
                         </div>
-                      )}
+                      )} */}
                       {/* <div className="flex flex-row w-full">
                         <div className="text-gray-600 shrink-0 w-[55%]">Saleable Area</div>
                         <div className="text-gray-900 font-semibold break-all w-[45%]">
