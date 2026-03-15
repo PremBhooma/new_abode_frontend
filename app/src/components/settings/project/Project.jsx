@@ -164,7 +164,7 @@ const Project = () => {
                                 <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Maint. Months</TableHead>
                                 <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Corpus Fund</TableHead>
                                 <TableHead className="border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50 text-nowrap">Rewards</TableHead>
-                                <TableHead className="w-[120px] text-center border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Actions</TableHead>
+                                <TableHead className="sticky right-0 z-20 w-[120px] text-center border border-neutral-200 px-3 py-2 text-neutral-700 uppercase tracking-wider text-sm font-bold leading-[18px] bg-gray-50">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -196,7 +196,7 @@ const Project = () => {
                                                     <Badge variant="secondary">No</Badge>
                                                 )}
                                             </TableCell>
-                                            <TableCell className="border border-neutral-200 px-3 py-2">
+                                            <TableCell className="sticky right-0 z-20 bg-white group-hover:bg-neutral-50 border-l border-neutral-200 px-3 py-2">
                                                 <div className="flex items-center justify-center gap-2">
                                                     <div
                                                         onClick={() => openViewProjectDrawer(project)}
