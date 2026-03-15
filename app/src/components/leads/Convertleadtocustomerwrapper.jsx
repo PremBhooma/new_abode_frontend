@@ -883,13 +883,13 @@ function Convertleadtocustomerwrapper() {
                         <h1 className="text-[24px] font-semibold">Convert Lead to Customer</h1>
                         <p className="text-gray-400 text-sm">Before converting to a lead, please fill out the details to proceed with the customer conversion.</p>
                     </div>
-                    <Link
-                        to={"/leads"}
-                        className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200"
+                    <div
+                        onClick={() => navigate(-1)}
+                        className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200 cursor-pointer"
                     >
                         <IconArrowLeft className="mt-0.5" size={18} color="#0083bf" />
                         Back
-                    </Link>
+                    </div>
                 </div>
             )}
             {isLoadingEffect ? (
