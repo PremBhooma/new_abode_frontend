@@ -324,24 +324,24 @@ function ExcelGlobalTemplate({ closeDownloadTemplate }) {
             // K: Total Floor Rise = J * F
             assignFlatSheet.getCell(`K${i}`).value = { formula: `IF(${cond},J${i}*F${i},"")` };
 
-            // L: East Facing Per Sqft (Check if Facing='East' in Flat Template)
+            // L: East Facing Per Sqft (only applies to East-facing flats, otherwise 0)
             const isEastFormula = `COUNTIFS('Flat Template'!$G:$G, "East", 'Flat Template'!$A:$A, $A${i}, 'Flat Template'!$B:$B, $B${i}, 'Flat Template'!$D:$D, $C${i})`;
             const baseEastRate = vlookup(3);
-            assignFlatSheet.getCell(`L${i}`).value = { formula: `IF(AND(${cond}, ${isEastFormula}>0), ${baseEastRate}, "")` };
+            assignFlatSheet.getCell(`L${i}`).value = { formula: `IF(${cond},IF(${isEastFormula}>0,${baseEastRate},0),"")` };
 
             // M: Total East Facing = L * F
-            assignFlatSheet.getCell(`M${i}`).value = { formula: `IF(${cond},L${i}*F${i},"")` };
+            assignFlatSheet.getCell(`M${i}`).value = { formula: `IF(${cond},L${i}*F${i},0)` };
 
-            // N: Corner Per Sqft (Check if Corner='Yes' in Flat Template)
+            // N: Corner Per Sqft (only applies to corner flats, otherwise 0)
             const isCornerFormula = `COUNTIFS('Flat Template'!$L:$L, "Yes", 'Flat Template'!$A:$A, $A${i}, 'Flat Template'!$B:$B, $B${i}, 'Flat Template'!$D:$D, $C${i})`;
             const baseCornerRate = vlookup(4);
-            assignFlatSheet.getCell(`N${i}`).value = { formula: `IF(AND(${cond}, ${isCornerFormula}>0), ${baseCornerRate}, "")` };
+            assignFlatSheet.getCell(`N${i}`).value = { formula: `IF(${cond},IF(${isCornerFormula}>0,${baseCornerRate},0),"")` };
 
             // O: Total Corner = N * F
-            assignFlatSheet.getCell(`O${i}`).value = { formula: `IF(${cond},N${i}*F${i},"")` };
+            assignFlatSheet.getCell(`O${i}`).value = { formula: `IF(${cond},N${i}*F${i},0)` };
 
-            // Q: Total Cost = I + K + M + O + P
-            assignFlatSheet.getCell(`Q${i}`).value = { formula: `IF(${cond},I${i}+K${i}+M${i}+O${i}+P${i},"")` };
+            // Q: Total Cost = I + K + M + O + P (sum numeric values for every facing/corner combination)
+            assignFlatSheet.getCell(`Q${i}`).value = { formula: `IF(${cond},SUM(I${i},K${i},M${i},O${i},P${i}),"")` };
 
             // R: GST = Q * gst_percentage / 100
             assignFlatSheet.getCell(`R${i}`).value = { formula: `IF(${cond},Q${i}*${vlookup(5)}/100,"")` };
