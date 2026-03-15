@@ -660,13 +660,13 @@ function Addnewcustomerwrapper() {
     <div className="flex flex-col gap-3 w-full">
       <div className="flex justify-between items-center">
         <h1 className="text-[24px] font-semibold">Add Customer</h1>
-        <Link
-          to={"/customers"}
-          className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200"
+        <div
+          onClick={() => navigate(-1)}
+          className="text-[#0083bf] px-3 gap-1 flex items-center justify-center p-1 rounded-sm border border-[#0083bf] bg-white transition-colors duration-200 cursor-pointer"
         >
           <IconArrowLeft className="mt-0.5" size={18} color="#0083bf" />
           Back
-        </Link>
+        </div>
       </div>
       <div className="flex flex-col gap-4 border border-[#ebecef] rounded-xl bg-white p-8">
         <div className="grid grid-cols-2 gap-4">
