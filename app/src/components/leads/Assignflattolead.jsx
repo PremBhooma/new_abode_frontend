@@ -941,7 +941,7 @@ function Assignflattolead() {
         <div className="h-full flex flex-col gap-3 justify-start overflow-y-auto">
             {/* Header */}
             <div className="flex justify-between items-center">
-                <div className="font-semibold text-xl text-gray-800">Assign Flat to Customer</div>
+                <div className="text-xl font-bold text-slate-800 tracking-tight leading-none">Assign Flat to Customer</div>
             </div>
             <div className="w-full rounded-md bg-white overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()} >
                 {/* Content */}
