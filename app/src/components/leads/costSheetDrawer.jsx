@@ -43,11 +43,11 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
             setTotalBaseCost(0);
             setBaseCostUnit("");
             setApplicationDate(""); // Or keep default if needed
-            setFloorRise('25');
+            setFloorRise('');
             setFloorRiseXPerSft("");
-            setEastFacing('100');
+            setEastFacing('');
             setEastFacingXPerSft("");
-            setCorner('100');
+            setCorner('');
             setCornerXPerSft("");
             setAmenities("");
             setStatus("");
@@ -56,10 +56,10 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
             setGst("");
             setCostofUnitWithTax("");
             setRegistrationCharge("");
-            setManjeeraConnectionCharge("50000");
-            setManjeeraMeterCharge("15000");
+            setManjeeraConnectionCharge("");
+            setManjeeraMeterCharge("");
             setMaintenceCharge("");
-            setDocumentationFee("20000");
+            setDocumentationFee("");
             setCorpusFund("");
             setGrandTotal("");
 
@@ -179,15 +179,15 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
         floor_rise: 0,
         east_facing: 0,
         corner: 0,
-        gst_percentage: 5,
-        manjeera_connection_charges: 50000,
-        manjeera_meter_charges: 15000,
-        documentation_fee: 20000,
+        gst_percentage: 0,
+        manjeera_connection_charges: 0,
+        manjeera_meter_charges: 0,
+        documentation_fee: 0,
         registration_percentage: 0,
         registration_base_charge: 0,
-        maintenance_rate_per_sqft: 3,
-        maintenance_duration_months: 24,
-        corpus_fund: 50
+        maintenance_rate_per_sqft: 0,
+        maintenance_duration_months: 0,
+        corpus_fund: 0
     });
 
     // Update form when closed/opened
@@ -303,23 +303,23 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
                             floor_rise: charges.floor_rise_price || 0,
                             east_facing: charges.east_price || 0,
                             corner: charges.corner_price || 0,
-                            gst_percentage: charges.gst_percentage ?? 5,
-                            manjeera_connection_charges: charges.manjeera_connection_charges ?? 50000,
-                            manjeera_meter_charges: charges.manjeera_meter_charges ?? 15000,
-                            documentation_fee: charges.documentation_fee ?? 20000,
-                            registration_percentage: charges.registration_percentage ?? 0,
-                            registration_base_charge: charges.registration_base_charge ?? 0,
-                            maintenance_rate_per_sqft: charges.maintenance_rate_per_sqft ?? 3,
-                            maintenance_duration_months: charges.maintenance_duration_months ?? 24,
-                            corpus_fund: charges.corpus_fund ?? 50
+                            gst_percentage: charges.gst_percentage || 0,
+                            manjeera_connection_charges: charges.manjeera_connection_charges || 0,
+                            manjeera_meter_charges: charges.manjeera_meter_charges || 0,
+                            documentation_fee: charges.documentation_fee || 0,
+                            registration_percentage: charges.registration_percentage || 0,
+                            registration_base_charge: charges.registration_base_charge || 0,
+                            maintenance_rate_per_sqft: charges.maintenance_rate_per_sqft || 0,
+                            maintenance_duration_months: charges.maintenance_duration_months || 0,
+                            corpus_fund: charges.corpus_fund || 0
                         });
 
                         // Set Static Charges directly from project
                         setEastFacing(charges.east_price?.toString() || '0');
                         setCorner(charges.corner_price?.toString() || '0');
-                        setManjeeraConnectionCharge(charges.manjeera_connection_charges?.toString() || '50000');
-                        setManjeeraMeterCharge(charges.manjeera_meter_charges?.toString() || '15000');
-                        setDocumentationFee(charges.documentation_fee?.toString() || '20000');
+                        setManjeeraConnectionCharge(charges.manjeera_connection_charges?.toString() || '0');
+                        setManjeeraMeterCharge(charges.manjeera_meter_charges?.toString() || '0');
+                        setDocumentationFee(charges.documentation_fee?.toString() || '0');
 
                         // Calculate Floor Rise based on new rates
                         if (selectedFlat?.floor_no && selectedFlat?.floor_no >= 6) {
@@ -335,15 +335,15 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
                     floor_rise: 0,
                     east_facing: 0,
                     corner: 0,
-                    gst_percentage: 5,
-                    manjeera_connection_charges: 50000,
-                    manjeera_meter_charges: 15000,
-                    documentation_fee: 20000,
+                    gst_percentage: 0,
+                    manjeera_connection_charges: 0,
+                    manjeera_meter_charges: 0,
+                    documentation_fee: 0,
                     registration_percentage: 0,
                     registration_base_charge: 0,
-                    maintenance_rate_per_sqft: 3,
-                    maintenance_duration_months: 24,
-                    corpus_fund: 50
+                    maintenance_rate_per_sqft: 0,
+                    maintenance_duration_months: 0,
+                    corpus_fund: 0
                 });
             }
         };
@@ -436,7 +436,7 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
     // 2️⃣ Recalculate dependent states whenever totalCostofUnit changes
     useEffect(() => {
         if (totalCostofUnit) {
-            const gstValue = (totalCostofUnit * (projectRates.gst_percentage / 100)).toFixed(2);
+            const gstValue = (totalCostofUnit * (parseFloat(projectRates.gst_percentage) / 100 || 0.05)).toFixed(2);
             setGst(gstValue);
 
             setCostofUnitWithTax(parseFloat(totalCostofUnit) + parseFloat(gstValue));
@@ -445,9 +445,9 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
             setRegistrationCharge(parseFloat(registerCharge));
 
             if (saleableAreaSqFt) {
-                let maintainCharge = ((parseFloat(saleableAreaSqFt) * projectRates.maintenance_rate_per_sqft) * projectRates.maintenance_duration_months).toFixed(2);
+                let maintainCharge = ((parseFloat(saleableAreaSqFt) * (parseFloat(projectRates.maintenance_rate_per_sqft) || 3)) * (parseFloat(projectRates.maintenance_duration_months) || 24)).toFixed(2);
                 setMaintenceCharge(parseFloat(maintainCharge));
-                let corpusFund = (parseFloat(saleableAreaSqFt) * projectRates.corpus_fund).toFixed(2);
+                let corpusFund = (parseFloat(saleableAreaSqFt) * (parseFloat(projectRates.corpus_fund) || 50)).toFixed(2);
                 setCorpusFund(parseFloat(corpusFund));
 
                 setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(registerCharge) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge) + parseFloat(maintainCharge) + parseFloat(corpusFund) + parseFloat(documentationFee))
@@ -753,13 +753,12 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
                                         </div>
                                     )}
 
-                                    <div>
-                                        <Label>Amenities</Label>
+                                    <div className="space-y-2">
+                                        <Label>Amenities (₹) <span className="text-red-500">*</span></Label>
                                         <Input
-                                            value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
-                                            readOnly
+                                            value={amenities}
                                             onChange={(e) => setAmenities(e.target.value)}
-                                            className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                            className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                         />
                                         {amenitiesError && <p className="text-red-500 text-xs mt-1">{amenitiesError}</p>}
                                     </div>
@@ -849,7 +848,7 @@ const CostSheetDrawer = ({ open, onOpenChange, leadData, refreshLeadDetails }) =
                                     </div>
 
                                     <div>
-                                        <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Months (₹)</Label>
+                                        <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Mos (₹)</Label>
                                         <Input
                                             value={maintenceCharge ? parseFloat(maintenceCharge).toLocaleString('en-IN') : ''}
                                             readOnly
