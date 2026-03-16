@@ -923,10 +923,9 @@ function Flatcostupdate({ closeFlatCostUpdate, flatNo, refreshUserDetails, custo
                         <div className="space-y-2">
                             <Label>Amenities (₹) <span className="text-red-500">*</span></Label>
                             <Input
-                                value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
-                                readOnly
+                                value={amenities}
                                 onChange={updateAmenities}
-                                className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                             />
                             {amenitiesError && <p className="text-xs text-red-500">{amenitiesError}</p>}
                         </div>

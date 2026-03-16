@@ -12,6 +12,7 @@ import { useEmployeeDetails } from "../../zustand/useEmployeeDetails";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IconX } from "@tabler/icons-react";
+import { Textarea } from "@/components/ui/textarea";
 
 function capitalize(str) {
     if (!str) return '';
@@ -1021,11 +1022,11 @@ function Assignflattocustomer({ closeFlatToCustomer, flatNo, block_id, refreshUs
 
                             <div className="space-y-2 md:col-span-2">
                                 <Label>Custom Note</Label>
-                                <textarea
+                                <Textarea
                                     value={customNote}
                                     onChange={updateCustomNote}
                                     placeholder="Enter any additional requirements need for this flat..."
-                                    rows={3}
+                                    rows={4}
                                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-[4px] focus:outline-none focus:border-black resize-none text-sm"
                                 />
                             </div>
@@ -1172,10 +1173,12 @@ function Assignflattocustomer({ closeFlatToCustomer, flatNo, block_id, refreshUs
                                 <div className="space-y-2">
                                     <Label>Amenities (₹) <span className="text-red-500">*</span></Label>
                                     <Input
-                                        value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
-                                        onChange={updateAmenities}
-                                        readOnly
-                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                        value={amenities}
+                                        onChange={(e) => setAmenties(e.target.value)}
+                                        // value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
+                                        // onChange={updateAmenities}
+                                        // readOnly
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                     {amenitiesError && <p className="text-xs text-red-500">{amenitiesError}</p>}
                                 </div>
