@@ -52,7 +52,7 @@ function Overviewtab({ customerFlatDetails, paymentSummary }) {
         <div className="w-full bg-white rounded-lg shadow-md mt-4 overflow-x-auto text-sm">
             <div className="min-w-[900px]">
                 {/* Table Header */}
-                <div className="grid grid-cols-12 bg-gray-100 border-b border-gray-200 font-bold text-gray-700">
+                <div className="grid grid-cols-12 bg-[#fde047] border-b border-gray-200 font-bold text-gray-700">
                     <div className="col-span-4 p-3 border-r border-gray-200">Description</div>
                     <div className="col-span-2 p-3 text-right border-r border-gray-200">Rate / Unit</div>
                     <div className="col-span-2 p-3 text-right border-r border-gray-200">Total Cost (₹)</div>
@@ -231,7 +231,7 @@ function Overviewtab({ customerFlatDetails, paymentSummary }) {
                 </div>
 
                 {/* Grand Total */}
-                <div className="grid grid-cols-12 bg-gray-100 border-t-2 border-gray-400">
+                <div className="grid grid-cols-12 bg-[#fde047] border-t-2 border-gray-400">
                     <div className="col-span-6 p-4 border-r border-gray-300 font-bold text-gray-900 text-base uppercase">Grand Total</div>
                     <div className="col-span-2 p-4 text-right border-r border-gray-300 font-bold text-gray-900 text-base">{formatPrice(grandTotal)}</div>
                     <div className="col-span-2 p-4 text-right border-r border-gray-300 font-bold text-[#0083bf] text-base bg-blue-100/50">{formatPrice(totalAmountPaid)}</div>
