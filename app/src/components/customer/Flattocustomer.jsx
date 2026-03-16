@@ -1063,7 +1063,7 @@ function Flattocustomer() {
                                     value={customNote}
                                     onChange={updateCustomNote}
                                     placeholder="Enter any additional requirements need for this flat..."
-                                    rows={3}
+                                    rows={4}
                                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-[4px] focus:outline-none focus:border-black resize-none text-sm"
                                 />
                             </div>
@@ -1210,10 +1210,12 @@ function Flattocustomer() {
                                 <div className="space-y-2">
                                     <Label>Amenities (₹) <span className="text-red-500">*</span></Label>
                                     <Input
-                                        value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
-                                        onChange={updateAmenities}
-                                        readOnly
-                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                        // value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
+                                        // onChange={updateAmenities}
+                                        // readOnly
+                                        value={amenities}
+                                        onChange={(e) => setAmenties(e.target.value)}
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                 </div>
 

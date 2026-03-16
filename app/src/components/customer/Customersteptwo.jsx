@@ -1079,10 +1079,12 @@ const Customersteptwo = forwardRef((props, ref) => {
                                 <Label>Ammenities (₹) <span className="text-red-500">*</span></Label>
                                 <Input
                                     placeholder="Enter Amenities"
-                                    value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
-                                    onChange={updateAmenities}
-                                    readOnly
-                                    className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                    // value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
+                                    // onChange={updateAmenities}
+                                    // readOnly
+                                    value={amenities}
+                                    onChange={(e) => setAmenties(e.target.value)}
+                                    className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                 />
                                 {amenitiesError && <p className="text-xs text-red-500">{amenitiesError}</p>}
                             </div>
