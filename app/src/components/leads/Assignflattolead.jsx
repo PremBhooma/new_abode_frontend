@@ -20,6 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "../ui/textarea";
 
 function capitalize(str) {
     if (!str) return '';
@@ -68,10 +69,7 @@ function Assignflattolead() {
         registration_base_charge: 0,
         maintenance_rate_per_sqft: 0,
         maintenance_duration_months: 0,
-        corpus_fund: 0,
-        car_parking: 0,
-        club_house: 0,
-        legal_charges: 0
+        corpus_fund: 0
     });
 
     const getProjectCharges = async (projectId) => {
@@ -201,7 +199,7 @@ function Assignflattolead() {
                             floor_rise: charges.floor_rise_price || 0,
                             east_facing: charges.east_price || 0,
                             corner: charges.corner_price || 0,
-                            gst_percentage: charges.gst_percentage || 5, // Defaulting to 5% if missing
+                            gst_percentage: charges.gst_percentage || 0,
                             manjeera_connection_charges: charges.manjeera_connection_charges || 0,
                             manjeera_meter_charges: charges.manjeera_meter_charges || 0,
                             documentation_fee: charges.documentation_fee || 0,
@@ -209,10 +207,7 @@ function Assignflattolead() {
                             registration_base_charge: charges.registration_base_charge || 0,
                             maintenance_rate_per_sqft: charges.maintenance_rate_per_sqft || 0,
                             maintenance_duration_months: charges.maintenance_duration_months || 0,
-                            corpus_fund: charges.corpus_fund || 0,
-                            car_parking: charges.car_parking || 0,
-                            club_house: charges.club_house || 0,
-                            legal_charges: charges.legal_charges || 0
+                            corpus_fund: charges.corpus_fund || 0
                         });
 
                         // Set Static Charges directly from project
@@ -232,7 +227,20 @@ function Assignflattolead() {
                     }
                 }
             } else {
-                setProjectRates({ floor_rise: 0, east_facing: 0, corner: 0 });
+                setProjectRates({
+                    floor_rise: 0,
+                    east_facing: 0,
+                    corner: 0,
+                    gst_percentage: 0,
+                    manjeera_connection_charges: 0,
+                    manjeera_meter_charges: 0,
+                    documentation_fee: 0,
+                    registration_percentage: 0,
+                    registration_base_charge: 0,
+                    maintenance_rate_per_sqft: 0,
+                    maintenance_duration_months: 0,
+                    corpus_fund: 0
+                });
             }
         };
 
@@ -666,28 +674,21 @@ function Assignflattolead() {
     // 2ï¸ âƒ£ Recalculate dependent states whenever totalCostofUnit changes
     useEffect(() => {
         if (totalCostofUnit) {
-            const gstPerc = projectRates.gst_percentage || 5;
-            const gstValue = (totalCostofUnit * (gstPerc / 100)).toFixed(2);
+            const gstValue = (totalCostofUnit * (parseFloat(projectRates.gst_percentage) / 100 || 0.05)).toFixed(2);
             setGst(gstValue);
 
             setCostofUnitWithTax(parseFloat(totalCostofUnit) + parseFloat(gstValue));
 
-            const regPerc = projectRates.registration_percentage || 7.6;
-            const regBase = projectRates.registration_base_charge || 1050;
-            let registerCharge = ((parseFloat(totalCostofUnit) * (regPerc / 100)) + parseFloat(regBase)).toFixed(2);
+            let registerCharge = ((parseFloat(totalCostofUnit) * (parseFloat(projectRates.registration_percentage) / 100 || 0.076)) + (parseFloat(projectRates.registration_base_charge) || 1050)).toFixed(2);
             setRegistrationCharge(parseFloat(registerCharge));
 
             if (saleableAreaSqFt) {
-                const maintRate = projectRates.maintenance_rate_per_sqft || 3;
-                const maintDur = projectRates.maintenance_duration_months || 24;
-                let maintainCharge = ((parseFloat(saleableAreaSqFt) * maintRate) * maintDur).toFixed(2);
+                let maintainCharge = ((parseFloat(saleableAreaSqFt) * (parseFloat(projectRates.maintenance_rate_per_sqft) || 3)) * (parseFloat(projectRates.maintenance_duration_months) || 24)).toFixed(2);
                 setMaintenceCharge(parseFloat(maintainCharge));
+                let corpusFund = (parseFloat(saleableAreaSqFt) * (parseFloat(projectRates.corpus_fund) || 50)).toFixed(2);
+                setCorpusFund(parseFloat(corpusFund));
 
-                const corpusFundVal = projectRates.corpus_fund || 50;
-                let calculatedCorpusFund = (parseFloat(saleableAreaSqFt) * corpusFundVal).toFixed(2);
-                setCorpusFund(parseFloat(calculatedCorpusFund));
-
-                setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(registerCharge) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge) + parseFloat(maintainCharge) + parseFloat(calculatedCorpusFund) + parseFloat(documentationFee))
+                setGrandTotal(parseFloat(totalCostofUnit) + parseFloat(gstValue) + parseFloat(registerCharge) + parseFloat(manjeeraConnectionCharge) + parseFloat(manjeeraMeterCharge) + parseFloat(maintainCharge) + parseFloat(corpusFund) + parseFloat(documentationFee))
             }
         } else {
             setGst("");
@@ -935,7 +936,6 @@ function Assignflattolead() {
     };
 
 
-    console.log("permissions", permissions);
 
     return (
         <div className="h-full flex flex-col gap-3 justify-start overflow-y-auto">
@@ -1062,11 +1062,11 @@ function Assignflattolead() {
 
                             <div className="space-y-2 md:col-span-2">
                                 <Label>Custom Note</Label>
-                                <textarea
+                                <Textarea
                                     value={customNote}
                                     onChange={updateCustomNote}
                                     placeholder="Enter any additional requirements need for this flat..."
-                                    rows={3}
+                                    rows={4}
                                     className="w-full px-3 py-2 bg-white border border-gray-300 rounded-[4px] focus:outline-none focus:border-black resize-none text-sm"
                                 />
                             </div>
@@ -1213,10 +1213,11 @@ function Assignflattolead() {
                                 <div className="space-y-2">
                                     <Label>Amenities (₹) <span className="text-red-500">*</span></Label>
                                     <Input
-                                        value={amenities ? parseFloat(amenities).toLocaleString('en-IN') : ''}
-                                        onChange={updateAmenities}
-                                        readOnly
-                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                        value={amenities}
+                                        onChange={(e) => setAmenties(e.target.value)}
+                                        // onChange={updateAmenities}
+                                        // readOnly
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                 </div>
 
@@ -1260,11 +1261,10 @@ function Assignflattolead() {
                                 <div className="space-y-2">
                                     <Label>Manjeera Connection Charges (₹) <span className="text-red-500">*</span></Label>
                                     <Input
-                                        value={manjeeraConnectionCharge ? parseFloat(manjeeraConnectionCharge).toLocaleString('en-IN') : ''}
+                                        value={manjeeraConnectionCharge}
                                         onChange={(e) => setManjeeraConnectionCharge(e.target.value)}
                                         placeholder="Enter Amount"
-                                        readOnly
-                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                     {manjeeraConnectionChargeError && <p className="text-xs text-red-500">{manjeeraConnectionChargeError}</p>}
                                 </div>
@@ -1272,17 +1272,16 @@ function Assignflattolead() {
                                 <div className="space-y-2">
                                     <Label>Manjeera Meter Charges (₹) <span className="text-red-500">*</span></Label>
                                     <Input
-                                        value={manjeeraMeterCharge ? parseFloat(manjeeraMeterCharge).toLocaleString('en-IN') : ''}
+                                        value={manjeeraMeterCharge}
                                         onChange={(e) => setManjeeraMeterCharge(e.target.value)}
                                         placeholder="Enter Amount"
-                                        readOnly
-                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                     {manjeeraMeterChargeError && <p className="text-xs text-red-500">{manjeeraMeterChargeError}</p>}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Yrs (₹)</Label>
+                                    <Label>Maintenance @{projectRates.maintenance_rate_per_sqft || 3}/- per sqft for {projectRates.maintenance_duration_months || 24} Mos (₹)</Label>
                                     <Input
                                         value={maintenceCharge ? parseFloat(maintenceCharge).toLocaleString('en-IN') : ''}
                                         readOnly
@@ -1293,10 +1292,9 @@ function Assignflattolead() {
                                 <div className="space-y-2">
                                     <Label>Documentation Fee (₹) <span className="text-red-500">*</span></Label>
                                     <Input
-                                        value={documentationFee ? parseFloat(documentationFee).toLocaleString('en-IN') : ''}
-                                        readOnly
+                                        value={documentationFee}
                                         onChange={updateDocumenationFee}
-                                        className="bg-gray-50 border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
+                                        className="bg-white border border-gray-300 rounded-[4px] focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-gray-300 focus:border-black"
                                     />
                                 </div>
 
