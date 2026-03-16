@@ -965,7 +965,7 @@ function Convertleadtocustomerwrapper() {
                         <div className="flex flex-col gap-1">
                             <label className="text-sm font-medium text-gray-600 mb-1">Prefix <span className="text-red-500">*</span></label>
                             <Select value={prefixes || undefined} onValueChange={updatePrefix}>
-                                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!prefixes ? 'text-gray-400' : ''} ${prefixError ? 'border-red-500' : 'border-gray-300'}`}>
+                                <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!prefixes ? 'text-gray-400' : ''} ${prefixError ? 'border-red-500' : 'border-gray-300'}`}>
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent className="border border-gray-200">
@@ -984,7 +984,7 @@ function Convertleadtocustomerwrapper() {
                                 placeholder="Enter First Name"
                                 value={firstName}
                                 onChange={updateFirstName}
-                                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${firstNameError ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${firstNameError ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {firstNameError && <p className="text-xs text-red-500">{firstNameError}</p>}
                         </div>
@@ -995,7 +995,7 @@ function Convertleadtocustomerwrapper() {
                                 placeholder="Enter Last Name"
                                 value={lastName}
                                 onChange={updateLastName}
-                                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${lastNameError ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${lastNameError ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {lastNameError && <p className="text-xs text-red-500">{lastNameError}</p>}
                         </div>
@@ -1006,7 +1006,7 @@ function Convertleadtocustomerwrapper() {
                                 placeholder="Enter Email Address"
                                 value={email}
                                 onChange={updateEmail}
-                                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {emailError && <p className="text-xs text-red-500">{emailError}</p>}
                         </div>
@@ -1017,7 +1017,7 @@ function Convertleadtocustomerwrapper() {
                                 placeholder="Enter Alternate Email Address"
                                 value={email2}
                                 onChange={updateEmail2}
-                                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError2 ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${emailError2 ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {emailError2 && <p className="text-xs text-red-500">{emailError2}</p>}
                         </div>
@@ -1028,7 +1028,7 @@ function Convertleadtocustomerwrapper() {
                             <div className="flex flex-row gap-x-4 w-full">
                                 <div className="w-20">
                                     <Select value={phoneCode || undefined} onValueChange={updatePhoneCode}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!phoneCode ? 'text-gray-400' : ''} ${phoneCodeError ? 'border-red-500' : 'border-gray-300'}`}>
+                                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!phoneCode ? 'text-gray-400' : ''} ${phoneCodeError ? 'border-red-500' : 'border-gray-300'}`}>
                                             <SelectValue placeholder="Code" />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1044,7 +1044,7 @@ function Convertleadtocustomerwrapper() {
                                         type="text"
                                         value={phoneNumber}
                                         onChange={updatePhoneNumber}
-                                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${phoneNumberError ? 'border-red-500' : 'border-gray-300'}`}
+                                        className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${phoneNumberError ? 'border-red-500' : 'border-gray-300'}`}
                                     />
                                 </div>
                             </div>
@@ -1117,7 +1117,7 @@ function Convertleadtocustomerwrapper() {
                         <div className="flex flex-col gap-1">
                             <label className="text-sm font-medium text-gray-600 mb-1">Gender <span className="text-red-500">*</span></label>
                             <Select value={gender || undefined} onValueChange={updateGender}>
-                                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!gender ? 'text-gray-400' : ''} ${genderError ? 'border-red-500' : 'border-gray-300'}`}>
+                                <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!gender ? 'text-gray-400' : ''} ${genderError ? 'border-red-500' : 'border-gray-300'}`}>
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent className="border border-gray-200">
@@ -1142,7 +1142,7 @@ function Convertleadtocustomerwrapper() {
                                 placeholder="Enter Father Name"
                                 value={fatherName}
                                 onChange={updateFatherName}
-                                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${fatherNameError ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${fatherNameError ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {fatherNameError && <p className="text-xs text-red-500">{fatherNameError}</p>}
                         </div>
@@ -1150,7 +1150,7 @@ function Convertleadtocustomerwrapper() {
                         <div className="flex flex-col gap-1">
                             <label className="text-sm font-medium text-gray-600 mb-1">Marital Status</label>
                             <Select value={maritalStatus || undefined} onValueChange={updateMaritalStatus}>
-                                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!maritalStatus ? 'text-gray-400' : ''} ${maritalStatusError ? 'border-red-500' : 'border-gray-300'}`}>
+                                <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!maritalStatus ? 'text-gray-400' : ''} ${maritalStatusError ? 'border-red-500' : 'border-gray-300'}`}>
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent className="border border-gray-200">
@@ -1165,7 +1165,7 @@ function Convertleadtocustomerwrapper() {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">Spouse Prefix</label>
                                     <Select value={spousePrefix || undefined} onValueChange={updateSpousePrefix}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!spousePrefix ? 'text-gray-400' : ''} ${spousePrefixError ? 'border-red-500' : 'border-gray-300'}`}>
+                                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!spousePrefix ? 'text-gray-400' : ''} ${spousePrefixError ? 'border-red-500' : 'border-gray-300'}`}>
                                             <SelectValue placeholder="Select" />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200">
@@ -1184,7 +1184,7 @@ function Convertleadtocustomerwrapper() {
                                         placeholder="Enter Spouse Name"
                                         value={spouseName}
                                         onChange={updateSpouseName}
-                                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${spouseNameError ? 'border-red-500' : 'border-gray-300'}`}
+                                        className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${spouseNameError ? 'border-red-500' : 'border-gray-300'}`}
                                     />
                                     {spouseNameError && <p className="text-xs text-red-500">{spouseNameError}</p>}
                                 </div>
@@ -1204,7 +1204,7 @@ function Convertleadtocustomerwrapper() {
                                         type="number"
                                         value={numberOfChildren}
                                         onChange={updateNumberOfChildren}
-                                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${numberOfChildrenError ? 'border-red-500' : 'border-gray-300'}`}
+                                        className={`w-full px-3 py-2 shadow-smborder rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${numberOfChildrenError ? 'border-red-500' : 'border-gray-300'}`}
                                     />
                                     {numberOfChildrenError && <p className="text-xs text-red-500">{numberOfChildrenError}</p>}
                                 </div>
@@ -1224,7 +1224,7 @@ function Convertleadtocustomerwrapper() {
                                 placeholder="Enter Pan Card No"
                                 value={panCardNo}
                                 onChange={updatePanCardNo}
-                                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${panCardNoError ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${panCardNoError ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {panCardNoError && <p className="text-xs text-red-500">{panCardNoError}</p>}
                         </div>
@@ -1236,7 +1236,7 @@ function Convertleadtocustomerwrapper() {
                                 type="number"
                                 value={aadharCardNo}
                                 onChange={updateAadharCardNo}
-                                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${aadharCardNoError ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${aadharCardNoError ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {aadharCardNoError && <p className="text-xs text-red-500">{aadharCardNoError}</p>}
                         </div>
@@ -1244,7 +1244,7 @@ function Convertleadtocustomerwrapper() {
                         <div className="flex flex-col gap-1">
                             <label className="text-sm font-medium text-gray-600 mb-1">Country of Citizenship</label>
                             <Select value={countryOfCitizenship || undefined} onValueChange={updateCountryOfCitizenship}>
-                                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!countryOfCitizenship ? 'text-gray-400' : ''} ${countryOfCitizenshipError ? 'border-red-500' : 'border-gray-300'}`}>
+                                <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!countryOfCitizenship ? 'text-gray-400' : ''} ${countryOfCitizenshipError ? 'border-red-500' : 'border-gray-300'}`}>
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1259,7 +1259,7 @@ function Convertleadtocustomerwrapper() {
                         <div className="flex flex-col gap-1">
                             <label className="text-sm font-medium text-gray-600 mb-1">Country of Residence</label>
                             <Select value={countryOfResidence || undefined} onValueChange={updateCountryOfResidence}>
-                                <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!countryOfResidence ? 'text-gray-400' : ''} ${countryOfResidenceError ? 'border-red-500' : 'border-gray-300'}`}>
+                                <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!countryOfResidence ? 'text-gray-400' : ''} ${countryOfResidenceError ? 'border-red-500' : 'border-gray-300'}`}>
                                     <SelectValue placeholder="Select" />
                                 </SelectTrigger>
                                 <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1277,7 +1277,7 @@ function Convertleadtocustomerwrapper() {
                                 placeholder="Enter Mother Tongue"
                                 value={motherTongue}
                                 onChange={updateMotherTongue}
-                                className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${motherTongueError ? 'border-red-500' : 'border-gray-300'}`}
+                                className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${motherTongueError ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {motherTongueError && <p className="text-xs text-red-500">{motherTongueError}</p>}
                         </div>
@@ -1360,7 +1360,7 @@ function Convertleadtocustomerwrapper() {
                                     placeholder="Enter Current Designation"
                                     value={currentDesignation}
                                     onChange={updateCurrentDesignation}
-                                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${currentDesignationError ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${currentDesignationError ? 'border-red-500' : 'border-gray-300'}`}
                                 />
                                 {currentDesignationError && <p className="text-xs text-red-500">{currentDesignationError}</p>}
                             </div>
@@ -1371,7 +1371,7 @@ function Convertleadtocustomerwrapper() {
                                     placeholder="Enter Current Organization"
                                     value={currentOrganization}
                                     onChange={updateCurrentOrganization}
-                                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${currentOrganizationError ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${currentOrganizationError ? 'border-red-500' : 'border-gray-300'}`}
                                 />
                                 {currentOrganizationError && <p className="text-xs text-red-500">{currentOrganizationError}</p>}
                             </div>
@@ -1382,7 +1382,7 @@ function Convertleadtocustomerwrapper() {
                                     placeholder="Enter Organization Address"
                                     value={organizationAddress}
                                     onChange={updateOrganizationAddress}
-                                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${organizationAddressError ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${organizationAddressError ? 'border-red-500' : 'border-gray-300'}`}
                                 />
                                 {organizationAddressError && <p className="text-xs text-red-500">{organizationAddressError}</p>}
                             </div>
@@ -1394,7 +1394,7 @@ function Convertleadtocustomerwrapper() {
                                     type="number"
                                     value={workExperience}
                                     onChange={updateWorkExperience}
-                                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${workExperienceError ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${workExperienceError ? 'border-red-500' : 'border-gray-300'}`}
                                 />
                                 {workExperienceError && <p className="text-xs text-red-500">{workExperienceError}</p>}
                             </div>
@@ -1406,7 +1406,7 @@ function Convertleadtocustomerwrapper() {
                                     type="number"
                                     value={annualIncome}
                                     onChange={updateAnnualIncome}
-                                    className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${annualIncomeError ? 'border-red-500' : 'border-gray-300'}`}
+                                    className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${annualIncomeError ? 'border-red-500' : 'border-gray-300'}`}
                                 />
                                 {annualIncomeError && <p className="text-xs text-red-500">{annualIncomeError}</p>}
                             </div>
@@ -1422,7 +1422,7 @@ function Convertleadtocustomerwrapper() {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">Country</label>
                                     <Select value={correspondenceCountry || undefined} onValueChange={updateCorrespondenceCountry}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCountry ? 'text-gray-400' : ''} ${correspondenceCountryError ? 'border-red-500' : 'border-gray-300'}`}>
+                                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCountry ? 'text-gray-400' : ''} ${correspondenceCountryError ? 'border-red-500' : 'border-gray-300'}`}>
                                             <SelectValue placeholder="Select Country" />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1443,7 +1443,7 @@ function Convertleadtocustomerwrapper() {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">State</label>
                                     <Select disabled={!correspondenceCountry} value={correspondenceState || undefined} onValueChange={updateCorrespondenceState}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceState ? 'text-gray-400' : ''} ${correspondenceStateError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
+                                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceState ? 'text-gray-400' : ''} ${correspondenceStateError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
                                             <SelectValue placeholder={!correspondenceCountry ? "Select Country First" : "Select State"} />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1458,7 +1458,7 @@ function Convertleadtocustomerwrapper() {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">City</label>
                                     <Select disabled={!correspondenceState} value={correspondenceCity || undefined} onValueChange={updateCorrespondenceCity}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCity ? 'text-gray-400' : ''} ${correspondenceCityError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
+                                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!correspondenceCity ? 'text-gray-400' : ''} ${correspondenceCityError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
                                             <SelectValue placeholder={!correspondenceState ? "Select State First" : "Select City"} />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1476,7 +1476,7 @@ function Convertleadtocustomerwrapper() {
                                         placeholder="Enter your Address"
                                         value={correspondenceAddress}
                                         onChange={updateCorrespondenceAddress}
-                                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${correspondenceAddressError ? 'border-red-500' : 'border-gray-300'}`}
+                                        className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${correspondenceAddressError ? 'border-red-500' : 'border-gray-300'}`}
                                     />
                                     {correspondenceAddressError && <p className="text-xs text-red-500">{correspondenceAddressError}</p>}
                                 </div>
@@ -1487,7 +1487,7 @@ function Convertleadtocustomerwrapper() {
                                         placeholder="Enter your pincode"
                                         value={correspondencePincode}
                                         onChange={updateCorrespondencePincode}
-                                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${correspondencePincodeError ? 'border-red-500' : 'border-gray-300'}`}
+                                        className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${correspondencePincodeError ? 'border-red-500' : 'border-gray-300'}`}
                                     />
                                     {correspondencePincodeError && <p className="text-xs text-red-500">{correspondencePincodeError}</p>}
                                 </div>
@@ -1513,7 +1513,7 @@ function Convertleadtocustomerwrapper() {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">Country</label>
                                     <Select value={permanentCountry || undefined} onValueChange={updatePermanentCountry}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCountry ? 'text-gray-400' : ''} ${permanentCountryError ? 'border-red-500' : 'border-gray-300'}`}>
+                                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCountry ? 'text-gray-400' : ''} ${permanentCountryError ? 'border-red-500' : 'border-gray-300'}`}>
                                             <SelectValue placeholder="Select Country" />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1534,7 +1534,7 @@ function Convertleadtocustomerwrapper() {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">State</label>
                                     <Select disabled={!permanentCountry} value={permanentState || undefined} onValueChange={updatePermanentState}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentState ? 'text-gray-400' : ''} ${permanentStateError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
+                                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentState ? 'text-gray-400' : ''} ${permanentStateError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
                                             <SelectValue placeholder={!permanentCountry ? "Select Country First" : "Select State"} />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1549,7 +1549,7 @@ function Convertleadtocustomerwrapper() {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-sm font-medium text-gray-600 mb-1">City</label>
                                     <Select disabled={!permanentState} value={permanentCity || undefined} onValueChange={updatePermanentCity}>
-                                        <SelectTrigger className={`w-full h-10 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCity ? 'text-gray-400' : ''} ${permanentCityError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
+                                        <SelectTrigger className={`w-full h-9 border rounded-md focus:border-black focus:ring-0 focus:ring-offset-0 focus:outline-none ${!permanentCity ? 'text-gray-400' : ''} ${permanentCityError ? 'border-red-500' : 'border-gray-300'} disabled:opacity-50 disabled:bg-gray-100 disabled:cursor-not-allowed`}>
                                             <SelectValue placeholder={!permanentState ? "Select State First" : "Select City"} />
                                         </SelectTrigger>
                                         <SelectContent className="border border-gray-200 max-h-48 overflow-y-auto">
@@ -1567,7 +1567,7 @@ function Convertleadtocustomerwrapper() {
                                         placeholder="Enter your Address"
                                         value={permanentAddress}
                                         onChange={updatePermanentAddress}
-                                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${permanentAddressError ? 'border-red-500' : 'border-gray-300'}`}
+                                        className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${permanentAddressError ? 'border-red-500' : 'border-gray-300'}`}
                                     />
                                     {permanentAddressError && <p className="text-xs text-red-500">{permanentAddressError}</p>}
                                 </div>
@@ -1578,7 +1578,7 @@ function Convertleadtocustomerwrapper() {
                                         placeholder="Enter your pincode"
                                         value={permanentPincode}
                                         onChange={updatePermanentPincode}
-                                        className={`w-full px-3 py-2 border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${permanentPincodeError ? 'border-red-500' : 'border-gray-300'}`}
+                                        className={`w-full px-3 py-2 shadow-sm border rounded-md focus:border-black focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none transition-colors duration-200 placeholder-gray-400 ${permanentPincodeError ? 'border-red-500' : 'border-gray-300'}`}
                                     />
                                     {permanentPincodeError && <p className="text-xs text-red-500">{permanentPincodeError}</p>}
                                 </div>
