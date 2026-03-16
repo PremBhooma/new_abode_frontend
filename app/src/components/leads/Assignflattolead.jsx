@@ -938,12 +938,12 @@ function Assignflattolead() {
     console.log("permissions", permissions);
 
     return (
-        <div className="h-full flex flex-col gap-3 justify-start bg-gray-50 overflow-y-auto">
+        <div className="h-full flex flex-col gap-3 justify-start overflow-y-auto">
             {/* Header */}
             <div className="flex justify-between items-center">
                 <div className="font-semibold text-xl text-gray-800">Assign Flat to Customer</div>
             </div>
-            <div className="w-full max-w-7xl bg-white overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()} >
+            <div className="w-full rounded-md bg-white overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()} >
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-4 bg-white">
                     <div className="flex flex-col lg:flex-row gap-6">
